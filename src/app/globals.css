@@ -5,8 +5,9 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #0a0a0a;
+    --background: #ededed;
+    --text-white: #ffffff;
   }
 }
 
@@ -17,7 +18,7 @@ body {
 }
 
 body {
-  color: var(--foreground);
+  color: var(--text-white);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -35,8 +36,8 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: system) {
   html {
-    color-scheme: dark;
+    color-scheme: system;
   }
 }
