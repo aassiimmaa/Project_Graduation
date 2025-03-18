@@ -45,7 +45,7 @@ export function NavBar() {
   }
 
   const styleLogo = {
-    fontSize: '1.875rem',
+    fontSize: '2.2rem',
     fontWeight: 700,
     fontFamily: 'monospace',
     letterSpacing: '0.05rem',

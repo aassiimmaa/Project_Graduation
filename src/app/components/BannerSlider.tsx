@@ -33,7 +33,7 @@ const SlideImage = styled('div')<{ image: string }>(({ image }) => ({
   backgroundImage: `url(${image})`,
   backgroundSize: 'cover',
   backgroundPosition: 'center',
-  transition: 'all 0.8s ease-in-out',
+  transition: 'all 0.8s ease-in-out'
 }))
 
 const NavigationButton = styled(IconButton)(({ theme }) => ({
@@ -46,6 +46,7 @@ const NavigationButton = styled(IconButton)(({ theme }) => ({
   borderRadius: 0,
   height: '100%',
   fontSize: '48px',
+  zIndex: 2,
   '&:hover': {
     color: 'rgba(255, 255, 255, 1)',
     backgroundColor: 'transparent'
@@ -53,7 +54,9 @@ const NavigationButton = styled(IconButton)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     padding: theme.spacing(0.5)
   },
-  zIndex: 2
+  '&:active .iconNavigation': {
+    fontSize: '46px'
+  }
 }))
 
 const styleBannerDescription = {
@@ -62,7 +65,7 @@ const styleBannerDescription = {
   position: 'absolute',
   top: 0,
   left: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.6)',
+  backgroundColor: 'rgba(0, 0, 0, 0.7)',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -163,7 +166,10 @@ const BannerSlider: FC = () => {
         size={isMobile ? 'small' : 'medium'}
         disableRipple
       >
-        <ArrowBackIosIcon sx={{ fontSize: '48px' }} />
+        <ArrowBackIosIcon
+          className="iconNavigation"
+          sx={{ fontSize: '48px' }}
+        />
       </NavigationButton>
       <NavigationButton
         sx={{ right: { xs: 8 } }}
@@ -171,7 +177,12 @@ const BannerSlider: FC = () => {
         size={isMobile ? 'small' : 'medium'}
         disableRipple
       >
-        <ArrowForwardIosIcon sx={{ fontSize: '48px' }} />
+        <ArrowForwardIosIcon
+          className="iconNavigation"
+          sx={{
+            fontSize: '48px'
+          }}
+        />
       </NavigationButton>
       <Box sx={styleBannerDescription}>
         <Typography variant="h2">Khám Phá Thế Giới Dễ Dàng</Typography>
