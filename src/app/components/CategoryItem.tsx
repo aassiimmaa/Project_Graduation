@@ -25,8 +25,6 @@ const styleCard = {
   }
 }
 
-
-
 const CategoryItem = ({ image, name, description }: CategoryProps) => {
   return (
     <Card variant="outlined" sx={styleCard}>

@@ -34,7 +34,11 @@ export function NavBar() {
     backgroundColor: 'rgb(33, 37, 41)',
     width: '100%',
     height: '70px',
-    paddingY: '8px'
+    paddingY: '8px',
+    position: 'fixed',
+    top:0,
+    left: 0,
+    zIndex: 1000
   }
 
   const styleContainer = {
@@ -103,8 +107,8 @@ export function NavBar() {
   }
 
   const styleMenu = {
-    marginTop: '48px',
-    marginLeft: '70px'
+    top: 48,
+    left: 75
   }
 
   return (
@@ -113,9 +117,9 @@ export function NavBar() {
         <Typography sx={styleLogo}>ANRENTAL</Typography>
         <Box sx={styleNavBarItem}>
           <Link href="/">Trang chủ</Link>
-          <Link href="/">Dịch vụ</Link>
-          <Link href="/">Giới thiệu</Link>
-          <Link href="/">Liên hệ</Link>
+          <Link href="#Services">Dịch vụ</Link>
+          <Link href="#About">Giới thiệu</Link>
+          <Link href="#Contact">Liên hệ</Link>
           <Box component={'span'} sx={{ paddingX: '8px', userSelect: 'none' }}>
             |
           </Box>
@@ -128,6 +132,7 @@ export function NavBar() {
                 sx={styleAvatar}
               />
               <Menu
+                disableScrollLock
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
@@ -142,6 +147,8 @@ export function NavBar() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
                 sx={styleMenu}
+                container={document.getElementById('menu-appbar')!}
+                disablePortal
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
                 <MenuItem onClick={handleClose}>My account</MenuItem>
@@ -149,7 +156,7 @@ export function NavBar() {
               </Menu>
             </Box>
           ) : (
-            <Link href="/" onClick={handleLogin}>
+            <Link href="#" onClick={handleLogin}>
               Đăng nhập
             </Link>
           )}

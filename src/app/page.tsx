@@ -1,3 +1,4 @@
+import About from './components/About'
 import BannerSlider from './components/BannerSlider'
 import CategoriesList from './components/CategoriesList'
 import { NavBar } from './components/NavBar'
@@ -9,6 +10,7 @@ const HomePage = () => {
       <NavBar />
       <BannerSlider />
       <CategoriesList />
+      <About />
     </Box>
   )
 }
