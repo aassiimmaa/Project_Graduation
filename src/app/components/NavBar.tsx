@@ -55,7 +55,8 @@ export function NavBar() {
     letterSpacing: '0.05rem',
     background: 'linear-gradient(90deg,rgb(255, 115, 0),rgb(59, 148, 238))',
     WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent'
+    WebkitTextFillColor: 'transparent',
+    userSelect: 'none'
   }
 
   const styleNavBarItem = {

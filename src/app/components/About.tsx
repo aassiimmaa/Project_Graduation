@@ -1,11 +1,21 @@
 import React from 'react'
 import { Box, Typography, Container } from '@mui/material'
 
+//Style
+const styleAboutContainer = { mt: 4, mb: 4, pt: 8, borderTop: '1px solid #ccc' }
+
 const About: React.FC = () => {
   return (
-    <Container id='About' maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+    <Container id="About" maxWidth="md" sx={styleAboutContainer}>
       <Box textAlign="center" mb={4}>
-        <Typography variant="h4" component="h1" color="#000" fontWeight={600} pb={2} gutterBottom>
+        <Typography
+          variant="h4"
+          component="h1"
+          color="#000"
+          fontWeight={600}
+          pb={2}
+          gutterBottom
+        >
           Về Chúng Tôi
         </Typography>
         <Typography variant="body1" color="#000">
