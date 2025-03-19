@@ -192,7 +192,7 @@ const BannerSlider: FC = () => {
           Khám phá các dòng xe phù hợp cho mọi hành trình của bạn. Dịch vụ thuê
           xe giá cả phải chăng và đáng tin cậy, đáp ứng mọi nhu cầu của bạn.
         </Typography>
-        <Button sx={styleBannerButton}>Thuê Xe</Button>
+        <Button onClick={() => document.getElementById('Services')?.scrollIntoView({ behavior: 'smooth' })} sx={styleBannerButton}>Thuê Xe</Button>
       </Box>
     </SliderContainer>
   )
