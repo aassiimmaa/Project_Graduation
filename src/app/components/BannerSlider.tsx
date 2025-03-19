@@ -22,7 +22,8 @@ const SliderContainer = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('md')]: {
     height: '300px'
   },
-  overflow: 'hidden'
+  overflow: 'hidden',
+  marginTop: '70px'
 }))
 
 const SlideImage = styled('div')<{ image: string }>(({ image }) => ({
@@ -149,6 +150,7 @@ const BannerSlider: FC = () => {
     <SliderContainer
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
+      id='Banner'
     >
       {slides.map((slide, index) => (
         <SlideImage
