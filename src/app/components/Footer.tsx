@@ -7,7 +7,7 @@ const styleFooter = {
   color: '#fff',
   textAlign: 'center',
   py: 2,
-  width: '100%'
+  width: '100%',
 }
 
 const Footer: React.FC = () => {

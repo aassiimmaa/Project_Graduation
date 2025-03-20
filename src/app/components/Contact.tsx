@@ -7,7 +7,8 @@ import {
   Modal,
   Link,
   Container,
-  Divider
+  Divider,
+  Fade
 } from '@mui/material'
 
 //Style
@@ -78,49 +79,61 @@ const Contact: React.FC = () => {
       </Container>
 
       {/* Contact Modal */}
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={styleModal}>
-          <Typography
-            variant="h5"
-            component="h2"
-            fontWeight={700}
-            sx={styleTitleModal}
-          >
-            Thông Tin Liên Hệ
-          </Typography>
-          <Divider />
-          <Box sx={styleTitleModal}>
-            <Typography sx={styleHelpDescription}>
-              Mọi thắc mắc hoặc yêu cầu hỗ trợ, vui lòng liên hệ với chúng tôi
-              qua:
+      <Modal
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        disableScrollLock
+      >
+        <Fade in={open}>
+          <Box sx={styleModal}>
+            <Typography
+              id="contact-modal-title"
+              variant="h5"
+              component="h2"
+              fontWeight={700}
+              sx={styleTitleModal}
+            >
+              Thông Tin Liên Hệ
             </Typography>
-            <Typography sx={styleDescriptionModal}>
-              <Box component="strong">Facebook: </Box>
-              <Link href="https://www.facebook.com/entian195">
-                https://www.facebook.com/entian195
-              </Link>
-            </Typography>
-            <Typography sx={styleDescriptionModal}>
-              <Box component="strong">Email: </Box>
-              <Link href="mailto:nguyenthanhanvp2690@gmail.com">
-                nguyenthanhanvp2690@gmail.com
-              </Link>
-            </Typography>
-            <Typography sx={styleDescriptionModal}>
-              <Box component="strong">Hotline: </Box>
-              <Link href="tel:+84 378 543 296">+84 378 543 296</Link>
-            </Typography>
+            <Divider />
+            <Box sx={styleTitleModal}>
+              <Typography sx={styleHelpDescription}>
+                Mọi thắc mắc hoặc yêu cầu hỗ trợ, vui lòng liên hệ với chúng tôi
+                qua:
+              </Typography>
+              <Typography sx={styleDescriptionModal}>
+                <Box component="strong">Facebook: </Box>
+                <Link
+                  href="https://www.facebook.com/entian195"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  https://www.facebook.com/entian195
+                </Link>
+              </Typography>
+              <Typography sx={styleDescriptionModal}>
+                <Box component="strong">Email: </Box>
+                <Link href="mailto:nguyenthanhanvp2690@gmail.com">
+                  nguyenthanhanvp2690@gmail.com
+                </Link>
+              </Typography>
+              <Typography sx={styleDescriptionModal}>
+                <Box component="strong">Hotline: </Box>
+                <Link href="tel:+84 378 543 296">+84 378 543 296</Link>
+              </Typography>
+            </Box>
+            <Divider />
+            <Button
+              variant="contained"
+              color="primary"
+              sx={styleCloseButtonModal}
+              onClick={handleClose}
+            >
+              Đóng
+            </Button>
           </Box>
-          <Divider />
-          <Button
-            variant="contained"
-            color="primary"
-            sx={styleCloseButtonModal}
-            onClick={handleClose}
-          >
-            Đóng
-          </Button>
-        </Box>
+        </Fade>
       </Modal>
     </>
   )
