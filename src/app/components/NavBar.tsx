@@ -157,7 +157,7 @@ export function NavBar() {
               </Menu>
             </Box>
           ) : (
-            <Link href="#" onClick={handleLogin}>
+            <Link href="/Login" onClick={handleLogin}>
               Đăng nhập
             </Link>
           )}
