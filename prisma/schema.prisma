@@ -12,3 +12,52 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Users {
+  userId    String   @id @default(cuid())
+  email     String   @unique
+  phone     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  role      Boolean  @default(false)
+
+  orders Orders[]
+}
+
+model Vehicles {
+  vehicleId   String   @id @default(cuid())
+  vehicleName String
+  categoryId  String
+  description String
+  price       Int
+  image       String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orders     Orders[]
+  Categories Categories @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
+}
+
+model Categories {
+  categoryId   String @id @default(cuid())
+  CategoryName String
+  Description  String
+  Image        String
+
+  Vehicles Vehicles[]
+}
+
+model Orders {
+  orderId   String   @id @default(cuid())
+  userId    String
+  vehicleId String
+  fromDay   DateTime
+  toDay     DateTime
+  status    Int      @default(-1)
+  createdAt DateTime @default(now())
+
+  Users    Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  Vehicles Vehicles @relation(fields: [vehicleId], references: [vehicleId], onDelete: Cascade)
+}
