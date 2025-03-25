@@ -1,4 +1,4 @@
-import { Card, keyframes } from '@mui/material'
+import { Card } from '@mui/material'
 import CardContent from '@mui/joy/CardContent'
 import Typography from '@mui/material/Typography'
 import React from 'react'

@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
 // import { useParams } from 'next/navigation'
-import { NavBar } from '../../components/NavBar'
-import Footer from '../../components/Footer'
+import { NavBar } from '~/app/components/NavBar'
+import Footer from '~/app/components/Footer'
 import { Container } from '@mui/material'
 import DetailCategory from '~/app/components/DetailCategory'
 
