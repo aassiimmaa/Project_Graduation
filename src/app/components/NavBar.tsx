@@ -3,15 +3,18 @@ import {
   Avatar,
   Box,
   Container,
+  Divider,
+  ListItemIcon,
   Menu,
   MenuItem,
   Typography
 } from '@mui/material'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import { AccountCircle, Logout, ManageHistory } from '@mui/icons-material'
 
 export function NavBar() {
-  const [auth, setAuth] = useState(false)
+  const [auth, setAuth] = useState(true)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -36,7 +39,7 @@ export function NavBar() {
     height: '70px',
     paddingY: '8px',
     position: 'fixed',
-    top:0,
+    top: 0,
     left: 0,
     zIndex: 1000
   }
@@ -64,7 +67,7 @@ export function NavBar() {
     gap: '20px',
     justifyContent: 'flex-end',
     alignItems: 'center',
-    '& a': {
+    '& .navbar_item': {
       position: 'relative',
       textDecoration: 'none',
       fontSize: '1rem',
@@ -109,18 +112,39 @@ export function NavBar() {
 
   const styleMenu = {
     top: 48,
-    left: 75
+    left: 96
   }
+
+  const styleMenuContainer = {
+    px: 2,
+    py: 2,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 1,
+    width: 230
+  }
+
+  const styleMenuAvatar = { width: 42, height: 42 }
 
   return (
     <Box sx={styleLayOutNavBar}>
       <Container maxWidth="xl" sx={styleContainer}>
         <Typography sx={styleLogo}>ANRENTAL</Typography>
         <Box sx={styleNavBarItem}>
-          <Link href="/">Trang chủ</Link>
-          <Link href="#Services">Dịch vụ</Link>
-          <Link href="#About">Giới thiệu</Link>
-          <Link href="#Contact">Liên hệ</Link>
+          <Link className="navbar_item" href="/">
+            Trang chủ
+          </Link>
+          <Link className="navbar_item" href="#Services">
+            Dịch vụ
+          </Link>
+          <Link className="navbar_item" href="#About">
+            Giới thiệu
+          </Link>
+          <Link className="navbar_item" href="#Contact">
+            Liên hệ
+          </Link>
           <Box component={'span'} sx={{ paddingX: '8px', userSelect: 'none' }}>
             |
           </Box>
@@ -151,9 +175,40 @@ export function NavBar() {
                 container={document.getElementById('menu-appbar')!}
                 disablePortal
               >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleLogin}>Logout</MenuItem>
+                <Box sx={styleMenuContainer}>
+                  <Avatar
+                    alt="User Avatar"
+                    src="/static/images/avatar/1.jpg"
+                    sx={styleMenuAvatar}
+                  />
+                  <Typography variant="body1" fontWeight="bold">
+                    Nguyễn Thanh An
+                  </Typography>
+                </Box>
+                <Divider />
+
+                <Link href="/Profile">
+                  <MenuItem sx={{ mt: 1 }} onClick={handleClose}>
+                    <ListItemIcon>
+                      <AccountCircle fontSize="medium" />
+                    </ListItemIcon>
+                    <Typography variant="body2">Thông tin cá nhân</Typography>
+                  </MenuItem>
+                </Link>
+
+                <MenuItem onClick={handleClose}>
+                  <ListItemIcon>
+                    <ManageHistory fontSize="medium" />
+                  </ListItemIcon>
+                  <Typography variant="body2">Lịch sử thuê xe</Typography>
+                </MenuItem>
+                <Divider />
+                <MenuItem onClick={handleLogin} sx={{ color: 'red' }}>
+                  <ListItemIcon>
+                    <Logout fontSize="small" sx={{ color: 'red' }} />
+                  </ListItemIcon>
+                  <Typography variant="body2">Logout</Typography>
+                </MenuItem>
               </Menu>
             </Box>
           ) : (
