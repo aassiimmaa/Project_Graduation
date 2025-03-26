@@ -7,6 +7,7 @@ import {
   Grid2,
   Box
 } from '@mui/material'
+import Link from 'next/link'
 
 // Interface
 interface Vehicle {
@@ -61,10 +62,23 @@ const vehicles: Vehicle[] = [
   }
 ]
 
+//Styles
+const styleTitle = { mt: 8, mb: 4 }
+
+const styleCardVehicle = {
+  transition: 'all 0.3s ease-in-out',
+  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+  '&:hover': {
+    transform: 'translateY(-10px)',
+    boxShadow: '0 12px 24px rgba(0, 0, 0, 0.2)',
+    cursor: 'pointer'
+  }
+}
+
 const VehiclesList: React.FC = () => {
   return (
     <>
-      <Typography variant="h4" component="h1" sx={{ mt: 8, mb: 4 }}>
+      <Typography variant="h4" component="h1" sx={styleTitle}>
         <Box component="strong" color="rgba(218, 152, 53)">
           Xe SUV
         </Box>{' '}
@@ -73,32 +87,24 @@ const VehiclesList: React.FC = () => {
       <Grid2 container spacing={3.665}>
         {vehicles.map(vehicle => (
           <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={vehicle.id}>
-            <Card
-              sx={{
-                transition: 'all 0.3s ease-in-out',
-                boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                '&:hover': {
-                  transform: 'translateY(-10px)',
-                  boxShadow: '0 12px 24px rgba(0, 0, 0, 0.2)',
-                  cursor: 'pointer'
-                }
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="240"
-                image={vehicle.imageUrl}
-                alt={vehicle.name}
-              />
-              <CardContent>
-                <Typography variant="h5" component="div" lineHeight={2.4}>
-                  {vehicle.name}
-                </Typography>
-                <Typography variant="body1" color="red">
-                  {vehicle.price}
-                </Typography>
-              </CardContent>
-            </Card>
+            <Link href={`/VehicleDetail/${vehicle.id}`} passHref>
+              <Card sx={styleCardVehicle}>
+                <CardMedia
+                  component="img"
+                  height="240"
+                  image={vehicle.imageUrl}
+                  alt={vehicle.name}
+                />
+                <CardContent>
+                  <Typography variant="h5" component="div" lineHeight={2.4}>
+                    {vehicle.name}
+                  </Typography>
+                  <Typography variant="body1" color="red">
+                    {vehicle.price}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Link>
           </Grid2>
         ))}
       </Grid2>
