@@ -85,6 +85,13 @@ const styleTitleTable = {
   textAlign: 'center'
 }
 
+const styleHoverRow = {
+  transition: '0.3s',
+  '&:hover': { backgroundColor: '#a1bcec3d' }
+}
+
+const styleActionButton = { textTransform: 'none', fontSize: '0.9rem' }
+
 const RentalHistoryPage: React.FC = () => {
   return (
     <>
@@ -126,13 +133,7 @@ const RentalHistoryPage: React.FC = () => {
                     const statusStyle = getStatusStyle(order.status)
 
                     return (
-                      <TableRow
-                        key={index}
-                        sx={{
-                          transition: '0.3s',
-                          '&:hover': { backgroundColor: '#a1bcec3d' }
-                        }}
-                      >
+                      <TableRow key={index} sx={styleHoverRow}>
                         <TableBodyCell fontWeight="600" align="center">
                           {index + 1}
                         </TableBodyCell>
@@ -177,7 +178,7 @@ const RentalHistoryPage: React.FC = () => {
                               variant="contained"
                               color="info"
                               startIcon={<Visibility />}
-                              sx={{ textTransform: 'none', fontSize: '0.9rem' }}
+                              sx={styleActionButton}
                             >
                               Xem
                             </Button>
@@ -188,10 +189,7 @@ const RentalHistoryPage: React.FC = () => {
                               disabled={
                                 order.status === 'Chờ duyệt' ? false : true
                               }
-                              sx={{
-                                textTransform: 'none',
-                                fontSize: '0.9rem'
-                              }}
+                              sx={styleActionButton}
                             >
                               Hủy
                             </Button>
