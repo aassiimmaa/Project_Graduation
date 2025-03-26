@@ -185,6 +185,7 @@ export function NavBar() {
                     Nguyễn Thanh An
                   </Typography>
                 </Box>
+
                 <Divider />
 
                 <Link href="/Profile">
@@ -195,19 +196,22 @@ export function NavBar() {
                     <Typography variant="body2">Thông tin cá nhân</Typography>
                   </MenuItem>
                 </Link>
+                <Link href="/HistoryRental">
+                  <MenuItem sx={{mb: 1}} onClick={handleClose}>
+                    <ListItemIcon>
+                      <ManageHistory fontSize="medium" />
+                    </ListItemIcon>
+                    <Typography variant="body2">Lịch sử thuê xe</Typography>
+                  </MenuItem>
+                </Link>
 
-                <MenuItem onClick={handleClose}>
-                  <ListItemIcon>
-                    <ManageHistory fontSize="medium" />
-                  </ListItemIcon>
-                  <Typography variant="body2">Lịch sử thuê xe</Typography>
-                </MenuItem>
                 <Divider />
-                <MenuItem onClick={handleLogin} sx={{ color: 'red' }}>
+
+                <MenuItem onClick={handleLogin} sx={{ color: 'red', mt: 1 }}>
                   <ListItemIcon>
                     <Logout fontSize="small" sx={{ color: 'red' }} />
                   </ListItemIcon>
-                  <Typography variant="body2">Logout</Typography>
+                  <Typography variant="body2">Đăng xuất</Typography>
                 </MenuItem>
               </Menu>
             </Box>
