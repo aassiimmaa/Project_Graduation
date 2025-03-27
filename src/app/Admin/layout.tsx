@@ -12,31 +12,39 @@ import { DashboardLayout } from '@toolpad/core/DashboardLayout'
 import Dashboard from '../components/admin/Dashboard'
 import Order from '../components/admin/Order'
 import {
-  Box,
-  Button,
-  Chip,
   createTheme,
   Stack,
-  Tooltip,
-  Typography
 } from '@mui/material'
 import Image from 'next/image'
-import { AppTitle } from '@toolpad/core/DashboardLayout/AppTitle'
 import LogoText from '../components/LogoText'
-import Link from 'next/link'
 import LogedInUser from '../components/admin/LogedInUser'
 
 const NAVIGATION: Navigation = [
   {
-    segment: 'Admin/Dashboard',
-    title: 'Dashboard',
+    segment: 'Admin/Users',
+    title: 'Quản lý tài khoản',
     icon: <DashboardIcon />
   },
   {
-    segment: 'Admin/Orders',
-    title: 'Orders',
+    segment: 'Admin/Categories',
+    title: 'Quản lý loại xe',
+    icon: <DashboardIcon />
+  },
+  {
+    segment: 'Admin/Vehicles',
+    title: 'Quản lý xe',
     icon: <ShoppingCartIcon />
-  }
+  },
+  {
+    segment: 'Admin/RentOrder',
+    title: 'Quản lý thuê xe',
+    icon: <DashboardIcon />
+  },
+  {
+    segment: 'Admin/Consummer',
+    title: 'Thống kê',
+    icon: <DashboardIcon />
+  },
 ]
 
 const theme = createTheme({

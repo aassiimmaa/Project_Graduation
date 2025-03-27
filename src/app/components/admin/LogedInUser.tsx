@@ -11,8 +11,6 @@ import { Reply, Logout } from '@mui/icons-material'
 import Link from 'next/link'
 import React from 'react'
 
-const styleMenuAvatar = { width: 42, height: 42 }
-
 const LogedInUser = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
