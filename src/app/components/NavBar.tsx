@@ -11,7 +11,13 @@ import {
 } from '@mui/material'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import { AccountCircle, Logout, ManageHistory } from '@mui/icons-material'
+import {
+  AccountCircle,
+  Logout,
+  ManageHistory,
+  SupervisorAccount
+} from '@mui/icons-material'
+import LogoText from './LogoText'
 
 export function NavBar() {
   const [auth, setAuth] = useState(true)
@@ -49,17 +55,6 @@ export function NavBar() {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center'
-  }
-
-  const styleLogo = {
-    fontSize: '2.2rem',
-    fontWeight: 700,
-    fontFamily: 'monospace',
-    letterSpacing: '0.05rem',
-    background: 'linear-gradient(90deg,rgb(255, 115, 0),rgb(59, 148, 238))',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    userSelect: 'none'
   }
 
   const styleNavBarItem = {
@@ -131,7 +126,7 @@ export function NavBar() {
   return (
     <Box sx={styleLayOutNavBar}>
       <Container maxWidth="xl" sx={styleContainer}>
-        <Typography sx={styleLogo}>ANRENTAL</Typography>
+        <LogoText />
         <Box sx={styleNavBarItem}>
           <Link className="navbar_item" href="/">
             Trang chủ
@@ -197,11 +192,19 @@ export function NavBar() {
                   </MenuItem>
                 </Link>
                 <Link href="/HistoryRental">
-                  <MenuItem sx={{mb: 1}} onClick={handleClose}>
+                  <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                       <ManageHistory fontSize="medium" />
                     </ListItemIcon>
                     <Typography variant="body2">Lịch sử thuê xe</Typography>
+                  </MenuItem>
+                </Link>
+                <Link href="/Admin">
+                  <MenuItem sx={{ mb: 1 }} onClick={handleClose}>
+                    <ListItemIcon>
+                      <SupervisorAccount fontSize="medium" />
+                    </ListItemIcon>
+                    <Typography variant="body2">Đến trang quản lý</Typography>
                   </MenuItem>
                 </Link>
 
