@@ -1,22 +1,33 @@
 'use client'
 
-import { Box, Card, CardContent, Grid, Typography } from '@mui/material'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
-import PeopleIcon from '@mui/icons-material/People'
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn'
-
-const stats = [
-  { title: 'Tổng số đơn hàng', value: 125, icon: <ShoppingCartIcon fontSize="large" /> },
-  { title: 'Người dùng đăng ký', value: 340, icon: <PeopleIcon fontSize="large" /> },
-  { title: 'Doanh thu tháng này', value: '$12,540', icon: <MonetizationOnIcon fontSize="large" /> },
-  { title: 'Báo cáo chung', value: '10%', icon: <DashboardIcon fontSize="large" /> }
-]
+import { Box, Typography } from '@mui/material'
+import Image from 'next/image'
 
 export default function AdminDashboard() {
   return (
-    <Box>
-      ????
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        textAlign: 'center',
+      }}
+    >
+      <Image
+        src="/images/logo.png"
+        alt="AnRental Logo"
+        width={200}
+        height={180}
+      />
+      <Typography variant="h4" fontWeight={600} color="#000" mt={2}>
+        Chào mừng đến với trang quản lý AnRental!
+      </Typography>
+      <Typography variant="body1" color="#0008" mt={1} mb={2} maxWidth={600}>
+        Hệ thống quản lý chuyên nghiệp giúp bạn dễ dàng kiểm soát đơn hàng,
+        khách hàng, và hoạt động kinh doanh của mình.
+      </Typography>
     </Box>
   )
 }
