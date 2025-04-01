@@ -1,7 +1,10 @@
 'use client'
 import * as React from 'react'
-import DashboardIcon from '@mui/icons-material/Dashboard'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart'
+import PeopleIcon from '@mui/icons-material/People'
+import CategoryIcon from '@mui/icons-material/Category'
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar'
+import CarRentalIcon from '@mui/icons-material/CarRental'
+import BarChartIcon from '@mui/icons-material/BarChart'
 import {
   AppProvider,
   type Router,
@@ -9,42 +12,42 @@ import {
   type Navigation
 } from '@toolpad/core/AppProvider'
 import { DashboardLayout } from '@toolpad/core/DashboardLayout'
-import Dashboard from '../components/admin/Dashboard'
-import Order from '../components/admin/Order'
-import {
-  createTheme,
-  Stack,
-} from '@mui/material'
+import { createTheme, Stack } from '@mui/material'
 import Image from 'next/image'
 import LogoText from '../components/LogoText'
 import LogedInUser from '../components/admin/LogedInUser'
+import UsersManagement from '../components/admin/UsersManagement'
+import CategoriesManagement from '../components/admin/CategoriesManagement'
+import VehiclesManagement from '../components/admin/VehiclesManagement'
+import OrdersManagement from '../components/admin/OrdersManagement'
+import Statistical from '../components/admin/Statistical'
 
 const NAVIGATION: Navigation = [
   {
     segment: 'Admin/Users',
     title: 'Quản lý tài khoản',
-    icon: <DashboardIcon />
+    icon: <PeopleIcon />
   },
   {
     segment: 'Admin/Categories',
     title: 'Quản lý loại xe',
-    icon: <DashboardIcon />
+    icon: <CategoryIcon />
   },
   {
     segment: 'Admin/Vehicles',
     title: 'Quản lý xe',
-    icon: <ShoppingCartIcon />
+    icon: <DirectionsCarIcon />
   },
   {
     segment: 'Admin/RentOrder',
     title: 'Quản lý thuê xe',
-    icon: <DashboardIcon />
+    icon: <CarRentalIcon />
   },
   {
-    segment: 'Admin/Consummer',
+    segment: 'Admin/Statistical',
     title: 'Thống kê',
-    icon: <DashboardIcon />
-  },
+    icon: <BarChartIcon />
+  }
 ]
 
 const theme = createTheme({
@@ -68,8 +71,11 @@ const theme = createTheme({
 
 // Mapping giữa route và component tương ứng
 const PAGE_COMPONENTS: Record<string, React.ReactNode> = {
-  '/Admin/Dashboard': <Dashboard />,
-  '/Admin/Orders': <Order />
+  '/Admin/Users': <UsersManagement />,
+  '/Admin/Categories': <CategoriesManagement />,
+  '/Admin/Vehicles': <VehiclesManagement />,
+  '/Admin/RentOrder': <OrdersManagement />,
+  '/Admin/Statistical': <Statistical />
 }
 
 interface LayoutProps {

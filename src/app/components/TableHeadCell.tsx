@@ -10,6 +10,8 @@ interface CellProps {
 const TableHeadCell = ({ width, align, children }: CellProps) => {
   const styleCell = {
     fontWeight: 600,
+    color: '#000',
+    fontSize: '1rem',
     ...(width && { width }),
     ...(align && { textAlign: align })
   }
