@@ -11,9 +11,9 @@ interface CellProps {
 const TableBodyCell = ({ color, fontWeight, align, children }: CellProps) => {
   const styleCell = {
     fontWeight: '0.9rem',
+    color: color || '#000',
     ...(align && { textAlign: align }),
-    ...(fontWeight && { fontWeight: fontWeight }),
-    ...(color && { color: color })
+    ...(fontWeight && { fontWeight: fontWeight })
   }
   return <TableCell sx={styleCell}>{children}</TableCell>
 }
