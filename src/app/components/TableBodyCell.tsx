@@ -5,17 +5,28 @@ interface CellProps {
   align?: string
   fontWeight?: string
   color?: string
+  colSpan?: number
   children?: React.ReactNode
 }
 
-const TableBodyCell = ({ color, fontWeight, align, children }: CellProps) => {
+const TableBodyCell = ({
+  colSpan,
+  color,
+  fontWeight,
+  align,
+  children
+}: CellProps) => {
   const styleCell = {
     fontWeight: '0.9rem',
     color: color || '#000',
     ...(align && { textAlign: align }),
     ...(fontWeight && { fontWeight: fontWeight })
   }
-  return <TableCell sx={styleCell}>{children}</TableCell>
+  return (
+    <TableCell colSpan={colSpan || 1} sx={styleCell}>
+      {children}
+    </TableCell>
+  )
 }
 
 export default TableBodyCell

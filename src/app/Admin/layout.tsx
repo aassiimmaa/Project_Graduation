@@ -21,21 +21,22 @@ import CategoriesManagement from '../components/admin/CategoriesManagement'
 import VehiclesManagement from '../components/admin/VehiclesManagement'
 import OrdersManagement from '../components/admin/OrdersManagement'
 import Statistical from '../components/admin/Statistical'
+import { CATEGORY_MANAGEMENT, USER_MANAGEMENT, VEHICLE_MANAGEMENT } from '../shared/constant'
 
 const NAVIGATION: Navigation = [
   {
     segment: 'Admin/Users',
-    title: 'Quản lý tài khoản',
+    title: USER_MANAGEMENT,
     icon: <PeopleIcon />
   },
   {
     segment: 'Admin/Categories',
-    title: 'Quản lý loại xe',
+    title: CATEGORY_MANAGEMENT,
     icon: <CategoryIcon />
   },
   {
     segment: 'Admin/Vehicles',
-    title: 'Quản lý xe',
+    title: VEHICLE_MANAGEMENT,
     icon: <DirectionsCarIcon />
   },
   {
