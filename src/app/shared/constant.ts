@@ -1,0 +1,45 @@
+//Common text
+export const ALIGN_CENTER = 'center'
+export const FONT_WEIGHT_BOLD = 600
+export const PRIMARY_COLOR = 'primary'
+export const SIZE_BUTTON = 'small'
+export const SIZE_PAGINATION = 'large'
+export const TABLE_TITLE_VARIANT = 'h4'
+export const VARIANT_BUTTON = 'contained'
+export const VARIANT_SEARCH = 'outlined'
+export const W_5 = '5%'
+export const W_10 = '10%'
+export const W_15 = '15%'
+export const W_20 = '20%'
+export const TEXT_COLOR = '#000'
+export const SERIAL = 'STT'
+export const CREATED_AT = 'Thời gian tạo'
+export const ACTION = 'Hành động'
+export const SEARCH_TEXT_BTN = 'Tìm kiếm'
+export const PLACEHOLDER_SEARCH = 'Nhập để tìm kiếm...'
+export const NO_DATA_AVAILABLE = 'Không có kết quả!'
+export const BACKGROUND_TABLE_HEAD_COLOR = '#47acf9'
+export const DESCRIPTION = 'Mô tả'
+export const IMAGE = 'Hình Ảnh'
+
+//UsersManagement text
+export const USER_MANAGEMENT = 'Quản lý tài khoản'
+export const USER_NAME = 'Họ và tên'
+export const EMAIL = 'Email'
+export const PHONE_NUMBER = 'Số điện thoại'
+export const ROLE = 'Quyền'
+export const BANNED = 'Cấm tài khoản'
+export const DELETE_USER = 'Xóa tài khoản'
+
+//CategoriesManagement text
+export const CATEGORY_MANAGEMENT = 'Quản lý loại xe'
+export const CATEGORY_NAME = 'Tên loại xe'
+export const EDIT_CATEGORY = 'Chỉnh sửa thông tin loại xe'
+export const DELETE_CATEGORY = 'Xóa loại xe'
+
+//VehiclesManagement text
+export const VEHICLE_MANAGEMENT = 'Quản lý xe'
+export const VEHICLE_NAME = 'Tên xe'
+export const PRICE = 'Giá cho thuê'
+export const EDIT_VEHICLE = 'Chỉnh sửa thông tin xe'
+export const DELETE_VEHICLE = 'Xóa xe'
