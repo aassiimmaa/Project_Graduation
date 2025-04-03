@@ -1,5 +1,6 @@
 import { TableCell } from '@mui/material'
 import React from 'react'
+import { TEXT_COLOR } from '../shared/constant'
 
 interface CellProps {
   align?: string
@@ -18,7 +19,7 @@ const TableBodyCell = ({
 }: CellProps) => {
   const styleCell = {
     fontWeight: '0.9rem',
-    color: color || '#000',
+    color: color || TEXT_COLOR,
     ...(align && { textAlign: align }),
     ...(fontWeight && { fontWeight: fontWeight })
   }

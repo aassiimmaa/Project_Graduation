@@ -11,9 +11,7 @@ import {
   TableRow,
   Tooltip,
   TextField,
-  Box,
-  Dialog,
-  DialogContent
+  Box
 } from '@mui/material'
 import TableHeadCell from '../TableHeadCell'
 import TableBodyCell from '../TableBodyCell'
@@ -23,7 +21,6 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import {
   ACTION,
   ALIGN_CENTER,
-  BANNED,
   CATEGORY_NAME,
   DELETE_VEHICLE,
   DESCRIPTION,
@@ -45,19 +42,17 @@ import {
   VEHICLE_NAME,
   W_10,
   W_15,
-  W_20,
   W_5
 } from '~/app/shared/constant'
 import {
   PaginationContainer,
-  styleBannedButton,
   styleDeleteButton,
   styleDivider,
   StyledTableHead,
   StyledTableRow,
+  styleEditButton,
   styleHoverImage,
   styleImageContainer,
-  styleImageDialog,
   stylePagination,
   styleSearchBox,
   styleSearchButton,
@@ -67,6 +62,7 @@ import {
 } from '~/app/shared/styles/AdminTable'
 import SearchIcon from '@mui/icons-material/Search'
 import Image from 'next/image'
+import ShowLargeImage from './ShowLargeImage'
 
 // Mock data
 const vehicles = Array.from({ length: 50 }, (_, index) => ({
@@ -74,7 +70,7 @@ const vehicles = Array.from({ length: 50 }, (_, index) => ({
   name: `Tên xe ${index + 1}`,
   type: index % 2 === 0 ? 'SUV' : 'Sedan',
   description: `Mô tả về xe ${index + 1}`,
-  rentalPrice: `${(index + 1) * 10} USD/ngày`,
+  rentalPrice: `${(index + 1) * 1000000}`,
   image: `/images/air-blade-125-2025-tieu-chuan-den-bac.jpg`
 }))
 
@@ -210,7 +206,7 @@ const VehiclesManagement: React.FC = () => {
                       <Button
                         variant={VARIANT_BUTTON}
                         size={SIZE_BUTTON}
-                        sx={styleBannedButton}
+                        sx={styleEditButton}
                       >
                         <EditIcon />
                       </Button>
@@ -251,19 +247,12 @@ const VehiclesManagement: React.FC = () => {
       </TableContainer>
 
       {/* Modal hiển thị hình ảnh */}
-      <Dialog open={!!selectedImage} onClose={handleCloseModal} maxWidth="md">
-        <DialogContent>
-          {selectedImage && (
-            <Image
-              src={selectedImage}
-              alt={selectedImage}
-              width={800}
-              height={500}
-              style={styleImageDialog}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      {selectedImage && (
+        <ShowLargeImage
+          selectedImage={selectedImage}
+          close={handleCloseModal}
+        />
+      )}
     </>
   )
 }

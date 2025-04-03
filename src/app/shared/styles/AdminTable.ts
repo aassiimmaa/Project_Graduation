@@ -1,8 +1,13 @@
 import { Box, styled, TableHead, TableRow } from '@mui/material'
 import {
+  ACCEPT_COLOR_BUTTON,
   BACKGROUND_TABLE_HEAD_COLOR,
+  BANNED_COLOR_BUTTON,
+  DELETE_COLOR_BUTTON,
+  EDIT_COLOR_BUTTON,
   FONT_WEIGHT_BOLD,
   TEXT_COLOR,
+  TEXT_COLOR_WHITE,
   W_10
 } from '../constant'
 
@@ -17,18 +22,18 @@ export const styleSearchBox = {
 }
 
 export const styleSearchTextField = {
-  color: '#000',
+  color: TEXT_COLOR,
   '& .MuiOutlinedInput-root': {
     '& fieldset': { borderColor: '#ddd' },
     '&:hover fieldset': { borderColor: '#007BFF' },
     '&.Mui-focused fieldset': { borderColor: '#007BFF' }
   },
   '& .MuiInputBase-input': {
-    caretColor: '#000',
-    color: '#000'
+    caretColor: TEXT_COLOR,
+    color: TEXT_COLOR
   },
   '& .MuiInputBase-input::placeholder': {
-    color: '#000',
+    color: TEXT_COLOR,
     opacity: 0.4
   }
 }
@@ -41,7 +46,7 @@ export const styleSearchButton = {
 }
 
 export const styleTableContainer = {
-  backgroundColor: '#fff',
+  backgroundColor: TEXT_COLOR_WHITE,
   boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)'
 }
 
@@ -92,22 +97,62 @@ export const styleHoverImage = {
   cursor: 'pointer'
 }
 
-export const styleVisibilityIcon = { color: '#fff', fontSize: 24 }
+export const styleVisibilityIcon = { color: TEXT_COLOR_WHITE, fontSize: 24 }
 
-export const styleImageDialog = { width: '100%', height: 'auto' }
+export const styleDialogContainer = {
+  '.MuiDialogContent-root': {
+    p: 1,
+    fontSize: 0
+  }
+}
+
+export const styleImageDialog = {
+  width: '100%',
+  height: 'auto',
+  borderRadius: 3
+}
 
 export const styleEditButton = {
-  color: '#fff',
-  backgroundColor: '#ccb100'
+  color: TEXT_COLOR_WHITE,
+  backgroundColor: EDIT_COLOR_BUTTON
+}
+
+export const styleAcceptButton = {
+  mr: 1,
+  color: TEXT_COLOR_WHITE,
+  backgroundColor: ACCEPT_COLOR_BUTTON
+}
+
+export const styleDetailButton = {
+  color: TEXT_COLOR_WHITE,
+  backgroundColor: '#0062a3'
+}
+
+export const styleLocationButton = {
+  color: TEXT_COLOR_WHITE,
+  backgroundColor: '#bf6300'
 }
 
 export const styleBannedButton = {
-  color: '#fff',
-  backgroundColor: '#ff7700'
+  color: TEXT_COLOR_WHITE,
+  backgroundColor: BANNED_COLOR_BUTTON
 }
 
 export const styleDeleteButton = {
   ml: 1,
-  color: '#fff',
-  backgroundColor: '#d60000'
+  color: TEXT_COLOR_WHITE,
+  backgroundColor: DELETE_COLOR_BUTTON
+}
+
+export const styleButtonContainer = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 1
+}
+
+//Box inside BoxContainer
+export const styleButtonContainerChildren = {
+  display: 'flex',
+  justifyContent: 'center',
+  gap: 1
 }
