@@ -10,6 +10,8 @@ import {
   Paper
 } from '@mui/material'
 import Image from 'next/image'
+import { registerUser } from '~/actions/user.action'
+import toast from 'react-hot-toast'
 
 const RegisterForm: React.FC = () => {
   const router = useRouter()
@@ -78,14 +80,23 @@ const RegisterForm: React.FC = () => {
     return valid
   }
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      console.log('Đăng ký với:', { fullName, email, phoneNumber, password })
-      // Gọi API đăng ký
+      const result = await registerUser({
+        fullName,
+        email,
+        phoneNumber,
+        password
+      })
+      if (result.success) {
+        toast.success(result.message)
+        router.push('/Login')
+      } else {
+        toast.error(result.message)
+      }
     }
   }
-
 
   return (
     <Container

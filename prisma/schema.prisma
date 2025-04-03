@@ -21,6 +21,7 @@ model Users {
   password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isBanned  Boolean  @default(false)
   role      Boolean  @default(false)
 
   orders Orders[]
@@ -33,6 +34,7 @@ model Vehicles {
   description String
   price       Int
   image       String
+  isRent      Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

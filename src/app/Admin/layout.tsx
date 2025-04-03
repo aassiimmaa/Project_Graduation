@@ -67,7 +67,7 @@ const theme = createTheme({
       }
     }
   },
-  defaultColorScheme: 'dark' // Mặc định dark mode (nếu muốn)
+  defaultColorScheme: 'dark'
 })
 
 // Mapping giữa route và component tương ứng
