@@ -11,9 +11,7 @@ import {
   TableRow,
   Tooltip,
   TextField,
-  Box,
-  Dialog,
-  DialogContent
+  Box
 } from '@mui/material'
 import TableHeadCell from '../TableHeadCell'
 import TableBodyCell from '../TableBodyCell'
@@ -53,7 +51,6 @@ import {
   styleEditButton,
   styleHoverImage,
   styleImageContainer,
-  styleImageDialog,
   stylePagination,
   styleSearchBox,
   styleSearchButton,
@@ -63,6 +60,7 @@ import {
 } from '~/app/shared/styles/AdminTable'
 import SearchIcon from '@mui/icons-material/Search'
 import Image from 'next/image'
+import ShowLargeImage from './ShowLargeImage'
 
 // Mock data
 const categories = Array.from({ length: 50 }, (_, index) => ({
@@ -233,19 +231,12 @@ const CategoriesManagement: React.FC = () => {
       </TableContainer>
 
       {/* Modal hiển thị hình ảnh */}
-      <Dialog open={!!selectedImage} onClose={handleCloseModal} maxWidth="md">
-        <DialogContent>
-          {selectedImage && (
-            <Image
-              src={selectedImage}
-              alt={selectedImage}
-              width={800}
-              height={500}
-              style={styleImageDialog}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
+      {selectedImage && (
+        <ShowLargeImage
+          selectedImage={selectedImage}
+          close={handleCloseModal}
+        />
+      )}
     </>
   )
 }

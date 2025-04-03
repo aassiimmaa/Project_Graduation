@@ -11,8 +11,7 @@ import {
   TableRow,
   Tooltip,
   TextField,
-  Box,
-  IconButton
+  Box
 } from '@mui/material'
 import TableHeadCell from '../TableHeadCell'
 import TableBodyCell from '../TableBodyCell'
