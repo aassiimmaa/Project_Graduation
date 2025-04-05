@@ -57,4 +57,44 @@ const registerUser = async ({
   }
 }
 
-export { registerUser }
+//Login
+interface LoginUserParams {
+  email: string
+  password: string
+}
+
+const LoginUser = async ({ email, password }: LoginUserParams) => {
+  try {
+    // Kiểm tra email có tồn tại trong cơ sở dữ liệu
+    const user = await prisma.users.findUnique({
+      where: { email },
+    })
+
+    if (!user) {
+      return { success: false, message: 'Email không tồn tại' }
+    }
+
+    // Kiểm tra mật khẩu
+    const isPasswordValid = await bcrypt.compare(password, user.password)
+    if (!isPasswordValid) {
+      return { success: false, message: 'Mật khẩu không chính xác' }
+    }
+
+    // Trả về thông tin người dùng nếu đăng nhập thành công
+    return {
+      success: true,
+      message: 'Đăng nhập thành công',
+      user: {
+        id: user.userId,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+      },
+    }
+  } catch (err) {
+    console.error(err)
+    return { success: false, message: 'Đã xảy ra lỗi, vui lòng thử lại sau' }
+  }
+}
+
+export { registerUser, LoginUser }
