@@ -8,12 +8,14 @@ import {
   TextField,
   Typography,
   Paper,
-  Divider,
+  Divider
 } from '@mui/material'
-import Grid from '@mui/material/Grid2';
+import Grid from '@mui/material/Grid2'
 import { Google, Facebook } from '@mui/icons-material'
 import Image from 'next/image'
-import Link from 'next/link';
+import Link from 'next/link'
+import { LoginUser } from '~/actions/user.action'
+import toast from 'react-hot-toast'
 
 const LoginForm: React.FC = () => {
   const router = useRouter()
@@ -46,11 +48,17 @@ const LoginForm: React.FC = () => {
     return valid
   }
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     if (validateForm()) {
-      console.log('Đăng nhập với:', { email, password })
-      // Gọi API đăng nhập
+      const result = await LoginUser({ email, password })
+      if (result.success) {
+        toast.success(result.message)
+        localStorage.setItem('user', JSON.stringify(result.user))
+        router.push('/') // Chuyển hướng đến trang Dashboard
+      } else {
+        toast.error(result.message)
+      }
     }
   }
 
@@ -79,7 +87,13 @@ const LoginForm: React.FC = () => {
           backgroundColor: 'white'
         }}
       >
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center'
+          }}
+        >
           <Image src="/images/logo.png" height={80} width={100} alt="logo" />
           <Typography variant="h5" fontWeight="bold" mt={1}>
             Đăng nhập
@@ -119,9 +133,9 @@ const LoginForm: React.FC = () => {
             Đăng nhập
           </Button>
           <Link href="/Register">
-              <Button fullWidth variant="outlined" color="warning" sx={{ mt: 1 }}>
-                Đăng ký
-              </Button>
+            <Button fullWidth variant="outlined" color="warning" sx={{ mt: 1 }}>
+              Đăng ký
+            </Button>
           </Link>
         </Box>
 
@@ -139,7 +153,7 @@ const LoginForm: React.FC = () => {
               Google
             </Button>
           </Grid>
-          <Grid  size={6}>
+          <Grid size={6}>
             <Button
               fullWidth
               variant="contained"
