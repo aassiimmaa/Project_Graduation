@@ -26,6 +26,7 @@ export const EDIT_COLOR_BUTTON = '#ccb100'
 export const DELETE_COLOR_BUTTON = '#d60000'
 export const ACCEPT_COLOR_BUTTON = '#007c13'
 export const CONFIRM_TEXT = 'Xác nhận'
+export const CANCEL_TEXT = 'Hủy'
 export const EMAIL_REGEX_ERROR = 'Email không hợp lệ!'
 export const PHONE_REGEX_ERROR = 'Số điện thoại không hợp lệ (chỉ gồm 10 chữ số)'
 export const STORAGE_DATA_USER = 'user'
@@ -78,12 +79,19 @@ export const DELETE_ORDER = 'Xóa đơn'
 
 //Client area
 
-//AvatarCropper text
-export const MAX_WIDTH_PROFILE = 'sm'
+//Profile text
 export const CROP_AVATAR = 'Cắt ảnh đại diện'
 export const CROP_AVATAR_LABEL = 'Kéo để cắt ảnh'
 export const AVATAR_CROP_SIZE = 400
+export const MAX_WIDTH_PROFILE = 'sm'
 export const SAVE = 'Lưu'
 export const EDIT = 'Chỉnh sửa'
-export const CHANGE_PASSWORD = 'Đổi mật khẩu'
 export const PERSONAL_INFORMATION = 'Thông tin cá nhân'
+export const CHANGE_PASSWORD = 'Đổi mật khẩu'
+export const CURRENT_PASSWORD = 'Mật khẩu hiện tại'
+export const NEW_PASSWORD = 'Mật khẩu mới'
+export const CONFIRM_PASSWORD = 'Xác nhận mật khẩu mới'
+export const TYPE_PASSWORD = 'password'
+export const SAVE_PASSWORD = 'Lưu mật khẩu'
+export const PASSWORD_ERROR_LENGTH = 'Mật khẩu mới phải có ít nhất 6 ký tự!'
+export const PASSWORD_ERROR_CONFIRM = 'Mật khẩu xác nhận không khớp!'

@@ -1,6 +1,6 @@
 import { ALIGN_CENTER } from "../constant"
 
-const styleContainerProfile = { mt: 18 }
+const styleContainerProfile = { mt: 20 }
 
 const stylePaperProfile = { p: 4, textAlign: ALIGN_CENTER, m: 4 }
 
