@@ -37,7 +37,7 @@ import {
   SIZE_PAGINATION,
   TABLE_TITLE_VARIANT,
   VARIANT_BUTTON,
-  VARIANT_SEARCH,
+  VARIANT_INPUT,
   VEHICLE_MANAGEMENT,
   VEHICLE_NAME,
   W_10,
@@ -128,7 +128,7 @@ const VehiclesManagement: React.FC = () => {
       <Box sx={styleSearchBox}>
         <TextField
           placeholder={PLACEHOLDER_SEARCH}
-          variant={VARIANT_SEARCH}
+          variant={VARIANT_INPUT}
           size={SIZE_BUTTON}
           fullWidth
           value={searchTerm}
