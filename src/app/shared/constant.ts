@@ -2,11 +2,12 @@
 export const ALIGN_CENTER = 'center'
 export const FONT_WEIGHT_BOLD = 600
 export const PRIMARY_COLOR = 'primary'
+export const WARNING_COLOR = 'warning'
 export const SIZE_BUTTON = 'small'
 export const SIZE_PAGINATION = 'large'
 export const TABLE_TITLE_VARIANT = 'h4'
 export const VARIANT_BUTTON = 'contained'
-export const VARIANT_SEARCH = 'outlined'
+export const VARIANT_INPUT = 'outlined'
 export const W_5 = '5%'
 export const W_10 = '10%'
 export const W_15 = '15%'
@@ -24,7 +25,17 @@ export const BANNED_COLOR_BUTTON = '#ff7700'
 export const EDIT_COLOR_BUTTON = '#ccb100'
 export const DELETE_COLOR_BUTTON = '#d60000'
 export const ACCEPT_COLOR_BUTTON = '#007c13'
+export const CONFIRM_TEXT = 'Xác nhận'
+export const EMAIL_REGEX_ERROR = 'Email không hợp lệ!'
+export const PHONE_REGEX_ERROR = 'Số điện thoại không hợp lệ (chỉ gồm 10 chữ số)'
+export const STORAGE_DATA_USER = 'user'
+export const MARGIN_TEXTFIELD_NORMAL = 'normal'
 
+//Regex
+export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+export const REGEX_PHONE = /^[0-9]{10}$/
+
+//Admin area
 //UsersManagement text
 export const USER_MANAGEMENT = 'Quản lý tài khoản'
 export const USER_NAME = 'Họ và tên'
@@ -63,3 +74,16 @@ export const ACCEPT_ORDER = 'Duyệt đơn'
 export const DETAIL_ORDER = 'Xem chi tiết'
 export const LOCATION_CAR = 'Xem vị trí xe'
 export const DELETE_ORDER = 'Xóa đơn'
+
+
+//Client area
+
+//AvatarCropper text
+export const MAX_WIDTH_PROFILE = 'sm'
+export const CROP_AVATAR = 'Cắt ảnh đại diện'
+export const CROP_AVATAR_LABEL = 'Kéo để cắt ảnh'
+export const AVATAR_CROP_SIZE = 400
+export const SAVE = 'Lưu'
+export const EDIT = 'Chỉnh sửa'
+export const CHANGE_PASSWORD = 'Đổi mật khẩu'
+export const PERSONAL_INFORMATION = 'Thông tin cá nhân'

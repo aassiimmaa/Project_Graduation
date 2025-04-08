@@ -38,7 +38,7 @@ import {
   USER_MANAGEMENT,
   USER_NAME,
   VARIANT_BUTTON,
-  VARIANT_SEARCH,
+  VARIANT_INPUT,
   W_10,
   W_15,
   W_20,
@@ -112,7 +112,7 @@ const UsersManagement: React.FC = () => {
       <Box sx={styleSearchBox}>
         <TextField
           placeholder={PLACEHOLDER_SEARCH}
-          variant={VARIANT_SEARCH}
+          variant={VARIANT_INPUT}
           size={SIZE_BUTTON}
           fullWidth
           value={searchTerm}

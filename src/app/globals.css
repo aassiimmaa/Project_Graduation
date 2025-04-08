@@ -39,6 +39,10 @@ a {
   text-decoration: none;
 }
 
+.avatar-cropper-content g {
+  display: none;
+}
+
 @media (prefers-color-scheme: system) {
   html {
     color-scheme: system;

@@ -10,7 +10,6 @@ import {
   Typography
 } from '@mui/material'
 import Link from 'next/link'
-import React, { useState } from 'react'
 import {
   AccountCircle,
   Logout,
@@ -18,11 +17,24 @@ import {
   SupervisorAccount
 } from '@mui/icons-material'
 import LogoText from './LogoText'
+import { useRouter } from 'next/navigation'
+import React, { useEffect } from 'react'
 
 export function NavBar() {
-  const [auth, setAuth] = useState(true)
+  const user = localStorage.getItem('user')
+  const parsedUser = user ? JSON.parse(user) : null
+  const [auth, setAuth] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
+  const router = useRouter()
+
+  useEffect(() => {
+    if (parsedUser) {
+      setAuth(true)
+    } else {
+      setAuth(false)
+    }
+  }, [parsedUser])
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -32,9 +44,16 @@ export function NavBar() {
     setAnchorEl(null)
   }
 
-  //fake handle login
+  //handle login
   const handleLogin = () => {
-    setAuth(!auth)
+    router.push('/Login')
+  }
+
+  //Logout function
+  const handleLogOut = () => {
+    localStorage.removeItem('user')
+    setAuth(false)
+    router.push('/')
   }
 
   // Style Navbar
@@ -146,8 +165,8 @@ export function NavBar() {
           {auth ? (
             <Box sx={{ position: 'relative' }}>
               <Avatar
-                alt="Remy Sharp"
-                src="/static/images/avatar/1.jpg"
+                alt="Avatar"
+                src={parsedUser.image}
                 onClick={handleMenu}
                 sx={styleAvatar}
               />
@@ -173,11 +192,11 @@ export function NavBar() {
                 <Box sx={styleMenuContainer}>
                   <Avatar
                     alt="User Avatar"
-                    src="/static/images/avatar/1.jpg"
+                    src={parsedUser.image}
                     sx={styleMenuAvatar}
                   />
                   <Typography variant="body1" fontWeight="bold">
-                    Nguyễn Thanh An
+                    {parsedUser.name}
                   </Typography>
                 </Box>
 
@@ -199,18 +218,20 @@ export function NavBar() {
                     <Typography variant="body2">Lịch sử thuê xe</Typography>
                   </MenuItem>
                 </Link>
-                <Link href="/Admin">
-                  <MenuItem sx={{ mb: 1 }} onClick={handleClose}>
-                    <ListItemIcon>
-                      <SupervisorAccount fontSize="medium" />
-                    </ListItemIcon>
-                    <Typography variant="body2">Đến trang quản lý</Typography>
-                  </MenuItem>
-                </Link>
+                {parsedUser.role && (
+                  <Link href="/Admin">
+                    <MenuItem sx={{ mb: 1 }} onClick={handleClose}>
+                      <ListItemIcon>
+                        <SupervisorAccount fontSize="medium" />
+                      </ListItemIcon>
+                      <Typography variant="body2">Đến trang quản lý</Typography>
+                    </MenuItem>
+                  </Link>
+                )}
 
                 <Divider />
 
-                <MenuItem onClick={handleLogin} sx={{ color: 'red', mt: 1 }}>
+                <MenuItem onClick={handleLogOut} sx={{ color: 'red', mt: 1 }}>
                   <ListItemIcon>
                     <Logout fontSize="small" sx={{ color: 'red' }} />
                   </ListItemIcon>

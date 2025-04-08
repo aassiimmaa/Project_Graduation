@@ -23,6 +23,9 @@ const nextConfig = {
         pathname: '/wp-content/uploads/2024/09/**'
       }
     ]
+  },
+  experimental: {
+    scrollRestoration: false
   }
 }
 
