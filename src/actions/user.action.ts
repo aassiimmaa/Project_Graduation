@@ -30,7 +30,7 @@ const registerUser = async ({
     })
     if (existingEmail) {
       revalidatePath('/Register')
-      return { success: false, message: 'Email đã được sử dụng' }
+      return { success: false, message: 'Email đã được sử dụng!' }
     }
 
     // Kiểm tra số điện thoại đã tồn tại
@@ -38,7 +38,7 @@ const registerUser = async ({
       where: { phone: phoneNumber }
     })
     if (existingPhone) {
-      return { success: false, message: 'Số điện thoại đã được sử dụng' }
+      return { success: false, message: 'Số điện thoại đã được sử dụng!' }
     }
 
     // Mã hóa mật khẩu
@@ -57,7 +57,7 @@ const registerUser = async ({
     return { success: true, message: 'Đăng ký thành công!', user: newUser }
   } catch (err) {
     console.error(err)
-    return { success: false, message: 'Đã xảy ra lỗi, vui lòng thử lại sau' }
+    return { success: false, message: 'Đã xảy ra lỗi, vui lòng thử lại sau!' }
   }
 }
 
@@ -75,13 +75,13 @@ const LoginUser = async ({ email, password }: LoginUserParams) => {
     })
 
     if (!user) {
-      return { success: false, message: 'Email không tồn tại' }
+      return { success: false, message: 'Email không tồn tại!' }
     }
 
     // Kiểm tra mật khẩu
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
-      return { success: false, message: 'Mật khẩu không chính xác' }
+      return { success: false, message: 'Mật khẩu không chính xác!' }
     }
 
     // Trả về thông tin người dùng nếu đăng nhập thành công
@@ -100,7 +100,7 @@ const LoginUser = async ({ email, password }: LoginUserParams) => {
     }
   } catch (err) {
     console.error(err)
-    return { success: false, message: 'Đã xảy ra lỗi, vui lòng thử lại sau' }
+    return { success: false, message: 'Đã xảy ra lỗi, vui lòng thử lại sau!' }
   }
 }
 
@@ -121,7 +121,7 @@ const updateUser = async ({
 }: UpdateUserParams) => {
   try {
     const currentUser = await prisma.users.findUnique({
-      where: { userId },
+      where: { userId }
     })
 
     let avatarUrl = currentUser?.image // mặc định giữ nguyên
@@ -162,5 +162,50 @@ const updateUser = async ({
   }
 }
 
+//Change Password
+interface ChangePasswordParams {
+  userId: string
+  currentPassword: string
+  newPassword: string
+}
 
-export { registerUser, LoginUser, updateUser }
+const changePassword = async ({
+  userId,
+  currentPassword,
+  newPassword
+}: ChangePasswordParams) => {
+  try {
+    // Tìm người dùng theo userId
+    const user = await prisma.users.findUnique({
+      where: { userId }
+    })
+
+    if (!user) {
+      return { success: false, message: 'Người dùng không tồn tại!' }
+    }
+
+    // Kiểm tra mật khẩu hiện tại
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password)
+    if (!isPasswordValid) {
+      return { success: false, message: 'Mật khẩu hiện tại không chính xác!' }
+    }
+
+    // Mã hóa mật khẩu mới
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10)
+
+    // Cập nhật mật khẩu trong cơ sở dữ liệu
+    await prisma.users.update({
+      where: { userId },
+      data: {
+        password: hashedNewPassword
+      }
+    })
+
+    return { success: true, message: 'Thay đổi mật khẩu thành công!' }
+  } catch (err) {
+    console.error(err)
+    return { success: false, message: 'Đã xảy ra lỗi, vui lòng thử lại sau!' }
+  }
+}
+
+export { registerUser, LoginUser, updateUser, changePassword }
