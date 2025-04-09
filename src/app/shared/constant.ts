@@ -28,23 +28,32 @@ export const ACCEPT_COLOR_BUTTON = '#007c13'
 export const CONFIRM_TEXT = 'Xác nhận'
 export const CANCEL_TEXT = 'Hủy'
 export const EMAIL_REGEX_ERROR = 'Email không hợp lệ!'
-export const PHONE_REGEX_ERROR = 'Số điện thoại không hợp lệ (chỉ gồm 10 chữ số)'
+export const PHONE_REGEX_ERROR =
+  'Số điện thoại không hợp lệ (chỉ gồm 10 chữ số)'
 export const STORAGE_DATA_USER = 'user'
 export const MARGIN_TEXTFIELD_NORMAL = 'normal'
+export const ROLE_ADMIN = 'Admin'
+export const ROLE_USER = 'User'
 
 //Regex
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const REGEX_PHONE = /^[0-9]{10}$/
+export const DATE_PATTERN = 'HH:mm:ss - dd/MM/yyyy'
 
 //Admin area
 //UsersManagement text
 export const USER_MANAGEMENT = 'Quản lý tài khoản'
+export const AVATAR = 'Ảnh đại diện'
 export const USER_NAME = 'Họ và tên'
 export const EMAIL = 'Email'
 export const PHONE_NUMBER = 'Số điện thoại'
 export const ROLE = 'Quyền'
-export const BANNED = 'Cấm tài khoản'
+export const BAN_TITLE = 'Khóa tài khoản'
+export const BANNED = 'Tài khoản đã bị khóa!'
+export const CANNOT_BANNED = 'Không thể khóa tài khoản Admin!'
 export const DELETE_USER = 'Xóa tài khoản'
+export const CANNOT_DELETE = 'Chỉ có thể xóa tài khoản đã bị khóa!'
+export const LOADING_USERS = 'Đang tải danh sách người dùng...'
 
 //CategoriesManagement text
 export const CATEGORY_MANAGEMENT = 'Quản lý loại xe'
@@ -75,7 +84,6 @@ export const ACCEPT_ORDER = 'Duyệt đơn'
 export const DETAIL_ORDER = 'Xem chi tiết'
 export const LOCATION_CAR = 'Xem vị trí xe'
 export const DELETE_ORDER = 'Xóa đơn'
-
 
 //Client area
 

@@ -78,6 +78,10 @@ const LoginUser = async ({ email, password }: LoginUserParams) => {
       return { success: false, message: 'Email không tồn tại!' }
     }
 
+    if (user.isBanned) {
+      return { success: false, message: 'Tài khoản của bạn đã bị khóa!' }
+    }
+
     // Kiểm tra mật khẩu
     const isPasswordValid = await bcrypt.compare(password, user.password)
     if (!isPasswordValid) {
@@ -208,4 +212,127 @@ const changePassword = async ({
   }
 }
 
-export { registerUser, LoginUser, updateUser, changePassword }
+//getAllUsers
+const getAllUsers = async () => {
+  try {
+    const users = await prisma.users.findMany({
+      orderBy: {
+        createdAt: 'desc' // Sắp xếp theo thời gian tạo nếu có field này
+      },
+      select: {
+        userId: true,
+        name: true,
+        email: true,
+        phone: true,
+        image: true,
+        role: true,
+        isBanned: true,
+        createdAt: true // nếu có
+      }
+    })
+
+    return { success: true, users }
+  } catch (err) {
+    console.error(err)
+    return {
+      success: false,
+      message: 'Không thể lấy danh sách người dùng.'
+    }
+  }
+}
+
+//getUserById
+const getUserById = async (userId: string) => {
+  try {
+    const user = await prisma.users.findUnique({
+      where: { userId },
+      select: {
+        userId: true,
+        name: true,
+        email: true,
+        phone: true,
+        image: true,
+        role: true,
+        isBanned: true,
+        createdAt: true
+      }
+    })
+
+    if (!user) {
+      return { success: false, message: 'Người dùng không tồn tại!' }
+    }
+
+    return { success: true, user }
+  } catch (err) {
+    console.error(err)
+    return {
+      success: false,
+      message: 'Không thể lấy thông tin người dùng.'
+    }
+  }
+}
+
+//Ban User
+const banUser = async (userId: string) => {
+  try {
+    const user = await getUserById(userId)
+
+    if (!user) {
+      return { success: false, message: 'Người dùng không tồn tại!' }
+    }
+
+    await prisma.users.update({
+      where: { userId },
+      data: {
+        isBanned: true
+      }
+    })
+
+    return {
+      success: true,
+      message: `Đã khóa người dùng ${user.user?.name} thành công!`
+    }
+  } catch (err) {
+    console.error(err)
+    return {
+      success: false,
+      message: 'Cập nhật thất bại, vui lòng thử lại sau.'
+    }
+  }
+}
+
+//Delete User
+const deleteUser = async (userId: string) => {
+  try {
+    const user = await getUserById(userId)
+
+    if (!user) {
+      return { success: false, message: 'Người dùng không tồn tại!' }
+    }
+
+    await prisma.users.delete({
+      where: { userId }
+    })
+
+    return {
+      success: true,
+      message: `Đã xóa người dùng ${user.user?.name} thành công!`
+    }
+  } catch (err) {
+    console.error(err)
+    return {
+      success: false,
+      message: 'Xóa thất bại, vui lòng thử lại sau.'
+    }
+  }
+}
+
+export {
+  registerUser,
+  LoginUser,
+  updateUser,
+  changePassword,
+  getAllUsers,
+  banUser,
+  deleteUser
+}
