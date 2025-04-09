@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -11,7 +11,8 @@ import {
   TableRow,
   Tooltip,
   TextField,
-  Box
+  Box,
+  Avatar
 } from '@mui/material'
 import TableHeadCell from '../TableHeadCell'
 import TableBodyCell from '../TableBodyCell'
@@ -20,16 +21,24 @@ import BlockIcon from '@mui/icons-material/Block'
 import {
   ACTION,
   ALIGN_CENTER,
+  AVATAR,
+  BAN_TITLE,
   BANNED,
+  CANNOT_BANNED,
+  CANNOT_DELETE,
   CREATED_AT,
+  DATE_PATTERN,
   DELETE_USER,
   EMAIL,
   FONT_WEIGHT_BOLD,
+  LOADING_USERS,
   NO_DATA_AVAILABLE,
   PHONE_NUMBER,
   PLACEHOLDER_SEARCH,
   PRIMARY_COLOR,
   ROLE,
+  ROLE_ADMIN,
+  ROLE_USER,
   SEARCH_TEXT_BTN,
   SERIAL,
   SIZE_BUTTON,
@@ -46,6 +55,7 @@ import {
 } from '~/app/shared/constant'
 import {
   PaginationContainer,
+  styleAvatar,
   styleBannedButton,
   styleDeleteButton,
   styleDivider,
@@ -58,30 +68,38 @@ import {
   styleTableContainer
 } from '~/app/shared/styles/AdminTable'
 import SearchIcon from '@mui/icons-material/Search'
-
-// Mock data
-const users = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  name: `Người dùng ${index + 1}`,
-  email: `user${index + 1}@example.com`,
-  phone: `012345678${index % 10}`,
-  createdAt: '23:59:59 - 30/04/2025',
-  role: index % 2 === 0 ? 'Admin' : 'User'
-}))
+import { banUser, deleteUser, getAllUsers } from '~/actions/user.action'
+import { format } from 'date-fns'
+import toast from 'react-hot-toast'
 
 const UsersManagement: React.FC = () => {
   const [page, setPage] = useState(1) // Trang hiện tại (Pagination bắt đầu từ 1)
   const [searchTerm, setSearchTerm] = useState('') // Từ khóa tìm kiếm
   const [searchQuery, setSearchQuery] = useState('') // Từ khóa thực hiện tìm kiếm
   const rowsPerPage = 8 // Số dòng mỗi trang
-
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
+  const [users, setUsers] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  //Lấy toàn bộ User trong hệ thống
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const res = await getAllUsers()
+      if (res.success) {
+        setUsers(res.users || [])
+      } else {
+        alert(res.message)
+      }
+      setLoading(false)
+    }
+
+    fetchUsers()
+  }, [])
+
   const filteredUsers = users.filter(user =>
     user.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
-
   const totalPages = Math.ceil(filteredUsers.length / rowsPerPage) // Tổng số trang
-
   // Hàm xử lý thay đổi trang
   const handleChangePage = (
     event: React.ChangeEvent<unknown>,
@@ -100,6 +118,36 @@ const UsersManagement: React.FC = () => {
   const handleSearch = () => {
     setSearchQuery(searchTerm) // Cập nhật từ khóa tìm kiếm thực tế
     setPage(1) // Reset về trang đầu tiên
+  }
+
+  //Hàm xử lý khóa tài khoản
+  const handleBanUser = async (userId: string) => {
+    const res = await banUser(userId)
+    if (res.success) {
+      toast.success(res.message, {
+        duration: 2000
+      })
+      setUsers(prevUsers =>
+        prevUsers.map(user =>
+          user.userId === userId ? { ...user, isBanned: true } : user
+        )
+      )
+    } else {
+      toast.error(res.message)
+    }
+  }
+
+  //Hàm xử lý xóa tài khoản
+  const handleDeleteUser = async (userId: string) => {
+    const res = await deleteUser(userId)
+    if (res.success) {
+      toast.success(res.message, {
+        duration: 2000
+      })
+      setUsers(prevUsers => prevUsers.filter(user => user.userId !== userId))
+    } else {
+      toast.error(res.message)
+    }
   }
 
   return (
@@ -133,15 +181,18 @@ const UsersManagement: React.FC = () => {
         <Table>
           <StyledTableHead>
             <TableRow>
-              <TableHeadCell align={ALIGN_CENTER} width={W_10}>
+              <TableHeadCell align={ALIGN_CENTER} width={W_5}>
                 {SERIAL}
+              </TableHeadCell>
+              <TableHeadCell align={ALIGN_CENTER} width={W_10}>
+                {AVATAR}
               </TableHeadCell>
               <TableHeadCell width={W_20}>{USER_NAME}</TableHeadCell>
               <TableHeadCell>{EMAIL}</TableHeadCell>
               <TableHeadCell align={ALIGN_CENTER} width={W_10}>
                 {PHONE_NUMBER}
               </TableHeadCell>
-              <TableHeadCell align={ALIGN_CENTER} width={W_20}>
+              <TableHeadCell align={ALIGN_CENTER} width={W_15}>
                 {CREATED_AT}
               </TableHeadCell>
               <TableHeadCell align={ALIGN_CENTER} width={W_5}>
@@ -153,11 +204,16 @@ const UsersManagement: React.FC = () => {
             </TableRow>
           </StyledTableHead>
           <TableBody>
-            {paginatedUsers.length > 0 ? (
+            {paginatedUsers.length > 0 && !loading ? (
               paginatedUsers.map((user, index) => (
-                <StyledTableRow key={user.id}>
+                <StyledTableRow key={index}>
                   <TableBodyCell align={ALIGN_CENTER}>
                     {index + 1 + (page - 1) * rowsPerPage}
+                  </TableBodyCell>
+                  <TableBodyCell>
+                    <Box display={'flex'} justifyContent={ALIGN_CENTER}>
+                      <Avatar src={user.image} sx={styleAvatar} />
+                    </Box>
                   </TableBodyCell>
                   <TableBodyCell>{user.name}</TableBodyCell>
                   <TableBodyCell>{user.email}</TableBodyCell>
@@ -165,36 +221,60 @@ const UsersManagement: React.FC = () => {
                     {user.phone}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {user.createdAt}
+                    {format(new Date(user.createdAt), DATE_PATTERN)}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {user.role}
+                    {user.role ? ROLE_ADMIN : ROLE_USER}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    <Tooltip title={BANNED}>
-                      <Button
-                        variant={VARIANT_BUTTON}
-                        size={SIZE_BUTTON}
-                        sx={styleBannedButton}
-                      >
-                        <BlockIcon />
-                      </Button>
+                    <Tooltip
+                      title={
+                        user.isBanned
+                          ? BANNED
+                          : user.role
+                            ? CANNOT_BANNED
+                            : BAN_TITLE
+                      }
+                    >
+                      <Box component={'span'}>
+                        <Button
+                          disabled={user.isBanned || user.role}
+                          variant={VARIANT_BUTTON}
+                          size={SIZE_BUTTON}
+                          sx={styleBannedButton}
+                          onClick={() => handleBanUser(user.userId)}
+                        >
+                          <BlockIcon />
+                        </Button>
+                      </Box>
                     </Tooltip>
-                    <Tooltip title={DELETE_USER}>
-                      <Button
-                        variant={VARIANT_BUTTON}
-                        size={SIZE_BUTTON}
-                        sx={styleDeleteButton}
-                      >
-                        <DeleteIcon />
-                      </Button>
+                    <Tooltip
+                      title={user.isBanned ? DELETE_USER : CANNOT_DELETE}
+                    >
+                      <Box component={'span'}>
+                        <Button
+                          disabled={user.role || user.isBanned == false}
+                          variant={VARIANT_BUTTON}
+                          size={SIZE_BUTTON}
+                          sx={styleDeleteButton}
+                          onClick={() => handleDeleteUser(user.userId)}
+                        >
+                          <DeleteIcon />
+                        </Button>
+                      </Box>
                     </Tooltip>
                   </TableBodyCell>
                 </StyledTableRow>
               ))
+            ) : loading ? (
+              <StyledTableRow>
+                <TableBodyCell align={ALIGN_CENTER} colSpan={8}>
+                  {LOADING_USERS}
+                </TableBodyCell>
+              </StyledTableRow>
             ) : (
               <StyledTableRow>
-                <TableBodyCell align={ALIGN_CENTER} colSpan={7}>
+                <TableBodyCell align={ALIGN_CENTER} colSpan={8}>
                   {NO_DATA_AVAILABLE}
                 </TableBodyCell>
               </StyledTableRow>

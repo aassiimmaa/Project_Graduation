@@ -21,7 +21,14 @@ import CategoriesManagement from '../components/admin/CategoriesManagement'
 import VehiclesManagement from '../components/admin/VehiclesManagement'
 import OrdersManagement from '../components/admin/OrdersManagement'
 import Statistical from '../components/admin/Statistical'
-import { CATEGORY_MANAGEMENT, ORDER_MANAGEMENT, STATISTICAL, USER_MANAGEMENT, VEHICLE_MANAGEMENT } from '../shared/constant'
+import {
+  CATEGORY_MANAGEMENT,
+  ORDER_MANAGEMENT,
+  STATISTICAL,
+  USER_MANAGEMENT,
+  VEHICLE_MANAGEMENT
+} from '../shared/constant'
+import useRequireAuth from '~/hooks/useRequireAuth'
 
 const NAVIGATION: Navigation = [
   {
@@ -67,6 +74,22 @@ const theme = createTheme({
       }
     }
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          '&.Mui-disabled': {
+            backgroundColor: 'rgba(0, 0, 0, 0.4)', // Màu nền cho nút bị vô hiệu hóa
+            color: '#fff',
+            pointerEvents: 'auto', // ✅ Cho phép hover
+            '&:hover': {
+              cursor: 'not-allowed'
+            }
+          }
+        }
+      }
+    }
+  },
   defaultColorScheme: 'dark'
 })
 
@@ -89,6 +112,7 @@ export default function DashboardLayoutSidebarCollapsed({
   window
 }: LayoutProps) {
   const [pathname, setPathname] = React.useState('/Admin')
+  const user = useRequireAuth()
 
   const router = React.useMemo<Router>(
     () => ({
@@ -101,22 +125,30 @@ export default function DashboardLayoutSidebarCollapsed({
 
   const Window = window ? window() : undefined
 
-  const [session, setSession] = React.useState<Session | null>({
-    user: {
-      name: 'Bharat Kashyap',
-      email: 'bharatkashyap@outlook.com',
-      image: 'https://avatars.githubusercontent.com/u/19550456'
+  const [session, setSession] = React.useState<Session | null>(null)
+
+  React.useEffect(() => {
+    if (user) {
+      setSession({
+        user: {
+          name: user.name,
+          email: user.email,
+          image: user.image
+        }
+      })
     }
-  })
+  }, [user])
 
   const authentication = React.useMemo(() => {
+    if (!user) return null
+
     return {
       signIn: () => {
         setSession({
           user: {
-            name: 'Bharat Kashyap',
-            email: 'bharatkashyap@outlook.com',
-            image: 'https://avatars.githubusercontent.com/u/19550456'
+            name: user.name,
+            email: user.email,
+            image: user.image
           }
         })
       },
@@ -124,7 +156,9 @@ export default function DashboardLayoutSidebarCollapsed({
         setSession(null)
       }
     }
-  }, [])
+  }, [user])
+
+  if (!user) return null
 
   const CustomAppTitle = () => {
     return (
@@ -142,7 +176,7 @@ export default function DashboardLayoutSidebarCollapsed({
   }
 
   const CustomAccount = () => {
-    return <LogedInUser />
+    return <LogedInUser user={user} image={user.image} />
   }
 
   return (

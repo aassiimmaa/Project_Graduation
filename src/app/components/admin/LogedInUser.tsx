@@ -10,8 +10,15 @@ import {
 import { Reply, Logout } from '@mui/icons-material'
 import Link from 'next/link'
 import React from 'react'
+import { useRouter } from 'next/navigation'
 
-const LogedInUser = () => {
+interface UserProps {
+  user: any
+  image: string
+}
+
+const LogedInUser = (LogIn: UserProps) => {
+  const router = useRouter()
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
 
@@ -21,6 +28,11 @@ const LogedInUser = () => {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleLogOut = () => {
+    localStorage.removeItem('user')
+    router.push('/')
   }
 
   //Styles
@@ -51,8 +63,8 @@ const LogedInUser = () => {
   return (
     <Box sx={{ position: 'relative' }}>
       <Avatar
-        alt="Remy Sharp"
-        src="/static/images/avatar/1.jpg"
+        alt={LogIn.user.name}
+        src={LogIn.image}
         onClick={handleMenu}
         sx={styleAvatar}
       />
@@ -85,7 +97,7 @@ const LogedInUser = () => {
 
         <Divider />
 
-        <MenuItem onClick={handleClose} sx={{ color: 'red', mt: 1 }}>
+        <MenuItem onClick={handleLogOut} sx={{ color: 'red', mt: 1 }}>
           <ListItemIcon>
             <Logout fontSize="small" sx={{ color: 'red' }} />
           </ListItemIcon>

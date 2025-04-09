@@ -156,3 +156,5 @@ export const styleButtonContainerChildren = {
   justifyContent: 'center',
   gap: 1
 }
+
+export const styleAvatar = { width: 72, height: 72 }

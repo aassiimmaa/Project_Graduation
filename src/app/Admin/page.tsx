@@ -20,6 +20,7 @@ export default function AdminDashboard() {
         alt="AnRental Logo"
         width={200}
         height={180}
+        priority
       />
       <Typography variant="h4" fontWeight={600} color="#000" mt={2}>
         Chào mừng đến với trang quản lý AnRental!
