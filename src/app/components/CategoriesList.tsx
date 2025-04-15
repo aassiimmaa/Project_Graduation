@@ -1,69 +1,53 @@
+'use client'
 import { Box, Container, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CategoryItem from './CategoryItem'
 import Link from 'next/link'
+import { getAllCategories } from '~/actions/category.action'
+import { Category } from '../shared/inteface'
+import {
+  styleLayoutService,
+  styleServiceSectionLayout,
+  styleTitle
+} from '../shared/styles/CategoriesList'
+import {
+  ERROR_HAPPEN,
+  SERVICE_CAR,
+  SIZE_CONTAINER,
+  TABLE_TITLE_VARIANT
+} from '../shared/constant'
+import toast from 'react-hot-toast'
 
 const CategoriesList = () => {
-  //inteface data
-  interface CategoryItemProps {
-    image: string
-    name: string
-    description: string
-  }
+  const [DataCategories, setDataCategories] = useState<Category[]>([])
 
-  const DataCategories: CategoryItemProps[] = [
-    {
-      image:
-        'https://icdn.24h.com.vn/upload/2-2023/images/2023-04-28/image7-1682662731-746-width1200height793.jpg',
-      name: 'Xe Máy',
-      description:
-        'Nhanh gọn và tiết kiệm cho những chuyến đi ngắn trong thành phố.'
-    },
-    {
-      image:
-        'https://static-images.vnncdn.net/vps_images_publish/000001/000003/2024/10/11/xe-sedan-gia-re-thang-9-toyota-vios-dung-dau-honda-city-thang-hang-32261.jpg?width=0&s=7e0uvmV7Ak9bdewIIedOYA',
-      name: 'Xe Sedan',
-      description: 'Thoải mái, phù hợp cho chuyến đi gia đình hoặc công tác.'
-    },
-    {
-      image:
-        'https://www.mitsubishi-motors.com.vn/w/wp-content/uploads/2023/07/All-New-Compact-SUV_Exterior_01.jpg',
-      name: 'Xe SUV',
-      description:
-        'Thoáng mát, rộng rãi cho các chuyến đi đường dài và hành trình nhóm.'
-    },
-    {
-      image:
-        'https://www.winauto.vn/wp-content/uploads/2024/09/sieu-xe-la-gi-bang-gia-cac-dong-sieu-xe-noi-bat-tai-viet-nam-4.jpg',
-      name: 'Xe Cao Cấp',
-      description:
-        'Phù hợp cho các dịp đặc biệt và mang lại sự thoải mái tối ưu.'
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await getAllCategories()
+        if (res.success) {
+          setDataCategories(res.categories || [])
+        } else {
+          toast.error(res.message || ERROR_HAPPEN)
+        }
+      } catch (error) {
+        console.log(error)
+      }
     }
-  ]
-
-  //Style Section
-  const styleLayoutService = {
-    paddingY: '60px'
-  }
-
-  const styleTitle = {
-    color: '#000',
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: '48px'
-  }
+    fetchCategories()
+  }, [])
 
   return (
-    <Container id="Services" maxWidth="xl" sx={styleLayoutService}>
-      <Typography sx={styleTitle} variant="h4" component="h1">
-        Các dòng xe đang phục vụ
+    <Container id="Services" maxWidth={SIZE_CONTAINER} sx={styleLayoutService}>
+      <Typography sx={styleTitle} variant={TABLE_TITLE_VARIANT}>
+        {SERVICE_CAR}
       </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        {DataCategories.map((item, index) => (
+      <Box sx={styleServiceSectionLayout}>
+        {DataCategories?.map((item, index) => (
           <Link href={`/CategoryDetail/${index + 1}`} key={index}>
             <CategoryItem
               image={item.image}
-              name={item.name}
+              name={item.categoryName}
               description={item.description}
             />
           </Link>

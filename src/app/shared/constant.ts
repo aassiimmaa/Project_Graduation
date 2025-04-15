@@ -5,6 +5,7 @@ export const PRIMARY_COLOR = 'primary'
 export const WARNING_COLOR = 'warning'
 export const ERROR_COLOR = 'error'
 export const SIZE_BUTTON = 'small'
+export const SIZE_CONTAINER = 'xl'
 export const SIZE_PAGINATION = 'large'
 export const TABLE_TITLE_VARIANT = 'h4'
 export const VARIANT_BUTTON = 'contained'
@@ -40,6 +41,7 @@ export const STORAGE_DATA_USER = 'user'
 export const MARGIN_TEXTFIELD_NORMAL = 'normal'
 export const ROLE_ADMIN = 'Admin'
 export const ROLE_USER = 'User'
+export const ERROR_HAPPEN = 'Có lỗi xảy ra!'
 
 //Regex
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -102,6 +104,9 @@ export const LOCATION_CAR = 'Xem vị trí xe'
 export const DELETE_ORDER = 'Xóa đơn'
 
 //Client area
+
+//Home
+export const SERVICE_CAR = 'Các dòng xe đang phục vụ'
 
 //Profile text
 export const CROP_AVATAR = 'Cắt ảnh đại diện'

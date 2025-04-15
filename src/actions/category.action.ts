@@ -117,7 +117,7 @@ const updateCategory = async (categoryId: string, data: AddCategoryParams) => {
 
     const tempImage = category.image // Lấy phần cuối URL, tạm thời lưu để xóa ảnh cũ sau khi cập nhật
 
-    if (data.image.startsWith('data:image')) {
+    if (data.image.startsWith('data:image') && data.image !== category?.image) {
       const base64Data = data.image.replace(/^data:image\/\w+;base64,/, '')
       const buffer = Buffer.from(base64Data, 'base64')
       const filename = `${uuidv4()}.png`
@@ -128,7 +128,7 @@ const updateCategory = async (categoryId: string, data: AddCategoryParams) => {
     }
 
     // Xóa ảnh trong thư mục public/vehicles
-    if (tempImage) {
+    if (tempImage && tempImage !== data.image) {
       const fileName = tempImage.split('/').pop() // Lấy phần cuối URL
       const imagePath = path.join(
         process.cwd(),
