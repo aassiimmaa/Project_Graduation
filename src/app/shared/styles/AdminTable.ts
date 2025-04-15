@@ -81,12 +81,16 @@ export const styleImageContainer = {
   }
 }
 
+export const styleImage = {
+  borderRadius: '16px',
+}
+
 export const styleHoverImage = {
   position: 'absolute',
   top: 0,
   left: 0,
   width: '100%',
-  height: '100%',
+  height: '68px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

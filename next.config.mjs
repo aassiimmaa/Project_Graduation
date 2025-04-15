@@ -25,7 +25,10 @@ const nextConfig = {
     ]
   },
   experimental: {
-    scrollRestoration: false
+    scrollRestoration: false,
+    serverActions: {
+      bodySizeLimit: '3mb'
+    }
   }
 }
 

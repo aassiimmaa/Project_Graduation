@@ -24,6 +24,7 @@ import {
   AVATAR,
   BAN_TITLE,
   BANNED,
+  BUTTON_WRAPPER_COMPONENT,
   CANNOT_BANNED,
   CANNOT_DELETE,
   CREATED_AT,
@@ -71,6 +72,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import { banUser, deleteUser, getAllUsers } from '~/actions/user.action'
 import { format } from 'date-fns'
 import toast from 'react-hot-toast'
+import { User } from '~/app/shared/inteface'
 
 const UsersManagement: React.FC = () => {
   const [page, setPage] = useState(1) // Trang hiện tại (Pagination bắt đầu từ 1)
@@ -78,7 +80,7 @@ const UsersManagement: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('') // Từ khóa thực hiện tìm kiếm
   const rowsPerPage = 8 // Số dòng mỗi trang
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
-  const [users, setUsers] = useState<any[]>([])
+  const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)
 
   //Lấy toàn bộ User trong hệ thống
@@ -86,7 +88,12 @@ const UsersManagement: React.FC = () => {
     const fetchUsers = async () => {
       const res = await getAllUsers()
       if (res.success) {
-        setUsers(res.users || [])
+        setUsers(
+          (res.users ?? []).map(user => ({
+            ...user,
+            image: user.image ?? undefined
+          }))
+        )
       } else {
         alert(res.message)
       }
@@ -212,7 +219,7 @@ const UsersManagement: React.FC = () => {
                   </TableBodyCell>
                   <TableBodyCell>
                     <Box display={'flex'} justifyContent={ALIGN_CENTER}>
-                      <Avatar src={user.image} sx={styleAvatar} />
+                      <Avatar src={user.image || ''} sx={styleAvatar} />
                     </Box>
                   </TableBodyCell>
                   <TableBodyCell>{user.name}</TableBodyCell>
@@ -236,7 +243,7 @@ const UsersManagement: React.FC = () => {
                             : BAN_TITLE
                       }
                     >
-                      <Box component={'span'}>
+                      <Box component={BUTTON_WRAPPER_COMPONENT}>
                         <Button
                           disabled={user.isBanned || user.role}
                           variant={VARIANT_BUTTON}
@@ -251,7 +258,7 @@ const UsersManagement: React.FC = () => {
                     <Tooltip
                       title={user.isBanned ? DELETE_USER : CANNOT_DELETE}
                     >
-                      <Box component={'span'}>
+                      <Box component={BUTTON_WRAPPER_COMPONENT}>
                         <Button
                           disabled={user.role || user.isBanned == false}
                           variant={VARIANT_BUTTON}

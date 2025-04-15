@@ -227,7 +227,7 @@ const getAllUsers = async () => {
         image: true,
         role: true,
         isBanned: true,
-        createdAt: true // nếu có
+        createdAt: true
       }
     })
 
@@ -308,6 +308,21 @@ const deleteUser = async (userId: string) => {
 
     if (!user) {
       return { success: false, message: 'Người dùng không tồn tại!' }
+    }
+
+    // Xóa avatar trong thư mục public/uploads
+    if (user.user?.image) {
+      const fileName = user.user.image.split('/').pop() // Lấy phần cuối URL
+      const imagePath = path.join(
+        process.cwd(),
+        'public',
+        'uploads',
+        fileName!
+      )
+
+      if (fs.existsSync(imagePath)) {
+        fs.unlinkSync(imagePath) // Xóa file ảnh
+      }
     }
 
     await prisma.users.delete({
