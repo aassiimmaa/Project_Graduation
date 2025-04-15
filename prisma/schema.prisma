@@ -17,7 +17,7 @@ model Users {
   userId    String   @id @default(cuid())
   email     String   @unique
   phone     String   @unique
-  name      String?
+  name      String
   password  String
   image    String?
   createdAt DateTime @default(now())
@@ -40,16 +40,16 @@ model Vehicles {
   updatedAt   DateTime @updatedAt
 
   orders     Orders[]
-  Categories Categories @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
+  categories Categories @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
 }
 
 model Categories {
   categoryId   String @id @default(cuid())
-  CategoryName String
-  Description  String
-  Image        String
+  categoryName String @unique
+  description  String
+  image        String
 
-  Vehicles Vehicles[]
+  vehicles Vehicles[]
 }
 
 model Orders {
@@ -61,6 +61,6 @@ model Orders {
   status    Int      @default(-1)
   createdAt DateTime @default(now())
 
-  Users    Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  Vehicles Vehicles @relation(fields: [vehicleId], references: [vehicleId], onDelete: Cascade)
+  users    Users    @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  vehicles Vehicles @relation(fields: [vehicleId], references: [vehicleId], onDelete: Cascade)
 }
