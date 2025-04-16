@@ -37,10 +37,54 @@ interface EditCategoryDialogParams {
   onSubmit: (data: AddCategoryParams) => void
 }
 
+//Vehicles
+
+interface Vehicle {
+  categories: {
+    image: string
+    categoryId: string
+    description: string
+    categoryName: string
+  }
+  image: string
+  vehicleId: string
+  vehicleName: string
+  categoryId: string
+  description: string
+  price: number
+  isRent: boolean
+  createdAt: Date
+  updatedAt: Date
+}
+interface AddVehicleParams {
+  vehicleName: string
+  categoryName: string
+  description: string
+  price: string
+  image: string
+}
+
+interface AddVehicleDialogParams {
+  open: boolean
+  onClose: () => void
+  onSubmit: (data: AddVehicleParams) => void
+}
+
+interface EditVehicleDialogParams {
+  vehicleId: string
+  open: boolean
+  onClose: () => void
+  onSubmit: (data: AddVehicleParams) => void
+}
+
 export type {
   User,
   Category,
   AddCategoryParams,
   AddCategoryDialogParams,
-  EditCategoryDialogParams
+  EditCategoryDialogParams,
+  Vehicle,
+  AddVehicleParams,
+  AddVehicleDialogParams,
+  EditVehicleDialogParams
 }
