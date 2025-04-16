@@ -7,8 +7,7 @@ import {
   EDIT_COLOR_BUTTON,
   FONT_WEIGHT_BOLD,
   TEXT_COLOR,
-  TEXT_COLOR_WHITE,
-  W_10
+  TEXT_COLOR_WHITE
 } from '../constant'
 
 //Common styles
@@ -21,10 +20,35 @@ export const styleSearchBox = {
   pb: 1
 }
 
+export const styleSelectCategory = {
+  color: TEXT_COLOR,
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': { borderColor: '#ccc' },
+    '&:hover fieldset': { borderColor: '#007BFF' },
+    '&.Mui-focused fieldset': { borderColor: '#007BFF' }
+  },
+  '& .MuiInputBase-input': {
+    caretColor: TEXT_COLOR,
+    color: TEXT_COLOR
+  },
+  '& .MuiInputLabel-root': {
+    color: '#888'
+  },
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: '#007BFF'
+  },
+  '& .MuiSelect-icon': {
+    color: TEXT_COLOR,
+    opacity: 0.5
+  },
+  width: '200px',
+  mr: 1
+}
+
 export const styleSearchTextField = {
   color: TEXT_COLOR,
   '& .MuiOutlinedInput-root': {
-    '& fieldset': { borderColor: '#ddd' },
+    '& fieldset': { borderColor: '#ccc' },
     '&:hover fieldset': { borderColor: '#007BFF' },
     '&.Mui-focused fieldset': { borderColor: '#007BFF' }
   },
@@ -39,7 +63,7 @@ export const styleSearchTextField = {
 }
 
 export const styleSearchButton = {
-  width: W_10,
+  width: '180px',
   ml: 1,
   backgroundColor: BACKGROUND_TABLE_HEAD_COLOR,
   fontWeight: FONT_WEIGHT_BOLD
@@ -82,7 +106,7 @@ export const styleImageContainer = {
 }
 
 export const styleImage = {
-  borderRadius: '16px',
+  borderRadius: '16px'
 }
 
 export const styleHoverImage = {

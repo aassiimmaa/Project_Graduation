@@ -25,6 +25,7 @@ import {
   CATEGORY_MANAGEMENT,
   CATEGORY_NAME,
   CONFIRM_DELETE_CATEGORY,
+  CREATE_NEW,
   DELETE_CATEGORY,
   DESCRIPTION,
   EDIT_CATEGORY,
@@ -181,6 +182,7 @@ const CategoriesManagement: React.FC = () => {
         })
       }
       fetchCategories()
+      setPage(1)
     }
   }
 
@@ -197,7 +199,6 @@ const CategoriesManagement: React.FC = () => {
 
     if (newCategory.success) {
       await fetchCategories() // Cập nhật danh sách loại xe sau khi thêm mới
-      setSelectedCategory('')
       toast.success(newCategory.message, {
         duration: 2000
       })
@@ -206,10 +207,10 @@ const CategoriesManagement: React.FC = () => {
         duration: 2000
       })
     }
-    setOpenEditDialog(false)
+    handleCloseEditDialog()
   }
 
-  //Hàm đóng modal thêm loại xe 
+  //Hàm đóng modal thêm loại xe
   const handleCloseAddDialog = () => {
     setOpenAddDialog(false)
   }
@@ -253,7 +254,7 @@ const CategoriesManagement: React.FC = () => {
           sx={styleSearchButton}
           onClick={() => setOpenAddDialog(true)}
         >
-          Thêm mới
+          {CREATE_NEW}
         </Button>
       </Box>
 

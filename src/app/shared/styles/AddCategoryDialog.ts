@@ -46,6 +46,10 @@ const styleInputAddCategory = {
     WebkitBoxShadow: '0 0 0 1000px white inset !important',
     WebkitTextFillColor: '#000',
     caretColor: '#000'
+  },
+  '& .MuiSelect-icon': {
+    color: TEXT_COLOR,
+    opacity: 0.6
   }
 }
 
@@ -64,7 +68,7 @@ const styleDialogActions = { px: 3, pb: 2 }
 
 const stylePreviewImage = {
   maxWidth: '100%',
-  maxHeight: 300,
+  maxHeight: 150,
   mt: 1,
   borderRadius: 2,
   border: '1px solid #ccc',

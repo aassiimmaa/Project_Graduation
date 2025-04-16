@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -11,7 +11,8 @@ import {
   TableRow,
   Tooltip,
   TextField,
-  Box
+  Box,
+  MenuItem
 } from '@mui/material'
 import TableHeadCell from '../TableHeadCell'
 import TableBodyCell from '../TableBodyCell'
@@ -21,12 +22,16 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import {
   ACTION,
   ALIGN_CENTER,
+  ALL_TEXT,
   CATEGORY_NAME,
+  CONFIRM_DELETE_VEHICLE,
+  CREATE_NEW,
   DELETE_VEHICLE,
   DESCRIPTION,
   EDIT_VEHICLE,
   FONT_WEIGHT_BOLD,
   IMAGE,
+  LOADING_VEHICLES,
   NO_DATA_AVAILABLE,
   PLACEHOLDER_SEARCH,
   PRICE,
@@ -57,35 +62,88 @@ import {
   styleSearchBox,
   styleSearchButton,
   styleSearchTextField,
+  styleSelectCategory,
   styleTableContainer,
   styleVisibilityIcon
 } from '~/app/shared/styles/AdminTable'
 import SearchIcon from '@mui/icons-material/Search'
 import Image from 'next/image'
 import ShowLargeImage from './ShowLargeImage'
-
-// Mock data
-const vehicles = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  name: `Tên xe ${index + 1}`,
-  type: index % 2 === 0 ? 'SUV' : 'Sedan',
-  description: `Mô tả về xe ${index + 1}`,
-  rentalPrice: `${(index + 1) * 1000000}`,
-  image: `/images/air-blade-125-2025-tieu-chuan-den-bac.jpg`
-}))
+import AddIcon from '@mui/icons-material/Add'
+import AddVehicleDialog from './vehiclesComponents/AddVehicleDialog'
+import {
+  addVehicle,
+  deleteVehicle,
+  getAllVehicles,
+  updateVehicle
+} from '~/actions/vehicle.action'
+import toast from 'react-hot-toast'
+import { AddVehicleParams, Category, Vehicle } from '~/app/shared/inteface'
+import { formatPrice } from '~/lib/formatPrice'
+import { getAllCategories } from '~/actions/category.action'
+import EditVehicleDialog from './vehiclesComponents/EditVehicleDialog'
 
 const VehiclesManagement: React.FC = () => {
   const [page, setPage] = useState(1) // Trang hiện tại (Pagination bắt đầu từ 1)
   const [searchTerm, setSearchTerm] = useState('') // Từ khóa tìm kiếm
   const [searchQuery, setSearchQuery] = useState('') // Từ khóa thực hiện tìm kiếm
   const [selectedImage, setSelectedImage] = useState<string | null>(null) // Hình ảnh được chọn
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectdVehicle, setSelectedVehicle] = useState('')
+  const [open, setOpen] = useState(false) // Trạng thái mở modal thêm mới xe
+  const [openEdit, setOpenEdit] = useState(false) // Trạng thái mở modal chỉnh sửa xe
+
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]) // Dữ liệu xe
+  const [loading, setLoading] = useState(false) // Trạng thái loading
+
+  const [categories, setCategories] = useState<Category[]>([]) // Dữ liệu loại xe
+
   const rowsPerPage = 5 // Số dòng mỗi trang
 
-  // Lọc dữ liệu dựa trên từ khóa tìm kiếm
-  const filteredVehicles = vehicles.filter(vehicle =>
-    vehicle.name.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  // Lấy danh sách xe từ API
+  const fetchVehicles = async () => {
+    setLoading(true)
+    const res = await getAllVehicles()
+    if (res.success) {
+      setVehicles(res.vehicles || [])
+    } else {
+      alert(res.message)
+    }
+    setLoading(false)
+  }
 
+  useEffect(() => {
+    fetchVehicles()
+  }, [])
+
+  // Lấy danh sách loại xe từ API
+  const fetchCategories = async () => {
+    try {
+      const res = await getAllCategories()
+      if (res.success) {
+        setCategories(res.categories || [])
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchCategories()
+  }, [])
+
+  // Lọc dữ liệu dựa trên từ khóa tìm kiếm
+  const filteredVehicles = vehicles.filter(vehicle => {
+    const matchSearch = vehicle.vehicleName
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+    const matchCategory = selectedCategory
+      ? vehicle.categoryId.toLowerCase() === selectedCategory.toLowerCase()
+      : true
+    return matchSearch && matchCategory
+  })
+
+  //Tổng số trang
   const totalPages = Math.ceil(filteredVehicles.length / rowsPerPage) // Tổng số trang
 
   // Hàm xử lý thay đổi trang
@@ -108,6 +166,13 @@ const VehiclesManagement: React.FC = () => {
     setPage(1) // Reset về trang đầu tiên
   }
 
+  // Hàm xử lý thay đổi loại xe
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedCategory(e.target.value)
+    setPage(1)
+    setSearchQuery(searchTerm) // Cập nhật từ khóa hiện tại
+  }
+
   // Hàm mở modal hiển thị hình ảnh
   const handleImageClick = (image: string) => {
     setSelectedImage(image)
@@ -118,6 +183,80 @@ const VehiclesManagement: React.FC = () => {
     setSelectedImage(null)
   }
 
+  //Hàm mở modal thêm mới xe
+  const handleOpenAddDialog = () => {
+    setOpen(true)
+  }
+
+  //Hàm đóng modal thêm mới xe
+  const handleCloseAddDialog = () => {
+    setOpen(false)
+  }
+
+  //Hàm mở modal chỉnh sửa xe
+  const handleOpenEdit = (vehicleId: string) => {
+    setOpenEdit(true)
+    setSelectedVehicle(vehicleId)
+  }
+
+  //Hàm đóng modal chỉnh sửa xe
+  const handleCloseEdit = () => {
+    setOpenEdit(false)
+    setSelectedVehicle('')
+  }
+
+  // Hàm xử lý thêm xe
+  const handleAddVehicle = async (data: AddVehicleParams) => {
+    const res = await addVehicle(data)
+    if (res.success) {
+      await fetchVehicles()
+      toast.success(res.message)
+      setOpen(false)
+    } else {
+      toast.error(res.message)
+    }
+  }
+
+  // Hàm xử lý chỉnh sửa xe
+  const handleEditVehicle = async (
+    vehicleId: string,
+    data: AddVehicleParams
+  ) => {
+    const res = await updateVehicle(vehicleId, {
+      vehicleName: data.vehicleName,
+      categoryName: data.categoryName,
+      description: data.description,
+      price: data.price.replace(/,/g, ''),
+      image: data.image
+    })
+    if (res.success) {
+      await fetchVehicles()
+      toast.success(res.message)
+    } else {
+      toast.error(res.message)
+    }
+    handleCloseEdit()
+  }
+
+  // Hàm xử lý xóa xe
+  const handleDeleteVehicle = async (vehicleId: string) => {
+    const confirmDelete = window.confirm(CONFIRM_DELETE_VEHICLE)
+    if (confirmDelete) {
+      const res = await deleteVehicle(vehicleId)
+      if (res.success) {
+        toast.success(res.message, {
+          duration: 2000
+        })
+      } else {
+        toast.error(res.message, {
+          duration: 2000
+        })
+      }
+      fetchVehicles()
+      setPage(1)
+    }
+  }
+
   return (
     <>
       <Typography variant={TABLE_TITLE_VARIANT} fontWeight={FONT_WEIGHT_BOLD}>
@@ -126,6 +265,22 @@ const VehiclesManagement: React.FC = () => {
       <Divider sx={styleDivider} />
 
       <Box sx={styleSearchBox}>
+        <TextField
+          select
+          label={CATEGORY_NAME}
+          value={selectedCategory}
+          onChange={handleCategoryChange}
+          variant={VARIANT_INPUT}
+          size={SIZE_BUTTON}
+          sx={styleSelectCategory}
+        >
+          <MenuItem value="">{ALL_TEXT}</MenuItem>
+          {categories.map(category => (
+            <MenuItem key={category.categoryId} value={category.categoryId}>
+              {category.categoryName}
+            </MenuItem>
+          ))}
+        </TextField>
         <TextField
           placeholder={PLACEHOLDER_SEARCH}
           variant={VARIANT_INPUT}
@@ -143,6 +298,14 @@ const VehiclesManagement: React.FC = () => {
         >
           {SEARCH_TEXT_BTN}
         </Button>
+        <Button
+          variant={VARIANT_BUTTON}
+          startIcon={<AddIcon />}
+          sx={styleSearchButton}
+          onClick={handleOpenAddDialog}
+        >
+          {CREATE_NEW}
+        </Button>
       </Box>
 
       <TableContainer component={Paper} sx={styleTableContainer}>
@@ -152,7 +315,7 @@ const VehiclesManagement: React.FC = () => {
               <TableHeadCell align={ALIGN_CENTER} width={W_5}>
                 {SERIAL}
               </TableHeadCell>
-              <TableHeadCell width={W_15}>{VEHICLE_NAME}</TableHeadCell>
+              <TableHeadCell width={W_10}>{VEHICLE_NAME}</TableHeadCell>
               <TableHeadCell align={ALIGN_CENTER} width={W_10}>
                 {CATEGORY_NAME}
               </TableHeadCell>
@@ -171,17 +334,25 @@ const VehiclesManagement: React.FC = () => {
           <TableBody>
             {paginatedvehicles.length > 0 ? (
               paginatedvehicles.map((vehicle, index) => (
-                <StyledTableRow key={vehicle.id}>
+                <StyledTableRow key={vehicle.vehicleId}>
                   <TableBodyCell align={ALIGN_CENTER}>
                     {index + 1 + (page - 1) * rowsPerPage}
                   </TableBodyCell>
-                  <TableBodyCell>{vehicle.name}</TableBodyCell>
+                  <TableBodyCell>{vehicle.vehicleName}</TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {vehicle.type}
+                    {vehicle.categories.categoryName}
                   </TableBodyCell>
-                  <TableBodyCell>{vehicle.description}</TableBodyCell>
+                  <TableBodyCell>
+                    <Tooltip title={vehicle.description} arrow placement="top">
+                      <Box component={'span'}>
+                        {vehicle.description.length > 200
+                          ? vehicle.description.slice(0, 200) + '...'
+                          : vehicle.description}
+                      </Box>
+                    </Tooltip>
+                  </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {vehicle.rentalPrice}
+                    {formatPrice(vehicle.price.toString())}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
                     <Box sx={styleImageContainer}>
@@ -207,6 +378,7 @@ const VehiclesManagement: React.FC = () => {
                         variant={VARIANT_BUTTON}
                         size={SIZE_BUTTON}
                         sx={styleEditButton}
+                        onClick={() => handleOpenEdit(vehicle.vehicleId)}
                       >
                         <EditIcon />
                       </Button>
@@ -216,6 +388,7 @@ const VehiclesManagement: React.FC = () => {
                         variant={VARIANT_BUTTON}
                         size={SIZE_BUTTON}
                         sx={styleDeleteButton}
+                        onClick={() => handleDeleteVehicle(vehicle.vehicleId)}
                       >
                         <DeleteIcon />
                       </Button>
@@ -223,6 +396,12 @@ const VehiclesManagement: React.FC = () => {
                   </TableBodyCell>
                 </StyledTableRow>
               ))
+            ) : loading ? (
+              <StyledTableRow>
+                <TableBodyCell align={ALIGN_CENTER} colSpan={8}>
+                  {LOADING_VEHICLES}
+                </TableBodyCell>
+              </StyledTableRow>
             ) : (
               <StyledTableRow>
                 <TableBodyCell align={ALIGN_CENTER} colSpan={7}>
@@ -253,6 +432,20 @@ const VehiclesManagement: React.FC = () => {
           close={handleCloseModal}
         />
       )}
+
+      {/* Modal thêm mới xe */}
+      <AddVehicleDialog
+        open={open}
+        onClose={handleCloseAddDialog}
+        onSubmit={handleAddVehicle}
+      />
+
+      <EditVehicleDialog
+        vehicleId={selectdVehicle}
+        open={openEdit}
+        onClose={handleCloseEdit}
+        onSubmit={data => handleEditVehicle(selectdVehicle, data)}
+      />
     </>
   )
 }
