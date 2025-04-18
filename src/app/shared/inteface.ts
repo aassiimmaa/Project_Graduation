@@ -37,6 +37,13 @@ interface EditCategoryDialogParams {
   onSubmit: (data: AddCategoryParams) => void
 }
 
+interface CategoryDetailProps {
+  image: string
+  name: string
+  description: string
+  chosen: boolean
+}
+
 //Vehicles
 
 interface Vehicle {
@@ -77,14 +84,21 @@ interface EditVehicleDialogParams {
   onSubmit: (data: AddVehicleParams) => void
 }
 
+// DetailCategory
+interface DetailCategoryProps {
+  id?: string
+}
 export type {
   User,
   Category,
   AddCategoryParams,
   AddCategoryDialogParams,
   EditCategoryDialogParams,
+  CategoryDetailProps,
   Vehicle,
   AddVehicleParams,
   AddVehicleDialogParams,
-  EditVehicleDialogParams
+  EditVehicleDialogParams,
+  DetailCategoryProps
 }
+

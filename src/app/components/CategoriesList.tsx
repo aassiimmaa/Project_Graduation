@@ -17,9 +17,14 @@ import {
   TABLE_TITLE_VARIANT
 } from '../shared/constant'
 import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux'
+import { setSelectedCategoryId } from '../redux/store/features/categorySlice'
+import { useRouter } from 'next/navigation'
 
 const CategoriesList = () => {
   const [DataCategories, setDataCategories] = useState<Category[]>([])
+  const dispatch = useDispatch()
+  const router = useRouter()
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -44,13 +49,23 @@ const CategoriesList = () => {
       </Typography>
       <Box sx={styleServiceSectionLayout}>
         {DataCategories?.map((item, index) => (
-          <Link href={`/CategoryDetail/${index + 1}`} key={index}>
+          <Box key={index} onClick={() => {
+            dispatch(setSelectedCategoryId(item.categoryId))
+            router.push(`/CategoryDetail`)
+          }}>
             <CategoryItem
               image={item.image}
               name={item.categoryName}
               description={item.description}
             />
-          </Link>
+          </Box>
+          // <Link href={`/CategoryDetail`} key={index}>
+          //   <CategoryItem
+          //     image={item.image}
+          //     name={item.categoryName}
+          //     description={item.description}
+          //   />
+          // </Link>
         ))}
       </Box>
     </Container>

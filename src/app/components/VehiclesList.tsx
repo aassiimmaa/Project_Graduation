@@ -1,112 +1,102 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Card,
   CardMedia,
   CardContent,
   Typography,
   Grid2,
-  Box
+  Box,
+  Skeleton
 } from '@mui/material'
 import Link from 'next/link'
-
-// Interface
-interface Vehicle {
-  id: number
-  name: string
-  price: string
-  imageUrl: string
-}
-
-const vehicles: Vehicle[] = [
-  {
-    id: 1,
-    name: 'Car A',
-    price: '$20,000',
-    imageUrl:
-      'https://www.winauto.vn/wp-content/uploads/2024/09/sieu-xe-la-gi-bang-gia-cac-dong-sieu-xe-noi-bat-tai-viet-nam-4.jpg'
-  },
-  {
-    id: 2,
-    name: 'Car B',
-    price: '$25,000',
-    imageUrl:
-      'https://www.winauto.vn/wp-content/uploads/2024/09/sieu-xe-la-gi-bang-gia-cac-dong-sieu-xe-noi-bat-tai-viet-nam-4.jpg'
-  },
-  {
-    id: 3,
-    name: 'Car C',
-    price: '$30,000',
-    imageUrl:
-      'https://www.winauto.vn/wp-content/uploads/2024/09/sieu-xe-la-gi-bang-gia-cac-dong-sieu-xe-noi-bat-tai-viet-nam-4.jpg'
-  },
-  {
-    id: 4,
-    name: 'Car D',
-    price: '$35,000',
-    imageUrl:
-      'https://www.winauto.vn/wp-content/uploads/2024/09/sieu-xe-la-gi-bang-gia-cac-dong-sieu-xe-noi-bat-tai-viet-nam-4.jpg'
-  },
-  {
-    id: 5,
-    name: 'Car E',
-    price: '$40,000',
-    imageUrl:
-      'https://www.winauto.vn/wp-content/uploads/2024/09/sieu-xe-la-gi-bang-gia-cac-dong-sieu-xe-noi-bat-tai-viet-nam-4.jpg'
-  },
-  {
-    id: 6,
-    name: 'Car F',
-    price: '$45,000',
-    imageUrl:
-      'https://www.winauto.vn/wp-content/uploads/2024/09/sieu-xe-la-gi-bang-gia-cac-dong-sieu-xe-noi-bat-tai-viet-nam-4.jpg'
-  }
-]
-
-//Styles
-const styleTitle = { mt: 8, mb: 4 }
-
-const styleCardVehicle = {
-  transition: 'all 0.3s ease-in-out',
-  boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-  '&:hover': {
-    transform: 'translateY(-10px)',
-    boxShadow: '0 12px 24px rgba(0, 0, 0, 0.2)',
-    cursor: 'pointer'
-  }
-}
+import { useSelector } from 'react-redux'
+import { RootState } from '../redux/store'
+import { getVehicleByCategoryId } from '~/actions/vehicle.action'
+import { Vehicle } from '../shared/inteface'
+import { formatPrice } from '~/lib/formatPrice'
+import {
+  styleCardVehicle,
+  styleImage,
+  styleTitle,
+  styleTitleOverflow
+} from '../shared/styles/VehicleList'
+import { COLOR_STRONG, VARIANT_SKELETON_BOX } from '../shared/constant'
 
 const VehiclesList: React.FC = () => {
+  const categoryId = useSelector(
+    (state: RootState) => state.category.selectedCategoryId
+  )
+  const [vehicles, setVehicles] = useState<Vehicle[]>([])
+  const [loading, setLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchVehiclesByCategoryId = async () => {
+      if (categoryId) {
+        try {
+          const vehicles = await getVehicleByCategoryId(categoryId)
+          if (vehicles) {
+            setVehicles(vehicles.vehicles || [])
+          }
+        } finally {
+          setLoading(false)
+        }
+      }
+    }
+    fetchVehiclesByCategoryId()
+  }, [categoryId])
+
   return (
     <>
       <Typography variant="h4" component="h1" sx={styleTitle}>
-        <Box component="strong" color="rgba(218, 152, 53)">
-          Xe SUV
+        <Box component="strong" color={COLOR_STRONG}>
+          {vehicles[0]?.categories.categoryName}
         </Box>{' '}
         đang phục vụ
       </Typography>
       <Grid2 container spacing={3.665}>
-        {vehicles.map(vehicle => (
-          <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={vehicle.id}>
-            <Link href={`/VehicleDetail/${vehicle.id}`} passHref>
-              <Card sx={styleCardVehicle}>
-                <CardMedia
-                  component="img"
-                  height="240"
-                  image={vehicle.imageUrl}
-                  alt={vehicle.name}
+        {loading
+          ? Array.from({ length: vehicles.length || 4 }).map((_, index) => (
+              <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={index}>
+                <Skeleton
+                  variant={VARIANT_SKELETON_BOX}
+                  height={360}
+                  sx={{ borderRadius: 1 }}
                 />
-                <CardContent>
-                  <Typography variant="h5" component="div" lineHeight={2.4}>
-                    {vehicle.name}
-                  </Typography>
-                  <Typography variant="body1" color="red">
-                    {vehicle.price}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Link>
-          </Grid2>
-        ))}
+              </Grid2>
+            ))
+          : vehicles.map(vehicle => (
+              <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={vehicle.vehicleId}>
+                <Link href={`/VehicleDetail/${vehicle.vehicleId}`} passHref>
+                  <Card sx={styleCardVehicle}>
+                    <CardMedia
+                      component="img"
+                      height="240"
+                      image={vehicle.image}
+                      alt={vehicle.vehicleName}
+                      sx={styleImage}
+                    />
+                    <CardContent>
+                      <Typography
+                        variant="h6"
+                        lineHeight={2.4}
+                        sx={styleTitleOverflow}
+                        title={
+                          vehicle.vehicleName.length > 30
+                            ? vehicle.vehicleName
+                            : undefined
+                        }
+                      >
+                        {vehicle.vehicleName}
+                      </Typography>
+                      <Typography variant="h6" color="red">
+                        {formatPrice(vehicle.price.toString())}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </Grid2>
+            ))}
       </Grid2>
     </>
   )
