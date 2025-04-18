@@ -1,11 +1,10 @@
 'use client'
-import React, { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import {
   Box,
   Typography,
   Card,
-  CardContent,
   CardMedia,
   Button,
   TextField,
@@ -16,27 +15,33 @@ import Grid from '@mui/material/Grid2'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import { NavBar } from '~/app/components/NavBar'
 import Footer from '~/app/components/Footer'
-
-// Giả lập danh sách xe
-const vehicles = [
-  {
-    id: 1,
-    name: 'Honda Accord',
-    imageUrl:
-      'https://static-images.vnncdn.net/vps_images_publish/000001/000003/2024/10/11/xe-sedan-gia-re-thang-9-toyota-vios-dung-dau-honda-city-thang-hang-32261.jpg?width=0&s=7e0uvmV7Ak9bdewIIedOYA',
-    description:
-      'Sedan thanh lịch, mang phong cách tối giản nhưng không kém phần tinh tế. Honda Accord được biết đến với độ bền bỉ, vận hành êm ái và khả năng tiết kiệm nhiên liệu vượt trội. Xe được trang bị nhiều công nghệ hỗ trợ người lái và tiện nghi cao cấp.',
-    type: 'Xe Sedan'
-  }
-]
+import { getVehicleById } from '~/actions/vehicle.action'
+import { Vehicle } from '~/app/shared/inteface'
 
 const VehicleDetail: React.FC = () => {
   const { id } = useParams()
   const router = useRouter()
+  const [vehicle, setVehicle] = useState<Vehicle | null>(null)
 
   // Lấy thông tin xe theo ID
-  const vehicle = vehicles.find(v => v.id === Number(id))
-  if (!vehicle) return <Typography variant="h5">Không tìm thấy xe!</Typography>
+  const isFetched = useRef(false)
+
+  useEffect(() => {
+    const fetchVehicle = async () => {
+      if (!id || isFetched.current) return
+      isFetched.current = true
+
+      const res = await getVehicleById(Array.isArray(id) ? id[0] : id)
+      if (res.success) {
+        setVehicle(res.vehicle || null)
+      } else {
+        alert(res.message)
+        router.push('/CategoryDetail')
+      }
+    }
+
+    fetchVehicle()
+  }, [id])
 
   // State lưu ngày thuê xe
   const [fromDate, setFromDate] = useState('')
@@ -77,7 +82,7 @@ const VehicleDetail: React.FC = () => {
         <Button
           disableRipple
           startIcon={<ArrowBackIcon />}
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/CategoryDetail')}
           sx={{ mt: 2, mb: 1, fontSize: '1rem' }}
         >
           Quay lại
@@ -91,8 +96,8 @@ const VehicleDetail: React.FC = () => {
           >
             <CardMedia
               component="img"
-              image={vehicle.imageUrl}
-              alt={vehicle.name}
+              image={vehicle?.image || ''}
+              alt={vehicle?.vehicleName || ''}
               sx={{ width: '100%', borderRadius: 2, objectFit: 'contain' }}
             />
           </Grid>
@@ -101,7 +106,7 @@ const VehicleDetail: React.FC = () => {
           <Grid size={{ xs: 12, md: 7 }}>
             <Card sx={{ p: 4, height: '680px' }}>
               <Typography variant="h4" fontWeight="bold">
-                {vehicle.name}
+                {vehicle?.vehicleName || 'Tên xe'}
               </Typography>
 
               <Divider sx={{ my: 2 }} />
@@ -110,7 +115,7 @@ const VehicleDetail: React.FC = () => {
                 <Typography variant="h6" fontWeight="bold" gutterBottom>
                   Mô tả sản phẩm
                 </Typography>
-                <Typography variant="body1">{vehicle.description}</Typography>
+                <Typography variant="body1">{vehicle?.description}</Typography>
               </Box>
 
               <Divider sx={{ my: 2 }} />
@@ -119,7 +124,9 @@ const VehicleDetail: React.FC = () => {
                 <Typography variant="h6" fontWeight="bold" gutterBottom>
                   Dòng xe
                 </Typography>
-                <Typography variant="body1">{vehicle.type}</Typography>
+                <Typography variant="body1">
+                  {vehicle?.categories.categoryName}
+                </Typography>
               </Box>
 
               <Divider sx={{ my: 2 }} />
@@ -137,7 +144,10 @@ const VehicleDetail: React.FC = () => {
                       label="Từ ngày"
                       value={fromDate}
                       onChange={e => setFromDate(e.target.value)}
-                      slotProps={{ inputLabel: { shrink: true }, input: { inputProps: { min: fromDate || today } } }}
+                      slotProps={{
+                        inputLabel: { shrink: true },
+                        input: { inputProps: { min: fromDate || today } }
+                      }}
                       error={!!error.fromDate}
                       helperText={error.fromDate}
                     />
@@ -149,7 +159,10 @@ const VehicleDetail: React.FC = () => {
                       label="Đến ngày"
                       value={toDate}
                       onChange={e => setToDate(e.target.value)}
-                      slotProps={{ inputLabel: { shrink: true }, input: { inputProps: { min: fromDate || today } } }}
+                      slotProps={{
+                        inputLabel: { shrink: true },
+                        input: { inputProps: { min: fromDate || today } }
+                      }}
                       error={!!error.toDate}
                       helperText={error.toDate}
                     />

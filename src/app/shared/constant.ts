@@ -44,6 +44,8 @@ export const MARGIN_TEXTFIELD_NORMAL = 'normal'
 export const ROLE_ADMIN = 'Admin'
 export const ROLE_USER = 'User'
 export const ERROR_HAPPEN = 'Có lỗi xảy ra!'
+export const VARIANT_SKELETON_BOX = 'rectangular'
+export const COLOR_STRONG = 'rgba(218, 152, 53)'
 
 //Regex
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -132,3 +134,6 @@ export const TYPE_PASSWORD = 'password'
 export const SAVE_PASSWORD = 'Lưu mật khẩu'
 export const PASSWORD_ERROR_LENGTH = 'Mật khẩu mới phải có ít nhất 6 ký tự!'
 export const PASSWORD_ERROR_CONFIRM = 'Mật khẩu xác nhận không khớp!'
+
+//DetailCategory text
+export const HELPER_CHOOSE_CATEGORY = 'Chọn dòng xe cần phục vụ'

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
+import { ReduxProvider } from './redux/store/provider'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -27,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+        <ReduxProvider>{children}</ReduxProvider>
         <Toaster />
       </body>
     </html>

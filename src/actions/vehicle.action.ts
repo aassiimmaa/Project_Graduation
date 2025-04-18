@@ -95,6 +95,39 @@ const getVehicleById = async (vehicleId: string) => {
   }
 }
 
+const getVehicleByCategoryId = async (categoryId: string) => {
+  try {
+    if (!categoryId) {
+      return {
+        success: false,
+        message: 'Không tìm thấy danh mục này!'
+      }
+    }
+
+    const vehicles = await prisma.vehicles.findMany({
+      where: { categoryId },
+      include: {
+        categories: true
+      }
+    })
+    if (!vehicles) {
+      return {
+        success: false,
+        message: 'Không tìm thấy xe này!'
+      }
+    }
+    return {
+      success: true,
+      vehicles
+    }
+  } catch (err) {
+    return {
+      success: false,
+      message: 'Lỗi khi lấy thông tin xe, vui lòng thử lại sau.' + err
+    }
+  }
+}
+
 const updateVehicle = async (vehicleId: string, data: AddVehicleParams) => {
   try {
     const vehicle = await prisma.vehicles.findUnique({
@@ -214,6 +247,7 @@ export {
   addVehicle,
   getAllVehicles,
   getVehicleById,
+  getVehicleByCategoryId,
   updateVehicle,
   deleteVehicle
 }
