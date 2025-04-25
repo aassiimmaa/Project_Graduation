@@ -88,6 +88,25 @@ interface EditVehicleDialogParams {
 interface DetailCategoryProps {
   id?: string
 }
+
+// Components
+interface QRProps {
+  openQR: boolean
+  closeQR: () => void
+  vehicle: Vehicle
+  fromDate: string
+  toDate: string
+}
+
+
+interface payLaterProps{
+  userId: string
+  vehicle: Vehicle
+  fromDate: Date
+  toDate: Date
+  status: number
+}
+
 export type {
   User,
   Category,
@@ -99,6 +118,9 @@ export type {
   AddVehicleParams,
   AddVehicleDialogParams,
   EditVehicleDialogParams,
-  DetailCategoryProps
+  DetailCategoryProps,
+  QRProps,
+  payLaterProps
 }
+
 

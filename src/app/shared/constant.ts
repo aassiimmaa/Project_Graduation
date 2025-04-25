@@ -137,3 +137,11 @@ export const PASSWORD_ERROR_CONFIRM = 'Mật khẩu xác nhận không khớp!'
 
 //DetailCategory text
 export const HELPER_CHOOSE_CATEGORY = 'Chọn dòng xe cần phục vụ'
+
+
+//QRPay components
+export const QR_TITLE = 'Mã QR Thanh Toán'
+export const QR_HELP = 'Quét mã QR để thanh toán đặt xe:'
+export const OR = 'Hoặc'
+export const PAY_LATER = 'Thanh toán sau'
+export const PAY_LATER_NOTE = 'Lưu ý: Quý khách có thể sẽ không thể thuê xe này nếu có người đặt trước.'

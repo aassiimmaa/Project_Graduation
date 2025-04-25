@@ -9,7 +9,7 @@ import {
   Button,
   TextField,
   Container,
-  Divider
+  Divider,
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -17,6 +17,7 @@ import { NavBar } from '~/app/components/NavBar'
 import Footer from '~/app/components/Footer'
 import { getVehicleById } from '~/actions/vehicle.action'
 import { Vehicle } from '~/app/shared/inteface'
+import QRPay from '~/app/components/QRPay'
 
 const VehicleDetail: React.FC = () => {
   const { id } = useParams()
@@ -41,19 +42,20 @@ const VehicleDetail: React.FC = () => {
     }
 
     fetchVehicle()
-  }, [id])
+  }, [router, id])
 
   // State lưu ngày thuê xe
   const [fromDate, setFromDate] = useState('')
   const [toDate, setToDate] = useState('')
   const [error, setError] = useState({ fromDate: '', toDate: '' })
+  const [openQR, setOpenQR] = useState(false)
 
   // Lấy ngày hiện tại (YYYY-MM-DD)
   const today = new Date().toISOString().split('T')[0]
 
   // Xử lý đặt xe
   const handleRentCar = () => {
-    let newErrors = { fromDate: '', toDate: '' }
+    const newErrors = { fromDate: '', toDate: '' }
 
     if (!fromDate) newErrors.fromDate = 'Vui lòng chọn ngày bắt đầu'
     else if (fromDate < today)
@@ -67,7 +69,7 @@ const VehicleDetail: React.FC = () => {
 
     // Nếu không có lỗi, tiến hành thuê xe
     if (!newErrors.fromDate && !newErrors.toDate) {
-      alert(`Bạn đã thuê xe từ ${fromDate} đến ${toDate}`)
+      setOpenQR(true) // Mở modal thay vì alert
     }
   }
 
@@ -184,6 +186,9 @@ const VehicleDetail: React.FC = () => {
         </Grid>
       </Container>
       <Footer />
+      {vehicle && (
+        <QRPay openQR={openQR} closeQR={() => setOpenQR(false)} vehicle={vehicle} fromDate={fromDate} toDate={toDate} />
+      )}
     </>
   )
 }
