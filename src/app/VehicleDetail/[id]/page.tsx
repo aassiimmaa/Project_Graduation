@@ -18,6 +18,8 @@ import Footer from '~/app/components/Footer'
 import { getVehicleById } from '~/actions/vehicle.action'
 import { Vehicle } from '~/app/shared/inteface'
 import QRPay from '~/app/components/QRPay'
+import { BACK, CATEGORY_NAME, DATE_TYPE, DESCRIPTION, FONT_WEIGHT_BOLD, FROM_DATE, FROM_DATE_BEFORE_TODAY_ERR, FROM_DATE_NULL_ERR, PRIMARY_COLOR, RENT_VEHICLE, RENTAL_TIME, SIZE_CONTAINER, TO_DATE, TO_DATE_BEFORE_FROM_DATE_ERR, TO_DATE_NULL_ERR, VARIANT_BUTTON } from '~/app/shared/constant'
+import { styleCardInfo, styleContainer, styleDivider, styleFormContainer, styleImageVehicle, styleInfoContainer, styleRentalBtn, styleReturnBtn } from '~/app/shared/styles/VehicleDetail'
 
 const VehicleDetail: React.FC = () => {
   const { id } = useParams()
@@ -57,13 +59,13 @@ const VehicleDetail: React.FC = () => {
   const handleRentCar = () => {
     const newErrors = { fromDate: '', toDate: '' }
 
-    if (!fromDate) newErrors.fromDate = 'Vui lòng chọn ngày bắt đầu'
+    if (!fromDate) newErrors.fromDate = FROM_DATE_NULL_ERR
     else if (fromDate < today)
-      newErrors.fromDate = 'Ngày bắt đầu không thể trước hôm nay'
+      newErrors.fromDate = FROM_DATE_BEFORE_TODAY_ERR
 
-    if (!toDate) newErrors.toDate = 'Vui lòng chọn ngày kết thúc'
+    if (!toDate) newErrors.toDate = TO_DATE_NULL_ERR
     else if (toDate < fromDate)
-      newErrors.toDate = 'Ngày kết thúc không thể nhỏ hơn ngày bắt đầu'
+      newErrors.toDate = TO_DATE_BEFORE_FROM_DATE_ERR
 
     setError(newErrors)
 
@@ -77,73 +79,73 @@ const VehicleDetail: React.FC = () => {
     <>
       <NavBar />
       <Container
-        maxWidth="xl"
-        sx={{ mt: 8, mb: 5, minHeight: 'calc(100vh - 64px - 56px - 40px)' }}
+        maxWidth={SIZE_CONTAINER}
+        sx={styleContainer}
       >
         {/* Nút Quay lại */}
         <Button
           disableRipple
           startIcon={<ArrowBackIcon />}
           onClick={() => router.push('/CategoryDetail')}
-          sx={{ mt: 2, mb: 1, fontSize: '1rem' }}
+          sx={styleReturnBtn}
         >
-          Quay lại
+          {BACK}
         </Button>
 
         <Grid container spacing={4}>
           {/* Hình ảnh xe */}
           <Grid
             size={{ xs: 12, md: 5 }}
-            sx={{ display: 'flex', justifyContent: 'center' }}
+            sx={styleImageVehicle}
           >
             <CardMedia
               component="img"
               image={vehicle?.image || ''}
               alt={vehicle?.vehicleName || ''}
-              sx={{ width: '100%', borderRadius: 2, objectFit: 'contain' }}
+              sx={styleInfoContainer}
             />
           </Grid>
 
           {/* Thông tin chi tiết */}
           <Grid size={{ xs: 12, md: 7 }}>
-            <Card sx={{ p: 4, height: '680px' }}>
-              <Typography variant="h4" fontWeight="bold">
-                {vehicle?.vehicleName || 'Tên xe'}
+            <Card sx={styleCardInfo}>
+              <Typography variant="h4" fontWeight={FONT_WEIGHT_BOLD}>
+                {vehicle?.vehicleName}
               </Typography>
 
-              <Divider sx={{ my: 2 }} />
+              <Divider sx={styleDivider} />
 
               <Box>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Mô tả sản phẩm
+                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                  {DESCRIPTION}
                 </Typography>
                 <Typography variant="body1">{vehicle?.description}</Typography>
               </Box>
 
-              <Divider sx={{ my: 2 }} />
+              <Divider sx={styleDivider} />
 
               <Box sx={{ mt: 2 }}>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Dòng xe
+                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                  {CATEGORY_NAME}
                 </Typography>
                 <Typography variant="body1">
                   {vehicle?.categories.categoryName}
                 </Typography>
               </Box>
 
-              <Divider sx={{ my: 2 }} />
+              <Divider sx={styleDivider} />
 
               {/* Form chọn ngày thuê */}
-              <Box sx={{ mt: 3 }}>
-                <Typography variant="h6" fontWeight="bold" gutterBottom>
-                  Thời gian thuê xe:
+              <Box sx={styleFormContainer}>
+                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                  {`${RENTAL_TIME}:`}
                 </Typography>
                 <Grid flexDirection="column" container spacing={2} mt={2}>
                   <Grid size={5}>
                     <TextField
                       fullWidth
-                      type="date"
-                      label="Từ ngày"
+                      type={DATE_TYPE}
+                      label={FROM_DATE}
                       value={fromDate}
                       onChange={e => setFromDate(e.target.value)}
                       slotProps={{
@@ -157,8 +159,8 @@ const VehicleDetail: React.FC = () => {
                   <Grid size={5}>
                     <TextField
                       fullWidth
-                      type="date"
-                      label="Đến ngày"
+                      type={DATE_TYPE}
+                      label={TO_DATE}
                       value={toDate}
                       onChange={e => setToDate(e.target.value)}
                       slotProps={{
@@ -174,12 +176,12 @@ const VehicleDetail: React.FC = () => {
 
               {/* Nút thuê xe */}
               <Button
-                variant="contained"
-                color="primary"
+                variant={VARIANT_BUTTON}
+                color={PRIMARY_COLOR}
                 onClick={handleRentCar}
-                sx={{ mt: 3, p: 1, width: 120 }}
+                sx={styleRentalBtn}
               >
-                THUÊ XE
+                {RENT_VEHICLE}
               </Button>
             </Card>
           </Grid>

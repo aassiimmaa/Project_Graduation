@@ -2,7 +2,6 @@
 import { Box, Container, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import CategoryItem from './CategoryItem'
-import Link from 'next/link'
 import { getAllCategories } from '~/actions/category.action'
 import { Category } from '../shared/inteface'
 import {
@@ -59,13 +58,6 @@ const CategoriesList = () => {
               description={item.description}
             />
           </Box>
-          // <Link href={`/CategoryDetail`} key={index}>
-          //   <CategoryItem
-          //     image={item.image}
-          //     name={item.categoryName}
-          //     description={item.description}
-          //   />
-          // </Link>
         ))}
       </Box>
     </Container>

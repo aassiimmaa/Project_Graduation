@@ -1,27 +1,26 @@
 import React from 'react'
 import { Box, Typography, Container } from '@mui/material'
+import { ABOUT_DESCRIPTION, ABOUT_US, ALIGN_CENTER, FONT_WEIGHT_BOLD, TEXT_COLOR } from '../shared/constant'
+import { styleAboutContainer } from '../shared/styles/About'
 
-//Style
-const styleAboutContainer = { mt: 4, mb: 4, pt: 8, borderTop: '1px solid #ccc' }
+
 
 const About: React.FC = () => {
   return (
     <Container id="About" maxWidth="md" sx={styleAboutContainer}>
-      <Box textAlign="center" mb={4}>
+      <Box textAlign={ALIGN_CENTER} mb={4}>
         <Typography
           variant="h4"
           component="h1"
-          color="#000"
-          fontWeight={600}
+          color={TEXT_COLOR}
+          fontWeight={FONT_WEIGHT_BOLD}
           pb={2}
           gutterBottom
         >
-          Về Chúng Tôi
+          {ABOUT_US}
         </Typography>
-        <Typography variant="body1" color="#000">
-          Chúng tôi là dịch vụ cho thuê xe hàng đầu với nhiều năm kinh nghiệm
-          cung cấp các phương tiện chất lượng. Dù bạn đang tìm kiếm xe máy tiết
-          kiệm hay xe sang trọng, chúng tôi đều sẵn sàng phục vụ.
+        <Typography variant="body1" color={TEXT_COLOR}>
+          {ABOUT_DESCRIPTION}
         </Typography>
       </Box>
     </Container>

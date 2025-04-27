@@ -1,14 +1,7 @@
 import { TableCell } from '@mui/material'
 import React from 'react'
 import { TEXT_COLOR } from '../shared/constant'
-
-interface CellProps {
-  align?: string
-  fontWeight?: string
-  color?: string
-  colSpan?: number
-  children?: React.ReactNode
-}
+import { CellProps } from '../shared/inteface'
 
 const TableBodyCell = ({
   colSpan,

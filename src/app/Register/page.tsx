@@ -12,6 +12,32 @@ import {
 import Image from 'next/image'
 import { registerUser } from '~/actions/user.action'
 import toast from 'react-hot-toast'
+import {
+  ALIGN_CENTER,
+  CONFIRM_PASSWORD,
+  EMAIL,
+  EMAIL_NULL_ERR,
+  EMAIL_REGEX_ERROR,
+  FONT_WEIGHT_BOLD,
+  HAS_ACCOUNT_ALREADY,
+  LOGIN,
+  MARGIN_TEXTFIELD_NORMAL,
+  PASSWORD,
+  PASSWORD_ERROR_CONFIRM,
+  PASSWORD_ERROR_LENGTH,
+  PASSWORD_NULL_ERR,
+  PHONE_NUM_NULL_ERR,
+  PHONE_NUMBER,
+  PHONE_REGEX_ERROR,
+  PRIMARY_COLOR,
+  REGISTER,
+  USER_NAME,
+  USERNAME_NULL_ERR,
+  VARIANT_BUTTON,
+  VARIANT_INPUT,
+  WARNING_COLOR
+} from '../shared/constant'
+import { styleHeaderRegisterForm, stylePaperRegister, styleRegisterContainer } from '../shared/styles/Register'
 
 const RegisterForm: React.FC = () => {
   const router = useRouter()
@@ -40,39 +66,39 @@ const RegisterForm: React.FC = () => {
     }
 
     if (!fullName) {
-      newError.fullName = 'Vui lòng nhập họ và tên'
+      newError.fullName = USERNAME_NULL_ERR
       valid = false
     }
 
     if (!email) {
-      newError.email = 'Vui lòng nhập email'
+      newError.email = EMAIL_NULL_ERR
       valid = false
     } else if (!/\S+@\S+\.\S+/.test(email)) {
-      newError.email = 'Email không hợp lệ'
+      newError.email = EMAIL_REGEX_ERROR
       valid = false
     }
 
     if (!phoneNumber) {
-      newError.phoneNumber = 'Vui lòng nhập số điện thoại'
+      newError.phoneNumber = PHONE_NUM_NULL_ERR
       valid = false
     } else if (!/^\d{10}$/.test(phoneNumber)) {
-      newError.phoneNumber = 'Số điện thoại phải có đúng 10 chữ số'
+      newError.phoneNumber = PHONE_REGEX_ERROR
       valid = false
     }
 
     if (!password) {
-      newError.password = 'Vui lòng nhập mật khẩu'
+      newError.password = PASSWORD_NULL_ERR
       valid = false
     } else if (password.length < 6) {
-      newError.password = 'Mật khẩu ít nhất 6 ký tự'
+      newError.password = PASSWORD_ERROR_LENGTH
       valid = false
     }
 
     if (!confirmPassword) {
-      newError.confirmPassword = 'Vui lòng xác nhận mật khẩu'
+      newError.confirmPassword = PASSWORD_NULL_ERR
       valid = false
     } else if (confirmPassword !== password) {
-      newError.confirmPassword = 'Mật khẩu xác nhận không khớp'
+      newError.confirmPassword = PASSWORD_ERROR_CONFIRM
       valid = false
     }
 
@@ -99,44 +125,21 @@ const RegisterForm: React.FC = () => {
   }
 
   return (
-    <Container
-      maxWidth="md"
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-    >
-      <Paper
-        elevation={6}
-        sx={{
-          p: 4,
-          borderRadius: 3,
-          maxWidth: 500,
-          width: '100%',
-          backgroundColor: 'white'
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}
-        >
+    <Container maxWidth="md" sx={styleRegisterContainer}>
+      <Paper elevation={6} sx={stylePaperRegister}>
+        <Box sx={styleHeaderRegisterForm}>
           <Image src="/images/logo.png" height={80} width={100} alt="logo" />
-          <Typography variant="h5" fontWeight="bold" mt={1}>
-            Đăng ký
+          <Typography variant="h5" fontWeight={FONT_WEIGHT_BOLD} mt={1}>
+            {REGISTER}
           </Typography>
         </Box>
 
         <Box component="form" onSubmit={handleRegister} sx={{ mt: 3 }}>
           <TextField
             fullWidth
-            label="Họ và tên"
-            margin="normal"
-            variant="outlined"
+            label={USER_NAME}
+            margin={MARGIN_TEXTFIELD_NORMAL}
+            variant={VARIANT_INPUT}
             value={fullName}
             onChange={e => setFullName(e.target.value)}
             error={!!error.fullName}
@@ -144,10 +147,10 @@ const RegisterForm: React.FC = () => {
           />
           <TextField
             fullWidth
-            label="Email"
+            label={EMAIL}
             type="email"
-            margin="normal"
-            variant="outlined"
+            margin={MARGIN_TEXTFIELD_NORMAL}
+            variant={VARIANT_INPUT}
             value={email}
             onChange={e => setEmail(e.target.value)}
             error={!!error.email}
@@ -155,10 +158,10 @@ const RegisterForm: React.FC = () => {
           />
           <TextField
             fullWidth
-            label="Số điện thoại"
+            label={PHONE_NUMBER}
             type="tel"
-            margin="normal"
-            variant="outlined"
+            margin={MARGIN_TEXTFIELD_NORMAL}
+            variant={VARIANT_INPUT}
             value={phoneNumber}
             onChange={e => setPhoneNumber(e.target.value)}
             error={!!error.phoneNumber}
@@ -166,10 +169,10 @@ const RegisterForm: React.FC = () => {
           />
           <TextField
             fullWidth
-            label="Mật khẩu"
+            label={PASSWORD}
             type="password"
-            margin="normal"
-            variant="outlined"
+            margin={MARGIN_TEXTFIELD_NORMAL}
+            variant={VARIANT_INPUT}
             value={password}
             onChange={e => setPassword(e.target.value)}
             error={!!error.password}
@@ -177,10 +180,10 @@ const RegisterForm: React.FC = () => {
           />
           <TextField
             fullWidth
-            label="Xác nhận mật khẩu"
+            label={CONFIRM_PASSWORD}
             type="password"
-            margin="normal"
-            variant="outlined"
+            margin={MARGIN_TEXTFIELD_NORMAL}
+            variant={VARIANT_INPUT}
             value={confirmPassword}
             onChange={e => setConfirmPassword(e.target.value)}
             error={!!error.confirmPassword}
@@ -188,23 +191,23 @@ const RegisterForm: React.FC = () => {
           />
           <Button
             fullWidth
-            variant="contained"
-            color="primary"
+            variant={VARIANT_BUTTON}
+            color={PRIMARY_COLOR}
             type="submit"
             sx={{ mt: 2 }}
           >
-            Đăng ký
+            {REGISTER}
           </Button>
         </Box>
 
-        <Typography variant="body2" align="center" sx={{ mt: 3 }}>
-          Đã có tài khoản?
+        <Typography variant="body2" align={ALIGN_CENTER} sx={{ mt: 3 }}>
+          {HAS_ACCOUNT_ALREADY}
           <Button
             variant="text"
-            color="warning"
+            color={WARNING_COLOR}
             onClick={() => router.push('/Login')}
           >
-            Đăng nhập ngay
+            {LOGIN}
           </Button>
         </Typography>
       </Paper>

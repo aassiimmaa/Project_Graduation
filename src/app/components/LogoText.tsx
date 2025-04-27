@@ -1,18 +1,10 @@
 import { Typography } from '@mui/material'
 import React from 'react'
+import { LOGO_TEXT } from '../shared/constant'
+import { styleLogo } from '../shared/styles/LogoText'
 
 const LogoText = () => {
-  const styleLogo = {
-    fontSize: '2.2rem',
-    fontWeight: 700,
-    fontFamily: 'monospace',
-    letterSpacing: '0.05rem',
-    background: 'linear-gradient(90deg,rgb(255, 115, 0),rgb(59, 148, 238))',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    userSelect: 'none'
-  }
-  return <Typography sx={styleLogo}>ANRENTAL</Typography>
+  return <Typography sx={styleLogo}>{LOGO_TEXT}</Typography>
 }
 
 export default LogoText

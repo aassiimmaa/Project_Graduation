@@ -22,14 +22,7 @@ import {
   PRIMARY_COLOR,
   VARIANT_BUTTON
 } from '../shared/constant'
-
-interface AvatarCroperProps {
-  open: boolean
-  onCloseDialog: () => void
-  onCrop: (croppedImage: string) => void
-  onCloseAvatar: () => void
-  avatar: string | null
-}
+import { AvatarCroperProps } from '../shared/inteface'
 
 const AvatarCroper = ({
   open,

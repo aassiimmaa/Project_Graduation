@@ -19,6 +19,27 @@ import {
 import LogoText from './LogoText'
 import { useRouter } from 'next/navigation'
 import React, { useEffect } from 'react'
+import {
+  styleAvatar,
+  styleContainer,
+  styleLayOutNavBar,
+  styleMenu,
+  styleMenuAvatar,
+  styleMenuContainer,
+  styleNavBarItem
+} from '../shared/styles/NavBar'
+import {
+  CONTACT,
+  FONT_WEIGHT_BOLD,
+  GO_TO_ADMIN_PAGE,
+  HISTORY_RENTAL,
+  HOMEPAGE,
+  INTRODUCE,
+  LOGIN,
+  LOGOUT,
+  PERSONAL_INFORMATION,
+  SERVICE
+} from '../shared/constant'
 
 export function NavBar() {
   const user = localStorage.getItem('user')
@@ -56,108 +77,22 @@ export function NavBar() {
     router.push('/')
   }
 
-  // Style Navbar
-
-  const styleLayOutNavBar = {
-    backgroundColor: 'rgb(33, 37, 41)',
-    width: '100%',
-    height: '70px',
-    paddingY: '8px',
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 1000
-  }
-
-  const styleContainer = {
-    height: '100%',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  }
-
-  const styleNavBarItem = {
-    display: 'flex',
-    gap: '20px',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    '& .navbar_item': {
-      position: 'relative',
-      textDecoration: 'none',
-      fontSize: '1rem',
-      color: '#fff',
-      transition: 'color 0.3s ease',
-      '&::after': {
-        content: '""',
-        position: 'absolute',
-        width: '0%',
-        height: '2px',
-        bottom: '-4px',
-        left: 0,
-        backgroundColor: 'rgb(218, 152, 53)',
-        transition: 'width 0.3s ease'
-      },
-      '&:hover': {
-        color: 'rgb(218, 152, 53)'
-      },
-      '&:hover::after': {
-        width: '100%'
-      }
-    }
-  }
-
-  const styleAvatar = {
-    transition: 'all 0.3s ease',
-    border: !open
-      ? '1px solid transparent'
-      : '1px solid rgba(218, 152, 53, 0.2)',
-    boxShadow: !open ? 0 : '0 0 16px 4px rgb(218, 152, 53)',
-    '&:hover': {
-      cursor: 'pointer',
-      border: '1px solid rgba(218, 152, 53, 0.2)',
-      boxShadow: '0 0 16px 4px rgb(218, 152, 53)'
-    },
-    '&:active': {
-      transform: 'scale(0.9)',
-      border: '1px solid rgba(218, 152, 53, 0.4)',
-      boxShadow: '0 0 12px 2px rgb(218, 152, 53)'
-    }
-  }
-
-  const styleMenu = {
-    top: 48,
-    left: 96
-  }
-
-  const styleMenuContainer = {
-    px: 2,
-    py: 2,
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 1,
-    width: 230
-  }
-
-  const styleMenuAvatar = { width: 42, height: 42 }
-
   return (
     <Box sx={styleLayOutNavBar}>
       <Container maxWidth="xl" sx={styleContainer}>
         <LogoText />
         <Box sx={styleNavBarItem}>
           <Link className="navbar_item" href="/">
-            Trang chủ
+            {HOMEPAGE}
           </Link>
           <Link className="navbar_item" href="#Services">
-            Dịch vụ
+            {SERVICE}
           </Link>
           <Link className="navbar_item" href="#About">
-            Giới thiệu
+            {INTRODUCE}
           </Link>
           <Link className="navbar_item" href="#Contact">
-            Liên hệ
+            {CONTACT}
           </Link>
           <Box component={'span'} sx={{ paddingX: '8px', userSelect: 'none' }}>
             |
@@ -168,7 +103,7 @@ export function NavBar() {
                 alt="Avatar"
                 src={parsedUser.image}
                 onClick={handleMenu}
-                sx={styleAvatar}
+                sx={styleAvatar(open)}
               />
               <Menu
                 disableScrollLock
@@ -195,7 +130,7 @@ export function NavBar() {
                     src={parsedUser.image}
                     sx={styleMenuAvatar}
                   />
-                  <Typography variant="body1" fontWeight="bold">
+                  <Typography variant="body1" fontWeight={FONT_WEIGHT_BOLD}>
                     {parsedUser.name}
                   </Typography>
                 </Box>
@@ -207,7 +142,9 @@ export function NavBar() {
                     <ListItemIcon>
                       <AccountCircle fontSize="medium" />
                     </ListItemIcon>
-                    <Typography variant="body2">Thông tin cá nhân</Typography>
+                    <Typography variant="body2">
+                      {PERSONAL_INFORMATION}
+                    </Typography>
                   </MenuItem>
                 </Link>
                 <Link href="/HistoryRental">
@@ -215,7 +152,7 @@ export function NavBar() {
                     <ListItemIcon>
                       <ManageHistory fontSize="medium" />
                     </ListItemIcon>
-                    <Typography variant="body2">Lịch sử thuê xe</Typography>
+                    <Typography variant="body2">{HISTORY_RENTAL}</Typography>
                   </MenuItem>
                 </Link>
                 {parsedUser.role && (
@@ -224,7 +161,9 @@ export function NavBar() {
                       <ListItemIcon>
                         <SupervisorAccount fontSize="medium" />
                       </ListItemIcon>
-                      <Typography variant="body2">Đến trang quản lý</Typography>
+                      <Typography variant="body2">
+                        {GO_TO_ADMIN_PAGE}
+                      </Typography>
                     </MenuItem>
                   </Link>
                 )}
@@ -235,13 +174,13 @@ export function NavBar() {
                   <ListItemIcon>
                     <Logout fontSize="small" sx={{ color: 'red' }} />
                   </ListItemIcon>
-                  <Typography variant="body2">Đăng xuất</Typography>
+                  <Typography variant="body2">{LOGOUT}</Typography>
                 </MenuItem>
               </Menu>
             </Box>
           ) : (
             <Link href="/Login" onClick={handleLogin}>
-              Đăng nhập
+              {LOGIN}
             </Link>
           )}
         </Box>

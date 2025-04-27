@@ -10,45 +10,33 @@ import {
   Divider,
   Fade
 } from '@mui/material'
-
-//Style
-const styleContainerContact = {
-  my: 8,
-  pt: 4,
-  borderTop: '1px solid #ccc',
-  textAlign: 'center'
-}
-
-const styleTitleContact = {
-  fontWeight: 600,
-  marginBottom: 2,
-  color: '#000'
-}
-
-const styleDescriptionContact = {
-  color: '#000',
-  marginBottom: 3
-}
-
-const styleModal = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 620,
-  bgcolor: 'background.paper',
-  boxShadow: 24,
-  borderRadius: 2,
-  color: '#000'
-}
-
-const styleTitleModal = { padding: '16px 32px' }
-
-const styleDescriptionModal = { mb: 1 }
-
-const styleHelpDescription = { pb: 2, fontWeight: 600 }
-
-const styleCloseButtonModal = { margin: '16px 32px', float: 'right' }
+import {
+  CLOSE,
+  CONTACT,
+  CONTACT_DESCRIPTION,
+  CONTACT_INFO_HELP,
+  CONTACT_INFO_TITLE,
+  CONTACT_TITLE,
+  EMAIL,
+  FACEBOOK,
+  FACEBOOK_LINK,
+  HOTLINE,
+  MY_EMAIL,
+  MY_PHONENUM,
+  PRIMARY_COLOR,
+  VARIANT_BUTTON,
+  VARIANT_INPUT
+} from '../shared/constant'
+import {
+  styleCloseButtonModal,
+  styleContainerContact,
+  styleDescriptionContact,
+  styleDescriptionModal,
+  styleHelpDescription,
+  styleModal,
+  styleTitleContact,
+  styleTitleModal
+} from '../shared/styles/Contact'
 
 const Contact: React.FC = () => {
   const [open, setOpen] = React.useState(false)
@@ -61,20 +49,18 @@ const Contact: React.FC = () => {
       {/* CTA Section */}
       <Container id="Contact" maxWidth="md" sx={styleContainerContact}>
         <Typography variant="h4" component="h2" sx={styleTitleContact}>
-          Tại Sao Chọn AnRental?
+          {CONTACT_TITLE}
         </Typography>
         <Typography variant="body1" sx={styleDescriptionContact}>
-          Với nhiều lựa chọn xe và cam kết dịch vụ chất lượng, chúng tôi đảm bảo
-          trải nghiệm thuê xe dễ dàng và thú vị. Đặt xe ngay hôm nay để tự tin
-          di chuyển.
+          {CONTACT_DESCRIPTION}
         </Typography>
         <Button
-          variant="outlined"
-          color="primary"
+          variant={VARIANT_INPUT}
+          color={PRIMARY_COLOR}
           size="large"
           onClick={handleOpen}
         >
-          Liên Hệ
+          {CONTACT}
         </Button>
       </Container>
 
@@ -94,43 +80,38 @@ const Contact: React.FC = () => {
               fontWeight={700}
               sx={styleTitleModal}
             >
-              Thông Tin Liên Hệ
+              {CONTACT_INFO_TITLE}
             </Typography>
             <Divider />
             <Box sx={styleTitleModal}>
               <Typography sx={styleHelpDescription}>
-                Mọi thắc mắc hoặc yêu cầu hỗ trợ, vui lòng liên hệ với chúng tôi
-                qua:
+                {CONTACT_INFO_HELP}
               </Typography>
               <Typography sx={styleDescriptionModal}>
-                <Box component="strong">Facebook: </Box>
-                <Link
-                  href="https://www.facebook.com/entian195"
-                  target="_blank"
-                  rel="noopener"
-                >
-                  https://www.facebook.com/entian195
+                <Box component="strong">{`${FACEBOOK}: `} </Box>
+                <Link href={FACEBOOK_LINK} target="_blank" rel="noopener">
+                  {FACEBOOK_LINK}
                 </Link>
               </Typography>
               <Typography sx={styleDescriptionModal}>
-                <Box component="strong">Email: </Box>
+                <Box component="strong">{`${EMAIL}: `} </Box>
                 <Link href="mailto:nguyenthanhanvp2690@gmail.com">
-                  nguyenthanhanvp2690@gmail.com
+                  {MY_EMAIL}
                 </Link>
               </Typography>
               <Typography sx={styleDescriptionModal}>
-                <Box component="strong">Hotline: </Box>
-                <Link href="tel:+84 378 543 296">+84 378 543 296</Link>
+                <Box component="strong">{`${HOTLINE}: `}</Box>
+                <Link href="tel:+84 378 543 296">{MY_PHONENUM}</Link>
               </Typography>
             </Box>
             <Divider />
             <Button
-              variant="contained"
-              color="primary"
+              variant={VARIANT_BUTTON}
+              color={PRIMARY_COLOR}
               sx={styleCloseButtonModal}
               onClick={handleClose}
             >
-              Đóng
+              {CLOSE}
             </Button>
           </Box>
         </Fade>
