@@ -46,6 +46,15 @@ export const ROLE_USER = 'User'
 export const ERROR_HAPPEN = 'Có lỗi xảy ra!'
 export const VARIANT_SKELETON_BOX = 'rectangular'
 export const COLOR_STRONG = 'rgba(218, 152, 53)'
+export const FACEBOOK = 'Facebook'
+export const GOOGLE = 'Google'
+export const FACEBOOK_LINK = 'https://www.facebook.com/entian195'
+export const MY_EMAIL = 'nguyenthanhanvp2690@gmail.com'
+export const HOTLINE = 'Hotline'
+export const MY_PHONENUM = '+84 378 543 296'
+export const CLOSE = 'Đóng'
+export const LOGO_TEXT = 'ANRENTAL'
+export const PASSWORD = 'Mật khẩu'
 
 //Regex
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -113,10 +122,42 @@ export const DETAIL_ORDER = 'Xem chi tiết'
 export const LOCATION_CAR = 'Xem vị trí xe'
 export const DELETE_ORDER = 'Xóa đơn'
 
+//LogedInUser text
+export const BACK_HOME = 'Quay lại trang chủ'
+export const LOGOUT = 'Đăng xuất'
+
 //Client area
 
 //Home
 export const SERVICE_CAR = 'Các dòng xe đang phục vụ'
+export const HOMEPAGE = 'Trang chủ'
+export const SERVICE = 'Dịch vụ'
+export const INTRODUCE = 'Giới thiệu'
+export const HISTORY_RENTAL = 'Lịch sử thuê xe'
+export const GO_TO_ADMIN_PAGE = 'Đến trang quản lý'
+export const LOGIN = 'Đăng nhập'
+export const REGISTER = 'Đăng ký'
+
+//About section
+export const ABOUT_US = 'Về Chúng Tôi'
+export const ABOUT_DESCRIPTION =
+  'Chúng tôi là dịch vụ cho thuê xe hàng đầu với nhiều năm kinh nghiệm cung cấp các phương tiện chất lượng. Dù bạn đang tìm kiếm xe máy tiết kiệm hay xe sang trọng, chúng tôi đều sẵn sàng phục vụ.'
+
+//Footer
+export const AUTHOR_DESCRIPTION = 'AnRental. Bảo lưu mọi quyền.'
+
+//BannerSlider text
+export const BANNER_TITLE = 'Khám Phá Thế Giới Dễ Dàng'
+export const BANNER_DESCRIPTION =
+  ' Khám phá các dòng xe phù hợp cho mọi hành trình của bạn. Dịch vụ thuê xe giá cả phải chăng và đáng tin cậy, đáp ứng mọi nhu cầu của bạn.'
+
+//Contact section
+export const CONTACT_TITLE = 'Tại Sao Chọn AnRental?'
+export const CONTACT_DESCRIPTION =
+  'Với nhiều lựa chọn xe và cam kết dịch vụ chất lượng, chúng tôi đảm bảo trải nghiệm thuê xe dễ dàng và thú vị. Đặt xe ngay hôm nay để tự tin di chuyển.'
+export const CONTACT = 'Liên hệ'
+export const CONTACT_INFO_TITLE = 'Thông Tin Liên Hệ'
+export const CONTACT_INFO_HELP = 'Mọi thắc mắc hoặc yêu cầu hỗ trợ, vui lòng liên hệ với chúng tôi qua:'
 
 //Profile text
 export const CROP_AVATAR = 'Cắt ảnh đại diện'
@@ -129,19 +170,41 @@ export const PERSONAL_INFORMATION = 'Thông tin cá nhân'
 export const CHANGE_PASSWORD = 'Đổi mật khẩu'
 export const CURRENT_PASSWORD = 'Mật khẩu hiện tại'
 export const NEW_PASSWORD = 'Mật khẩu mới'
-export const CONFIRM_PASSWORD = 'Xác nhận mật khẩu mới'
+export const CONFIRM_PASSWORD = 'Xác nhận mật khẩu'
 export const TYPE_PASSWORD = 'password'
 export const SAVE_PASSWORD = 'Lưu mật khẩu'
 export const PASSWORD_ERROR_LENGTH = 'Mật khẩu mới phải có ít nhất 6 ký tự!'
 export const PASSWORD_ERROR_CONFIRM = 'Mật khẩu xác nhận không khớp!'
 
+//Register text
+export const USERNAME_NULL_ERR = 'Vui lòng nhập họ và tên'
+export const EMAIL_NULL_ERR = 'Vui lòng nhập email'
+export const PHONE_NUM_NULL_ERR = 'Vui lòng nhập số điện thoại'
+export const PASSWORD_NULL_ERR = 'Vui lòng nhập mật khẩu'
+export const PASSWORD_CONFIRM_NULL_ERR = 'Vui lòng xác nhận mật khẩu'
+export const HAS_ACCOUNT_ALREADY = 'Đã có tài khoản?'
+
 //DetailCategory text
 export const HELPER_CHOOSE_CATEGORY = 'Chọn dòng xe cần phục vụ'
 
+//VehicleList text
+export const SERVING = 'đang phục vụ'
+
+//VehicleDetail text
+export const FROM_DATE_NULL_ERR = 'Vui lòng chọn ngày bắt đầu'
+export const TO_DATE_NULL_ERR = 'Vui lòng chọn ngày kết thúc'
+export const FROM_DATE_BEFORE_TODAY_ERR = 'Ngày bắt đầu không thể trước hôm nay'
+export const TO_DATE_BEFORE_FROM_DATE_ERR =
+  'Ngày kết thúc không thể nhỏ hơn ngày bắt đầu'
 
 //QRPay components
 export const QR_TITLE = 'Mã QR Thanh Toán'
 export const QR_HELP = 'Quét mã QR để thanh toán đặt xe:'
 export const OR = 'Hoặc'
 export const PAY_LATER = 'Thanh toán sau'
-export const PAY_LATER_NOTE = 'Lưu ý: Quý khách có thể sẽ không thể thuê xe này nếu có người đặt trước.'
+export const PAY_LATER_NOTE =
+  'Lưu ý: Quý khách có thể sẽ không thể thuê xe này nếu có người đặt trước.'
+export const BACK = 'Quay lại'
+export const RENTAL_TIME = 'Thời gian thuê xe'
+export const DATE_TYPE = 'date'
+export const RENT_VEHICLE = 'Thuê xe'

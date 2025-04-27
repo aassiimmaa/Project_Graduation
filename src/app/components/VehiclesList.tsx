@@ -20,7 +20,7 @@ import {
   styleTitle,
   styleTitleOverflow
 } from '../shared/styles/VehicleList'
-import { COLOR_STRONG, VARIANT_SKELETON_BOX } from '../shared/constant'
+import { COLOR_STRONG, SERVING, VARIANT_SKELETON_BOX } from '../shared/constant'
 
 const VehiclesList: React.FC = () => {
   const categoryId = useSelector(
@@ -52,7 +52,7 @@ const VehiclesList: React.FC = () => {
         <Box component="strong" color={COLOR_STRONG}>
           {vehicles[0]?.categories.categoryName}
         </Box>{' '}
-        đang phục vụ
+        {SERVING}
       </Typography>
       <Grid2 container spacing={3.665}>
         {loading

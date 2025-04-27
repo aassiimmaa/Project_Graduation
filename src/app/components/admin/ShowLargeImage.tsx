@@ -5,7 +5,7 @@ import { styleDialogContainer, styleImageDialog } from '~/app/shared/styles/Admi
 
 interface ModalProps {
   selectedImage: string
-  close: (event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void
+  close: (event: object, reason: 'backdropClick' | 'escapeKeyDown') => void
 }
 
 const ShowLargeImage = ({ selectedImage, close }: ModalProps) => {

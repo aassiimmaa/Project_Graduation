@@ -107,6 +107,38 @@ interface payLaterProps{
   status: number
 }
 
+interface AvatarCroperProps {
+  open: boolean
+  onCloseDialog: () => void
+  onCrop: (croppedImage: string) => void
+  onCloseAvatar: () => void
+  avatar: string | null
+}
+
+interface Slide {
+  id: number
+  image: string
+}
+
+interface CategoryProps {
+  image: string
+  name: string
+  description: string
+}
+interface CellProps {
+  align?: string
+  fontWeight?: string
+  color?: string
+  colSpan?: number
+  children?: React.ReactNode
+}
+
+interface CellHeadProps {
+  width?: string
+  align?: string
+  children?: React.ReactNode
+}
+
 export type {
   User,
   Category,
@@ -120,7 +152,12 @@ export type {
   EditVehicleDialogParams,
   DetailCategoryProps,
   QRProps,
-  payLaterProps
+  payLaterProps,
+  AvatarCroperProps,
+  Slide,
+  CategoryProps,
+  CellProps,
+  CellHeadProps
 }
 
 

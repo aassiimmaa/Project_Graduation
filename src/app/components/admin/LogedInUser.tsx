@@ -11,9 +11,12 @@ import { Reply, Logout } from '@mui/icons-material'
 import Link from 'next/link'
 import React from 'react'
 import { useRouter } from 'next/navigation'
+import { User } from '~/app/shared/inteface'
+import { styleAvatar, styleMenu } from '~/app/shared/styles/LogedInUser'
+import { BACK_HOME, LOGOUT } from '~/app/shared/constant'
 
 interface UserProps {
-  user: any
+  user: User
   image: string
 }
 
@@ -35,30 +38,7 @@ const LogedInUser = (LogIn: UserProps) => {
     router.push('/')
   }
 
-  //Styles
-  const styleAvatar = {
-    width: 50,
-    height: 50,
-    transition: 'all 0.3s ease',
-    border: !open
-      ? '1px solid transparent'
-      : '1px solid rgba(218, 152, 53, 0.2)',
-    boxShadow: !open ? 0 : '0 0 16px 4px rgb(218, 152, 53)',
-    '&:hover': {
-      cursor: 'pointer',
-      border: '1px solid rgba(218, 152, 53, 0.2)',
-      boxShadow: '0 0 16px 4px rgb(218, 152, 53)'
-    },
-    '&:active': {
-      transform: 'scale(0.9)',
-      border: '1px solid rgba(218, 152, 53, 0.4)',
-      boxShadow: '0 0 12px 2px rgb(218, 152, 53)'
-    }
-  }
-
-  const styleMenu = {
-    top: 50
-  }
+ 
 
   return (
     <Box sx={{ position: 'relative' }}>
@@ -66,7 +46,7 @@ const LogedInUser = (LogIn: UserProps) => {
         alt={LogIn.user.name}
         src={LogIn.image}
         onClick={handleMenu}
-        sx={styleAvatar}
+        sx={styleAvatar(open)}
       />
       <Menu
         id="menu-appbar"
@@ -91,7 +71,7 @@ const LogedInUser = (LogIn: UserProps) => {
             <ListItemIcon>
               <Reply fontSize="medium" />
             </ListItemIcon>
-            <Typography variant="body2">Quay lại trang chủ</Typography>
+            <Typography variant="body2">{BACK_HOME}</Typography>
           </MenuItem>
         </Link>
 
@@ -101,7 +81,7 @@ const LogedInUser = (LogIn: UserProps) => {
           <ListItemIcon>
             <Logout fontSize="small" sx={{ color: 'red' }} />
           </ListItemIcon>
-          <Typography variant="body2">Đăng xuất</Typography>
+          <Typography variant="body2">{LOGOUT}</Typography>
         </MenuItem>
       </Menu>
     </Box>

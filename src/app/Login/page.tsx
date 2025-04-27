@@ -16,6 +16,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { LoginUser } from '~/actions/user.action'
 import toast from 'react-hot-toast'
+import { BACK_HOME, FACEBOOK, FONT_WEIGHT_BOLD, GOOGLE, LOGIN, MARGIN_TEXTFIELD_NORMAL, OR, PRIMARY_COLOR, REGISTER, VARIANT_BUTTON, VARIANT_INPUT, WARNING_COLOR } from '../shared/constant'
+import { styleContainerLoginForm, stylePaperLoginForm } from '../shared/styles/LoginPage'
 
 const LoginForm: React.FC = () => {
   const router = useRouter()
@@ -70,22 +72,11 @@ const LoginForm: React.FC = () => {
   return (
     <Container
       maxWidth="xs"
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
+      sx={styleContainerLoginForm}
     >
       <Paper
         elevation={6}
-        sx={{
-          p: 4,
-          borderRadius: 3,
-          maxWidth: 400,
-          width: '100%',
-          backgroundColor: 'white'
-        }}
+        sx={stylePaperLoginForm}
       >
         <Box
           sx={{
@@ -95,8 +86,8 @@ const LoginForm: React.FC = () => {
           }}
         >
           <Image src="/images/logo.png" height={80} width={100} alt="logo" />
-          <Typography variant="h5" fontWeight="bold" mt={1}>
-            Đăng nhập
+          <Typography variant="h5" fontWeight={FONT_WEIGHT_BOLD} mt={1}>
+            {LOGIN}
           </Typography>
         </Box>
 
@@ -105,8 +96,8 @@ const LoginForm: React.FC = () => {
             fullWidth
             label="Email"
             type="email"
-            margin="normal"
-            variant="outlined"
+            margin={MARGIN_TEXTFIELD_NORMAL}
+            variant={VARIANT_INPUT}
             value={email}
             onChange={e => setEmail(e.target.value)}
             error={!!error.email}
@@ -116,8 +107,8 @@ const LoginForm: React.FC = () => {
             fullWidth
             label="Mật khẩu"
             type="password"
-            margin="normal"
-            variant="outlined"
+            margin={MARGIN_TEXTFIELD_NORMAL}
+            variant={VARIANT_INPUT}
             value={password}
             onChange={e => setPassword(e.target.value)}
             error={!!error.password}
@@ -125,43 +116,43 @@ const LoginForm: React.FC = () => {
           />
           <Button
             fullWidth
-            variant="contained"
-            color="primary"
+            variant={VARIANT_BUTTON}
+            color={PRIMARY_COLOR}
             type="submit"
             sx={{ mt: 2 }}
           >
-            Đăng nhập
+            {LOGIN}
           </Button>
           <Link href="/Register">
-            <Button fullWidth variant="outlined" color="warning" sx={{ mt: 1 }}>
-              Đăng ký
+            <Button fullWidth variant={VARIANT_INPUT} color={WARNING_COLOR} sx={{ mt: 1 }}>
+              {REGISTER}
             </Button>
           </Link>
         </Box>
 
-        <Divider sx={{ my: 3 }}>Hoặc</Divider>
+        <Divider sx={{ my: 3 }}>{OR}</Divider>
 
         <Grid container spacing={2} justifyContent="center">
           <Grid size={6}>
             <Button
               fullWidth
-              variant="contained"
+              variant={VARIANT_BUTTON}
               color="error"
               startIcon={<Google />}
               onClick={() => handleThirdPartyLogin('Google')}
             >
-              Google
+              {GOOGLE}
             </Button>
           </Grid>
           <Grid size={6}>
             <Button
               fullWidth
-              variant="contained"
-              color="primary"
+              variant={VARIANT_BUTTON}
+              color={PRIMARY_COLOR}
               startIcon={<Facebook />}
               onClick={() => handleThirdPartyLogin('Facebook')}
             >
-              Facebook
+              {FACEBOOK}
             </Button>
           </Grid>
         </Grid>
@@ -173,7 +164,7 @@ const LoginForm: React.FC = () => {
           onClick={() => router.push('/')}
           sx={{ mt: 3 }}
         >
-          Quay về trang chủ
+          {BACK_HOME}
         </Button>
       </Paper>
     </Container>
