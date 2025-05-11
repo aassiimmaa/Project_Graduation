@@ -18,7 +18,7 @@ export default function AdminDashboard() {
       <Image
         src="/images/logo.png"
         alt="AnRental Logo"
-        width={200}
+        width={220}
         height={180}
         priority
       />

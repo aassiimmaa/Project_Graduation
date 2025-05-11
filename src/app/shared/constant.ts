@@ -4,6 +4,7 @@ export const FONT_WEIGHT_BOLD = 600
 export const PRIMARY_COLOR = 'primary'
 export const WARNING_COLOR = 'warning'
 export const ERROR_COLOR = 'error'
+export const INFO_COLOR = 'info'
 export const SIZE_BUTTON = 'small'
 export const SIZE_CONTAINER = 'xl'
 export const SIZE_PAGINATION = 'large'
@@ -55,6 +56,9 @@ export const MY_PHONENUM = '+84 378 543 296'
 export const CLOSE = 'Đóng'
 export const LOGO_TEXT = 'ANRENTAL'
 export const PASSWORD = 'Mật khẩu'
+export const LINK_TO_LOGO = '/images/logo.png'
+export const ADDRESS = 'Địa chỉ'
+export const MY_ADDRESS = '54 An Dương Vương, TP Huế'
 
 //Regex
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -157,7 +161,8 @@ export const CONTACT_DESCRIPTION =
   'Với nhiều lựa chọn xe và cam kết dịch vụ chất lượng, chúng tôi đảm bảo trải nghiệm thuê xe dễ dàng và thú vị. Đặt xe ngay hôm nay để tự tin di chuyển.'
 export const CONTACT = 'Liên hệ'
 export const CONTACT_INFO_TITLE = 'Thông Tin Liên Hệ'
-export const CONTACT_INFO_HELP = 'Mọi thắc mắc hoặc yêu cầu hỗ trợ, vui lòng liên hệ với chúng tôi qua:'
+export const CONTACT_INFO_HELP =
+  'Mọi thắc mắc hoặc yêu cầu hỗ trợ, vui lòng liên hệ với chúng tôi qua:'
 
 //Profile text
 export const CROP_AVATAR = 'Cắt ảnh đại diện'
@@ -208,3 +213,12 @@ export const BACK = 'Quay lại'
 export const RENTAL_TIME = 'Thời gian thuê xe'
 export const DATE_TYPE = 'date'
 export const RENT_VEHICLE = 'Thuê xe'
+
+//HistoryRental text
+export const DETAIL = 'Xem'
+export const ORDER_INVOICE = 'HÓA ĐƠN THUÊ XE'
+export const ORDERID_TEXT = 'Mã đơn hàng'
+export const ORDER_RENT = 'Người thuê'
+export const ORDER_DETAIL_INFOMATION = 'Chi tiết thuê'
+export const THANKS_TEXT = 'Cảm ơn bạn đã sử dụng dịch vụ của AnRental!'
+

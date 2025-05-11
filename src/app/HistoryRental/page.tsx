@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Container,
   Card,
@@ -15,93 +15,91 @@ import {
   Chip,
   Box
 } from '@mui/material'
-import {
-  Cancel,
-  Visibility,
-  HourglassEmpty,
-  CheckCircle,
-  DirectionsCar
-} from '@mui/icons-material'
+import { Cancel, Visibility } from '@mui/icons-material'
 import { NavBar } from '../components/NavBar'
 import TableHeadCell from '../components/TableHeadCell'
 import TableBodyCell from '../components/TableBodyCell'
-
-const rentalData = [
-  {
-    name: 'Nguyễn Văn A',
-    fromDate: '10/03/2024',
-    toDate: '15/03/2024',
-    total: '5,000,000 VND',
-    status: 'Đang thuê'
-  },
-  {
-    name: 'Trần Thị B',
-    fromDate: '05/02/2024',
-    toDate: '10/02/2024',
-    total: '3,500,000 VND',
-    status: 'Hoàn tất'
-  },
-  {
-    name: 'Lê Văn C',
-    fromDate: '20/01/2024',
-    toDate: '25/01/2024',
-    total: '4,200,000 VND',
-    status: 'Chờ duyệt'
-  },
-  {
-    name: 'Phạm Minh D',
-    fromDate: '01/04/2024',
-    toDate: '07/04/2024',
-    total: '6,800,000 VND',
-    status: 'Hủy'
-  }
-]
-
-// Hàm hiển thị màu và icon trạng thái
-const getStatusStyle = (status: string) => {
-  switch (status) {
-    case 'Chờ duyệt':
-      return { color: 'warning', icon: <HourglassEmpty fontSize="small" /> }
-    case 'Đang thuê':
-      return { color: 'primary', icon: <DirectionsCar fontSize="small" /> }
-    case 'Hoàn tất':
-      return { color: 'success', icon: <CheckCircle fontSize="small" /> }
-    case 'Hủy':
-      return { color: 'error', icon: <Cancel fontSize="small" /> }
-    default:
-      return { color: undefined, icon: null }
-  }
-}
-
-//Styles
-const styleLayoutTable = { mt: 12, mb: 6 }
-
-const styleCardContainer = { borderRadius: 3, overflow: 'hidden' }
-
-const styleTitleTable = {
-  p: 3,
-  backgroundColor: '#2864c0',
-  color: 'white',
-  textAlign: 'center'
-}
-
-const styleHoverRow = {
-  transition: '0.3s',
-  '&:hover': { backgroundColor: '#a1bcec3d' }
-}
-
-const styleActionButton = { textTransform: 'none', fontSize: '0.9rem' }
+import { cancelOrder, getHistoryRentalByUserId } from '~/actions/order.action'
+import { HistoryRentalProps, MuiColor } from '../shared/inteface'
+import {
+  ACTION,
+  ALIGN_CENTER,
+  CANCEL_TEXT,
+  DETAIL,
+  ERROR_COLOR,
+  FONT_WEIGHT_BOLD,
+  FROM_DATE,
+  HISTORY_RENTAL,
+  INFO_COLOR,
+  SERIAL,
+  SIZE_CONTAINER,
+  STATUS,
+  STORAGE_DATA_USER,
+  TO_DATE,
+  TOTAL_PRICE,
+  USER_NAME,
+  VARIANT_BUTTON,
+  W_10,
+  W_15,
+  W_5
+} from '../shared/constant'
+import { formatDate } from '~/lib/formatDate'
+import { totalPrice } from '~/lib/totalPrice'
+import { getRentalDays } from '~/lib/getRentalDay'
+import { formatPrice } from '~/lib/formatPrice'
+import {
+  styleActionButton,
+  styleActionButtonContainer,
+  styleCardContainer,
+  styleHoverRow,
+  styleLayoutTable,
+  styleRowTitle,
+  styleTitleTable
+} from '../shared/styles/HistoryRental'
+import { getStatusStyle } from '~/lib/getStatusStyle'
+import Link from 'next/link'
+import toast from 'react-hot-toast'
 
 const RentalHistoryPage: React.FC = () => {
+  const [rentalData, setRentalData] = useState<HistoryRentalProps[]>([])
+  const user = JSON.parse(localStorage.getItem(STORAGE_DATA_USER) || '')
+  
+
+  const handleCancelOrder = async (orderId: string, status: number) => {
+    const res = await cancelOrder(orderId, status)
+
+    if (res.success) {
+      toast.success(res.message)
+      fetchHistoryRental()
+    } else {
+      toast.error(res.message)
+    }
+  }
+
+  const fetchHistoryRental = async () => {
+      if (!user) {
+        alert('Vui lòng đăng nhập để sử dụng chức năng này!')
+        return
+      }
+
+      const data = await getHistoryRentalByUserId(user.id)
+      setRentalData(data?.orders ?? [])
+    }
+
+  useEffect(() => {
+    fetchHistoryRental()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <>
       <NavBar />
-      <Container maxWidth="xl" sx={styleLayoutTable}>
+      <Container maxWidth={SIZE_CONTAINER} sx={styleLayoutTable}>
         <Card elevation={4} sx={styleCardContainer}>
           {/* Tiêu đề */}
           <Box sx={styleTitleTable}>
-            <Typography variant="h4" fontWeight="600">
-              Lịch Sử Thuê Xe
+            <Typography variant="h4" fontWeight={FONT_WEIGHT_BOLD}>
+              {HISTORY_RENTAL}
             </Typography>
           </Box>
 
@@ -110,21 +108,21 @@ const RentalHistoryPage: React.FC = () => {
             <TableContainer>
               <Table>
                 <TableHead>
-                  <TableRow sx={{ backgroundColor: '#E3F2FD' }}>
-                    <TableHeadCell align="center" width="5%">
-                      STT
+                  <TableRow sx={styleRowTitle}>
+                    <TableHeadCell align={ALIGN_CENTER} width={W_5}>
+                      {SERIAL}
                     </TableHeadCell>
-                    <TableHeadCell width="15%">Tên Người Thuê</TableHeadCell>
-                    <TableHeadCell width="10%">Từ Ngày</TableHeadCell>
-                    <TableHeadCell width="10%">Đến Ngày</TableHeadCell>
-                    <TableHeadCell align="center" width="10%">
-                      Tổng Tiền
+                    <TableHeadCell width={W_15}>{USER_NAME}</TableHeadCell>
+                    <TableHeadCell width={W_10}>{FROM_DATE}</TableHeadCell>
+                    <TableHeadCell width={W_10}>{TO_DATE}</TableHeadCell>
+                    <TableHeadCell align={ALIGN_CENTER} width={W_10}>
+                      {TOTAL_PRICE}
                     </TableHeadCell>
-                    <TableHeadCell align="center" width="15%">
-                      Trạng Thái
+                    <TableHeadCell align={ALIGN_CENTER} width={W_15}>
+                      {STATUS}
                     </TableHeadCell>
-                    <TableHeadCell align="center" width="15%">
-                      Hành Động
+                    <TableHeadCell align={ALIGN_CENTER} width={W_15}>
+                      {ACTION}
                     </TableHeadCell>
                   </TableRow>
                 </TableHead>
@@ -134,64 +132,65 @@ const RentalHistoryPage: React.FC = () => {
 
                     return (
                       <TableRow key={index} sx={styleHoverRow}>
-                        <TableBodyCell fontWeight="600" align="center">
+                        <TableBodyCell
+                          fontWeight={FONT_WEIGHT_BOLD.toString()}
+                          align={ALIGN_CENTER}
+                        >
                           {index + 1}
                         </TableBodyCell>
 
-                        <TableBodyCell>{order.name}</TableBodyCell>
-                        <TableBodyCell>{order.fromDate}</TableBodyCell>
-                        <TableBodyCell>{order.toDate}</TableBodyCell>
+                        <TableBodyCell>{order.users.name}</TableBodyCell>
+                        <TableBodyCell>
+                          {formatDate(order.fromDay)}
+                        </TableBodyCell>
+                        <TableBodyCell>{formatDate(order.toDay)}</TableBodyCell>
                         <TableBodyCell
-                          fontWeight="600"
-                          align="center"
+                          fontWeight={FONT_WEIGHT_BOLD.toString()}
+                          align={ALIGN_CENTER}
                           color="#2E7D32"
                         >
-                          💰 {order.total}
+                          💰{' '}
+                          {formatPrice(
+                            totalPrice(
+                              order.vehicles.price,
+                              getRentalDays(
+                                formatDate(order.fromDay),
+                                formatDate(order.toDay)
+                              )
+                            ).toString()
+                          )}
                         </TableBodyCell>
-                        <TableBodyCell align="center">
+                        <TableBodyCell align={ALIGN_CENTER}>
                           <Chip
-                            label={order.status}
-                            color={
-                              statusStyle.color as
-                                | 'default'
-                                | 'error'
-                                | 'primary'
-                                | 'secondary'
-                                | 'info'
-                                | 'success'
-                                | 'warning'
-                                | undefined
-                            }
+                            label={statusStyle.description}
+                            color={statusStyle.color as MuiColor}
                             icon={statusStyle.icon || undefined}
                             sx={{ width: 130 }}
                           />
                         </TableBodyCell>
-                        <TableCell sx={{ textAlign: 'center' }}>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              gap: 1,
-                              justifyContent: 'center'
-                            }}
-                          >
+                        <TableCell sx={{ textAlign: ALIGN_CENTER }}>
+                          <Box sx={styleActionButtonContainer}>
+                            <Link href={`/HistoryRental/${order.orderId}`}>
+                              <Button
+                                variant={VARIANT_BUTTON}
+                                color={INFO_COLOR}
+                                startIcon={<Visibility />}
+                                sx={styleActionButton}
+                              >
+                                {DETAIL}
+                              </Button>
+                            </Link>
                             <Button
-                              variant="contained"
-                              color="info"
-                              startIcon={<Visibility />}
-                              sx={styleActionButton}
-                            >
-                              Xem
-                            </Button>
-                            <Button
-                              variant="contained"
-                              color="error"
+                              variant={VARIANT_BUTTON}
+                              color={ERROR_COLOR}
                               startIcon={<Cancel />}
-                              disabled={
-                                order.status === 'Chờ duyệt' ? false : true
-                              }
+                              disabled={order.status === 0 ? false : true}
                               sx={styleActionButton}
+                              onClick={() =>
+                                handleCancelOrder(order.orderId, order.status)
+                              }
                             >
-                              Hủy
+                              {CANCEL_TEXT}
                             </Button>
                           </Box>
                         </TableCell>
