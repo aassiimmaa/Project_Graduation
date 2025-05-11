@@ -98,8 +98,7 @@ interface QRProps {
   toDate: string
 }
 
-
-interface payLaterProps{
+interface payLaterProps {
   userId: string
   vehicle: Vehicle
   fromDate: Date
@@ -139,6 +138,50 @@ interface CellHeadProps {
   children?: React.ReactNode
 }
 
+interface HistoryRentalProps {
+  orderId: string
+  fromDay: Date
+  toDay: Date
+  status: number
+  users: {
+    name: string
+  }
+  vehicles: {
+    vehicleName: string
+    price: number
+  }
+}
+
+interface OrderDetailProps {
+  orderId: string
+  orderCode: string
+  fromDay: Date
+  toDay: Date
+  status: number
+  users: {
+    name: string
+  }
+  vehicles: {
+    vehicleName: string
+    image: string
+    price: number
+    categories: {
+      categoryName: string
+    }
+  }
+}
+
+//common type
+type MuiColor =
+  | 'default'
+  | 'error'
+  | 'primary'
+  | 'secondary'
+  | 'info'
+  | 'success'
+  | 'warning'
+  | undefined
+
 export type {
   User,
   Category,
@@ -157,7 +200,8 @@ export type {
   Slide,
   CategoryProps,
   CellProps,
-  CellHeadProps
+  CellHeadProps,
+  HistoryRentalProps,
+  OrderDetailProps,
+  MuiColor
 }
-
-

@@ -18,13 +18,14 @@ import Footer from '~/app/components/Footer'
 import { getVehicleById } from '~/actions/vehicle.action'
 import { Vehicle } from '~/app/shared/inteface'
 import QRPay from '~/app/components/QRPay'
-import { BACK, CATEGORY_NAME, DATE_TYPE, DESCRIPTION, FONT_WEIGHT_BOLD, FROM_DATE, FROM_DATE_BEFORE_TODAY_ERR, FROM_DATE_NULL_ERR, PRIMARY_COLOR, RENT_VEHICLE, RENTAL_TIME, SIZE_CONTAINER, TO_DATE, TO_DATE_BEFORE_FROM_DATE_ERR, TO_DATE_NULL_ERR, VARIANT_BUTTON } from '~/app/shared/constant'
+import { BACK, CATEGORY_NAME, DATE_TYPE, DESCRIPTION, FONT_WEIGHT_BOLD, FROM_DATE, FROM_DATE_BEFORE_TODAY_ERR, FROM_DATE_NULL_ERR, PRICE, PRIMARY_COLOR, RENT_VEHICLE, RENTAL_TIME, SIZE_CONTAINER, TO_DATE, TO_DATE_BEFORE_FROM_DATE_ERR, TO_DATE_NULL_ERR, VARIANT_BUTTON } from '~/app/shared/constant'
 import { styleCardInfo, styleContainer, styleDivider, styleFormContainer, styleImageVehicle, styleInfoContainer, styleRentalBtn, styleReturnBtn } from '~/app/shared/styles/VehicleDetail'
+import { formatPrice } from '~/lib/formatPrice'
 
 const VehicleDetail: React.FC = () => {
   const { id } = useParams()
   const router = useRouter()
-  const [vehicle, setVehicle] = useState<Vehicle | null>(null)
+  const [vehicle, setVehicle] = useState<Vehicle>()
 
   // Lấy thông tin xe theo ID
   const isFetched = useRef(false)
@@ -36,7 +37,7 @@ const VehicleDetail: React.FC = () => {
 
       const res = await getVehicleById(Array.isArray(id) ? id[0] : id)
       if (res.success) {
-        setVehicle(res.vehicle || null)
+        setVehicle(res.vehicle)
       } else {
         alert(res.message)
         router.push('/CategoryDetail')
@@ -73,6 +74,10 @@ const VehicleDetail: React.FC = () => {
     if (!newErrors.fromDate && !newErrors.toDate) {
       setOpenQR(true) // Mở modal thay vì alert
     }
+  }
+
+  if (!vehicle){
+    return <Typography> Đang tải </Typography>
   }
 
   return (
@@ -135,12 +140,23 @@ const VehicleDetail: React.FC = () => {
 
               <Divider sx={styleDivider} />
 
+              <Box sx={{ mt: 2 }}>
+                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                  {PRICE}
+                </Typography>
+                <Typography variant="body1">
+                  {formatPrice(vehicle.price.toString())}
+                </Typography>
+              </Box>
+
+              <Divider sx={styleDivider} />
+
               {/* Form chọn ngày thuê */}
               <Box sx={styleFormContainer}>
                 <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
                   {`${RENTAL_TIME}:`}
                 </Typography>
-                <Grid flexDirection="column" container spacing={2} mt={2}>
+                <Grid container spacing={2} mt={2}>
                   <Grid size={5}>
                     <TextField
                       fullWidth
