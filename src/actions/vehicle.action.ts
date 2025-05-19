@@ -243,11 +243,32 @@ const deleteVehicle = async (vehicleId: string) => {
   }
 }
 
+const updateRentStatus = async (vehicleId: string, rentStatus: boolean) => {
+  try {
+    await prisma.vehicles.update({
+      where: { vehicleId },
+      data: { isRent: rentStatus }
+    })
+
+    return {
+      success: true,
+      message: 'Cập nhật trạng thái thuê thành công'
+    }
+  } catch (error) {
+    console.error('Lỗi cập nhật rentStatus:', error)
+    return {
+      success: false,
+      message: 'Lỗi khi cập nhật trạng thái thuê'
+    }
+  }
+}
+
 export {
   addVehicle,
   getAllVehicles,
   getVehicleById,
   getVehicleByCategoryId,
   updateVehicle,
-  deleteVehicle
+  deleteVehicle,
+  updateRentStatus
 }

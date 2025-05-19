@@ -17,10 +17,16 @@ import { formatPrice } from '~/lib/formatPrice'
 import {
   styleCardVehicle,
   styleImage,
+  styleIsRentImg,
   styleTitle,
   styleTitleOverflow
 } from '../shared/styles/VehicleList'
-import { COLOR_STRONG, SERVING, VARIANT_SKELETON_BOX } from '../shared/constant'
+import {
+  COLOR_STRONG,
+  ISRENT,
+  SERVING,
+  VARIANT_SKELETON_BOX
+} from '../shared/constant'
 
 const VehiclesList: React.FC = () => {
   const categoryId = useSelector(
@@ -69,6 +75,14 @@ const VehiclesList: React.FC = () => {
               <Grid2 size={{ xs: 12, sm: 6, md: 3 }} key={vehicle.vehicleId}>
                 <Link href={`/VehicleDetail/${vehicle.vehicleId}`} passHref>
                   <Card sx={styleCardVehicle}>
+                    {vehicle.isRent && (
+                      <Box
+                        component="img"
+                        src="/uploads/isRent.png"
+                        alt={ISRENT}
+                        sx={styleIsRentImg}
+                      />
+                    )}
                     <CardMedia
                       component="img"
                       height="240"
