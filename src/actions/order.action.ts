@@ -2,6 +2,7 @@
 import { OrderStatus } from '~/app/shared/enum/orderStatus'
 import { Vehicle } from '~/app/shared/inteface'
 import prisma from '~/lib/prisma'
+import { updateRentStatus } from './vehicle.action'
 
 //Thuê xe tạo đơn
 const RentVehicle = async (
@@ -12,9 +13,8 @@ const RentVehicle = async (
   status: number
 ) => {
   try {
-    const orderCount = await prisma.orders.count()
-    const sequence = String(orderCount + 1).padStart(3, '0')
-    const orderCode = `ORD${sequence}`
+    const timestamp = Date.now()
+    const orderCode = `ORD${timestamp}`
     if (!vehicle || !fromDate || !toDate) {
       return {
         success: false,
@@ -122,6 +122,7 @@ const getOrderByOrderId = async (orderId: string) => {
         fromDay: true,
         toDay: true,
         status: true,
+        createdAt: true,
         users: {
           select: {
             name: true
@@ -188,4 +189,182 @@ const cancelOrder = async (orderId: string, status: number) => {
   }
 }
 
-export { RentVehicle, getHistoryRentalByUserId, getOrderByOrderId, cancelOrder }
+const getAllOrders = async () => {
+  try {
+    const orders = await prisma.orders.findMany({
+      select: {
+        orderId: true,
+        orderCode: true,
+        fromDay: true,
+        toDay: true,
+        status: true,
+        createdAt: true,
+        users: {
+          select: {
+            name: true
+          }
+        },
+        vehicles: {
+          select: {
+            vehicleName: true,
+            image: true,
+            price: true,
+            categories: {
+              select: {
+                categoryName: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    if (!orders) {
+      return {
+        success: false,
+        message: 'Lỗi lấy danh sách đơn hàng!',
+        orders: []
+      }
+    }
+
+    return {
+      success: true,
+      message: 'OK',
+      orders
+    }
+  } catch (error) {
+    console.error('Lỗi khi lấy danh sách đơn hàng:', error)
+    return {
+      success: false,
+      message: 'Không thể lấy danh sách đơn hàng.'
+    }
+  }
+}
+
+const acceptOrder = async (orderId: string) => {
+  try {
+    const order = await prisma.orders.findUnique({
+      where: { orderId },
+      include: {
+        vehicles: {
+          select: {
+            vehicleId: true
+          }
+        }
+      }
+    })
+
+    if (!order) {
+      return {
+        success: false,
+        message: 'Không tồn tại hóa đơn!'
+      }
+    }
+
+    await prisma.orders.update({
+      where: { orderId },
+      data: {
+        status: OrderStatus.Accepted
+      }
+    })
+
+    await updateRentStatus(order.vehicles.vehicleId, true)
+
+    return {
+      success: true,
+      message: 'Đơn hàng đã được xác nhận.'
+    }
+  } catch (error) {
+    console.error('Lỗi xác nhận đơn:', error)
+    return {
+      success: false,
+      message: 'Xác nhận đơn hàng thất bại.'
+    }
+  }
+}
+
+const deleteOrder = async (orderId: string) => {
+  try {
+    const order = prisma.orders.findUnique({
+      where: { orderId }
+    })
+
+    if (!order) {
+      return {
+        success: false,
+        message: 'Không tồn tại hóa đơn!'
+      }
+    }
+
+    await prisma.orders.delete({
+      where: { orderId }
+    })
+
+    return {
+      success: true,
+      message: 'Xóa đơn hàng thành công!'
+    }
+  } catch (error) {
+    console.log(error)
+    return {
+      success: false,
+      message: 'Lỗi khi xóa hóa đơn!'
+    }
+  }
+}
+
+const completeOrder = async (orderId: string) => {
+  try {
+    const order = await prisma.orders.findUnique({
+      where: { orderId },
+      include: {
+        vehicles: {
+          select: {
+            vehicleId: true
+          }
+        }
+      }
+    })
+
+    if (!order) {
+      return {
+        success: false,
+        message: 'Không tồn tại hóa đơn!'
+      }
+    }
+
+    await prisma.orders.update({
+      where: { orderId },
+      data: {
+        status: OrderStatus.Completed
+      }
+    })
+
+    await updateRentStatus(order.vehicles.vehicleId, false)
+
+    return {
+      success: true,
+      message: 'Đơn hàng đã hoàn tất.'
+    }
+  } catch (error) {
+    console.error('Lỗi hoàn tất đơn:', error)
+    return {
+      success: false,
+      message: 'Xác nhận hoàn tất đơn hàng thất bại.'
+    }
+  }
+}
+
+export {
+  RentVehicle,
+  getHistoryRentalByUserId,
+  getOrderByOrderId,
+  cancelOrder,
+  getAllOrders,
+  acceptOrder,
+  deleteOrder,
+  completeOrder
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Table,
   TableBody,
@@ -11,7 +11,8 @@ import {
   TableRow,
   Tooltip,
   TextField,
-  Box
+  Box,
+  Chip
 } from '@mui/material'
 import TableHeadCell from '../TableHeadCell'
 import TableBodyCell from '../TableBodyCell'
@@ -29,14 +30,15 @@ import {
   DETAIL_ORDER,
   FONT_WEIGHT_BOLD,
   FROM_DATE,
+  LOADING_ORDERS,
   LOCATION_CAR,
   NO_DATA_AVAILABLE,
   ORDER_MANAGEMENT,
+  ORDERID_TEXT,
   PAYMENT_STATUS,
   PLACEHOLDER_SEARCH,
   PRIMARY_COLOR,
   SEARCH_TEXT_BTN,
-  SERIAL,
   SIZE_BUTTON,
   SIZE_PAGINATION,
   STATUS,
@@ -47,14 +49,14 @@ import {
   VARIANT_BUTTON,
   VARIANT_INPUT,
   W_10,
-  W_15,
-  W_5
+  W_15
 } from '~/app/shared/constant'
 import {
   PaginationContainer,
   styleAcceptButton,
   styleButtonContainer,
   styleButtonContainerChildren,
+  styleChip,
   styleDeleteButton,
   styleDetailButton,
   styleDivider,
@@ -67,29 +69,55 @@ import {
   styleSearchTextField,
   styleTableContainer
 } from '~/app/shared/styles/AdminTable'
-
-// Mock data
-const orders = Array.from({ length: 50 }, (_, index) => ({
-  id: index + 1,
-  fullName: `Người dùng ${index + 1}`,
-  fromDate: `${(index % 30) + 1}/12/2024`,
-  toDate: `${(index % 30) + 1}/12/2024`,
-  createdAt: '23:59:59 - 30/04/2025',
-  totalAmount: `${(index + 1) * 1000000}`,
-  status: ['Chờ duyệt', 'Đang thuê', 'Hủy', 'Hoàn tất'][index % 4],
-  paymentStatus: index % 2 === 0 ? 'Đã thanh toán' : 'Chưa thanh toán'
-}))
+import {
+  acceptOrder,
+  completeOrder,
+  deleteOrder,
+  getAllOrders
+} from '~/actions/order.action'
+import { MuiColor, OrderDetailProps } from '~/app/shared/inteface'
+import toast from 'react-hot-toast'
+import { formatDate } from '~/lib/formatDate'
+import { totalPrice } from '~/lib/totalPrice'
+import { getRentalDays } from '~/lib/getRentalDay'
+import { getStatusStyle } from '~/lib/getStatusStyle'
+import { getPaymentStatus } from '~/lib/getPaymentStatus'
+import { formatPrice } from '~/lib/formatPrice'
+import { formatDateTime } from '~/lib/formatDateTime'
+import { OrderStatus } from '~/app/shared/enum/orderStatus'
+import OrderDetailModal from './ordersComponents/DetailOrder'
 
 const OrdersManagement: React.FC = () => {
   const [page, setPage] = useState(1) // Trang hiện tại (Pagination bắt đầu từ 1)
   const [searchTerm, setSearchTerm] = useState('') // Từ khóa tìm kiếm
   const [searchQuery, setSearchQuery] = useState('') // Từ khóa thực hiện tìm kiếm
+  const [orders, setOrders] = useState<OrderDetailProps[]>()
+  const [loading, setLoading] = useState(false)
   const rowsPerPage = 5 // Số dòng mỗi trang
+  const [openDetailModal, setOpenDetailModal] = useState(false)
+  const [selectedOrder, setSelectedOrder] = useState<OrderDetailProps | null>(
+    null
+  )
+
+  const fetchOrders = async () => {
+    setLoading(true)
+    const res = await getAllOrders()
+    if (res.success) {
+      setOrders(res.orders)
+    } else {
+      toast.error(res.message)
+    }
+    setLoading(false)
+  }
+  useEffect(() => {
+    fetchOrders()
+  }, [])
 
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
-  const filteredOrders = orders.filter(order =>
-    order.fullName.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+  const filteredOrders =
+    orders?.filter(order =>
+      order.orderCode.toLowerCase().includes(searchQuery.toLowerCase())
+    ) || []
 
   const totalPages = Math.ceil(filteredOrders.length / rowsPerPage) // Tổng số trang
 
@@ -111,6 +139,58 @@ const OrdersManagement: React.FC = () => {
   const handleSearch = () => {
     setSearchQuery(searchTerm) // Cập nhật từ khóa tìm kiếm thực tế
     setPage(1) // Reset về trang đầu tiên
+  }
+
+  //Hàm xử lý duyệt đơn
+  const handleAcceptOrder = async (orderId: string) => {
+    const res = await acceptOrder(orderId)
+    if (res.success) {
+      toast.success(res.message)
+      fetchOrders()
+    } else {
+      toast.error(res.message)
+    }
+  }
+
+  //Hàm xử lý xóa đơn
+  const handleDeleteOrder = async (orderId: string) => {
+    const confirmed = window.confirm(
+      'Việc xóa sẽ không thể hoàn tác. Bạn có chắc chắn muốn xóa đơn hàng này không?'
+    )
+    if (!confirmed) return
+
+    const res = await deleteOrder(orderId)
+    if (res.success) {
+      toast.success(res.message)
+      fetchOrders()
+    } else {
+      toast.error(res.message)
+    }
+  }
+
+  const handleOpenDetail = (order: OrderDetailProps) => {
+    setSelectedOrder(order)
+    setOpenDetailModal(true)
+  }
+
+  // Hàm xử lý hoàn thành đơn hàng
+  const handleCompleteOrder = async (orderId: string, toDate: string) => {
+    const now = new Date()
+    const endDate = new Date(toDate)
+    if (endDate > now) {
+      const confirm = window.confirm(
+        'Chưa hết hạn thuê, bạn có chắc chắn muốn hoàn tất đơn hàng không?'
+      )
+      if (!confirm) return
+    }
+    const res = await completeOrder(orderId)
+    if (res.success) {
+      toast.success(res.message)
+      fetchOrders()
+      setOpenDetailModal(false)
+    } else {
+      toast.error(res.message)
+    }
   }
 
   return (
@@ -144,8 +224,8 @@ const OrdersManagement: React.FC = () => {
         <Table>
           <StyledTableHead>
             <TableRow>
-              <TableHeadCell align={ALIGN_CENTER} width={W_5}>
-                {SERIAL}
+              <TableHeadCell align={ALIGN_CENTER} width={W_10}>
+                {ORDERID_TEXT}
               </TableHeadCell>
               <TableHeadCell>{USER_NAME}</TableHeadCell>
               <TableHeadCell align={ALIGN_CENTER} width={W_10}>
@@ -173,47 +253,66 @@ const OrdersManagement: React.FC = () => {
           </StyledTableHead>
           <TableBody>
             {paginatedorders.length > 0 ? (
-              paginatedorders.map((order, index) => (
-                <StyledTableRow key={order.id}>
+              paginatedorders.map(order => (
+                <StyledTableRow key={order.orderId}>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {index + 1 + (page - 1) * rowsPerPage}
+                    {order.orderCode}
                   </TableBodyCell>
-                  <TableBodyCell>{order.fullName}</TableBodyCell>
+                  <TableBodyCell>{order.users.name}</TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {order.fromDate}
-                  </TableBodyCell>
-                  <TableBodyCell align={ALIGN_CENTER}>
-                    {order.toDate}
+                    {formatDate(order.fromDay)}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {order.createdAt}
+                    {formatDate(order.toDay)}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {order.totalAmount}
+                    {formatDateTime(order.createdAt)}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {order.status}
+                    {formatPrice(
+                      totalPrice(
+                        order.vehicles.price,
+                        getRentalDays(
+                          formatDate(order.fromDay),
+                          formatDate(order.toDay)
+                        )
+                      ).toString()
+                    )}
+                  </TableBodyCell>
+                  <TableBodyCell
+                    align={ALIGN_CENTER}
+                    fontWeight={`${FONT_WEIGHT_BOLD}`}
+                  >
+                    <Chip
+                      label={getStatusStyle(order.status).description}
+                      color={getStatusStyle(order.status).color as MuiColor}
+                      icon={getStatusStyle(order.status).icon || undefined}
+                      sx={styleChip}
+                    />
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
-                    {order.paymentStatus}
+                    {getPaymentStatus(order.status)}
                   </TableBodyCell>
                   <TableBodyCell align={ALIGN_CENTER}>
                     <Box sx={styleButtonContainer}>
                       <Box sx={styleButtonContainerChildren}>
-                        <Tooltip title={ACCEPT_ORDER}>
+                        <Tooltip title={ACCEPT_ORDER} placement="top">
                           <Button
                             variant={VARIANT_BUTTON}
                             size={SIZE_BUTTON}
                             sx={styleAcceptButton}
+                            onClick={() => handleAcceptOrder(order.orderId)}
+                            disabled={order.status != OrderStatus.Pending}
                           >
                             <CheckIcon />
                           </Button>
                         </Tooltip>
-                        <Tooltip title={DETAIL_ORDER}>
+                        <Tooltip title={DETAIL_ORDER} placement="top">
                           <Button
                             variant={VARIANT_BUTTON}
                             size={SIZE_BUTTON}
                             sx={styleDetailButton}
+                            onClick={() => handleOpenDetail(order)}
                           >
                             <Visibility />
                           </Button>
@@ -221,7 +320,7 @@ const OrdersManagement: React.FC = () => {
                       </Box>
 
                       <Box sx={styleButtonContainerChildren}>
-                        <Tooltip title={LOCATION_CAR}>
+                        <Tooltip title={LOCATION_CAR} placement="bottom">
                           <Button
                             variant={VARIANT_BUTTON}
                             size={SIZE_BUTTON}
@@ -230,11 +329,13 @@ const OrdersManagement: React.FC = () => {
                             <PlaceIcon />
                           </Button>
                         </Tooltip>
-                        <Tooltip title={DELETE_ORDER}>
+                        <Tooltip title={DELETE_ORDER} placement="bottom">
                           <Button
                             variant={VARIANT_BUTTON}
                             size={SIZE_BUTTON}
                             sx={styleDeleteButton}
+                            onClick={() => handleDeleteOrder(order.orderId)}
+                            disabled={order.status != OrderStatus.Cancelled}
                           >
                             <DeleteIcon />
                           </Button>
@@ -244,6 +345,12 @@ const OrdersManagement: React.FC = () => {
                   </TableBodyCell>
                 </StyledTableRow>
               ))
+            ) : loading ? (
+              <StyledTableRow>
+                <TableBodyCell align={ALIGN_CENTER} colSpan={10}>
+                  {LOADING_ORDERS}
+                </TableBodyCell>
+              </StyledTableRow>
             ) : (
               <StyledTableRow>
                 <TableBodyCell align={ALIGN_CENTER} colSpan={10}>
@@ -266,6 +373,21 @@ const OrdersManagement: React.FC = () => {
           />
         </PaginationContainer>
       </TableContainer>
+
+      <OrderDetailModal
+        open={openDetailModal}
+        onClose={() => setOpenDetailModal(false)}
+        order={selectedOrder}
+        onCompleteOrder={(orderId: string, toDate: string) => {
+          if (selectedOrder && selectedOrder.orderId && selectedOrder.toDay) {
+            handleCompleteOrder(
+              selectedOrder.orderId,
+              selectedOrder.toDay.toString()
+            )
+          }
+        }}
+        fetchOrders={fetchOrders}
+      />
     </>
   )
 }

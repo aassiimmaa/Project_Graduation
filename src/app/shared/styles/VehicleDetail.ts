@@ -20,7 +20,7 @@ const styleDivider = { my: 2 }
 
 const styleFormContainer = { mt: 3 }
 
-const styleRentalBtn = { mt: 3, p: 1, width: 120 }
+const styleRentalBtn = { mt: 3, p: 1, width: 150 }
 
 export {
   styleContainer,

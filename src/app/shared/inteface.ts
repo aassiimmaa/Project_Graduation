@@ -158,6 +158,7 @@ interface OrderDetailProps {
   fromDay: Date
   toDay: Date
   status: number
+  createdAt: Date
   users: {
     name: string
   }
@@ -169,6 +170,14 @@ interface OrderDetailProps {
       categoryName: string
     }
   }
+}
+
+interface OrderDetailModalProps {
+  open: boolean
+  onClose: () => void
+  order: OrderDetailProps | null
+  onCompleteOrder: (orderId: string, toDate: string) => void
+  fetchOrders: () => void
 }
 
 //common type
@@ -203,5 +212,6 @@ export type {
   CellHeadProps,
   HistoryRentalProps,
   OrderDetailProps,
+  OrderDetailModalProps,
   MuiColor
 }

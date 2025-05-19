@@ -20,6 +20,8 @@ export const styleSearchBox = {
   pb: 1
 }
 
+export const styleChip = { width: 130, color: TEXT_COLOR_WHITE }
+
 export const styleSelectCategory = {
   color: TEXT_COLOR,
   '& .MuiOutlinedInput-root': {

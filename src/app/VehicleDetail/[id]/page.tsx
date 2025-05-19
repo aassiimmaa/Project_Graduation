@@ -9,7 +9,7 @@ import {
   Button,
   TextField,
   Container,
-  Divider,
+  Divider
 } from '@mui/material'
 import Grid from '@mui/material/Grid2'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
@@ -18,8 +18,36 @@ import Footer from '~/app/components/Footer'
 import { getVehicleById } from '~/actions/vehicle.action'
 import { Vehicle } from '~/app/shared/inteface'
 import QRPay from '~/app/components/QRPay'
-import { BACK, CATEGORY_NAME, DATE_TYPE, DESCRIPTION, FONT_WEIGHT_BOLD, FROM_DATE, FROM_DATE_BEFORE_TODAY_ERR, FROM_DATE_NULL_ERR, PRICE, PRIMARY_COLOR, RENT_VEHICLE, RENTAL_TIME, SIZE_CONTAINER, TO_DATE, TO_DATE_BEFORE_FROM_DATE_ERR, TO_DATE_NULL_ERR, VARIANT_BUTTON } from '~/app/shared/constant'
-import { styleCardInfo, styleContainer, styleDivider, styleFormContainer, styleImageVehicle, styleInfoContainer, styleRentalBtn, styleReturnBtn } from '~/app/shared/styles/VehicleDetail'
+import {
+  BACK,
+  CATEGORY_NAME,
+  DATE_TYPE,
+  DESCRIPTION,
+  FONT_WEIGHT_BOLD,
+  FROM_DATE,
+  FROM_DATE_BEFORE_TODAY_ERR,
+  FROM_DATE_NULL_ERR,
+  ISRENT_VEHICLE,
+  PRICE,
+  PRIMARY_COLOR,
+  RENT_VEHICLE,
+  RENTAL_TIME,
+  SIZE_CONTAINER,
+  TO_DATE,
+  TO_DATE_BEFORE_FROM_DATE_ERR,
+  TO_DATE_NULL_ERR,
+  VARIANT_BUTTON
+} from '~/app/shared/constant'
+import {
+  styleCardInfo,
+  styleContainer,
+  styleDivider,
+  styleFormContainer,
+  styleImageVehicle,
+  styleInfoContainer,
+  styleRentalBtn,
+  styleReturnBtn
+} from '~/app/shared/styles/VehicleDetail'
 import { formatPrice } from '~/lib/formatPrice'
 
 const VehicleDetail: React.FC = () => {
@@ -61,12 +89,10 @@ const VehicleDetail: React.FC = () => {
     const newErrors = { fromDate: '', toDate: '' }
 
     if (!fromDate) newErrors.fromDate = FROM_DATE_NULL_ERR
-    else if (fromDate < today)
-      newErrors.fromDate = FROM_DATE_BEFORE_TODAY_ERR
+    else if (fromDate < today) newErrors.fromDate = FROM_DATE_BEFORE_TODAY_ERR
 
     if (!toDate) newErrors.toDate = TO_DATE_NULL_ERR
-    else if (toDate < fromDate)
-      newErrors.toDate = TO_DATE_BEFORE_FROM_DATE_ERR
+    else if (toDate < fromDate) newErrors.toDate = TO_DATE_BEFORE_FROM_DATE_ERR
 
     setError(newErrors)
 
@@ -76,17 +102,14 @@ const VehicleDetail: React.FC = () => {
     }
   }
 
-  if (!vehicle){
+  if (!vehicle) {
     return <Typography> Đang tải </Typography>
   }
 
   return (
     <>
       <NavBar />
-      <Container
-        maxWidth={SIZE_CONTAINER}
-        sx={styleContainer}
-      >
+      <Container maxWidth={SIZE_CONTAINER} sx={styleContainer}>
         {/* Nút Quay lại */}
         <Button
           disableRipple
@@ -99,10 +122,7 @@ const VehicleDetail: React.FC = () => {
 
         <Grid container spacing={4}>
           {/* Hình ảnh xe */}
-          <Grid
-            size={{ xs: 12, md: 5 }}
-            sx={styleImageVehicle}
-          >
+          <Grid size={{ xs: 12, md: 5 }} sx={styleImageVehicle}>
             <CardMedia
               component="img"
               image={vehicle?.image || ''}
@@ -121,7 +141,11 @@ const VehicleDetail: React.FC = () => {
               <Divider sx={styleDivider} />
 
               <Box>
-                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                <Typography
+                  variant="h6"
+                  fontWeight={FONT_WEIGHT_BOLD}
+                  gutterBottom
+                >
                   {DESCRIPTION}
                 </Typography>
                 <Typography variant="body1">{vehicle?.description}</Typography>
@@ -130,7 +154,11 @@ const VehicleDetail: React.FC = () => {
               <Divider sx={styleDivider} />
 
               <Box sx={{ mt: 2 }}>
-                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                <Typography
+                  variant="h6"
+                  fontWeight={FONT_WEIGHT_BOLD}
+                  gutterBottom
+                >
                   {CATEGORY_NAME}
                 </Typography>
                 <Typography variant="body1">
@@ -141,7 +169,11 @@ const VehicleDetail: React.FC = () => {
               <Divider sx={styleDivider} />
 
               <Box sx={{ mt: 2 }}>
-                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                <Typography
+                  variant="h6"
+                  fontWeight={FONT_WEIGHT_BOLD}
+                  gutterBottom
+                >
                   {PRICE}
                 </Typography>
                 <Typography variant="body1">
@@ -153,7 +185,11 @@ const VehicleDetail: React.FC = () => {
 
               {/* Form chọn ngày thuê */}
               <Box sx={styleFormContainer}>
-                <Typography variant="h6" fontWeight={FONT_WEIGHT_BOLD} gutterBottom>
+                <Typography
+                  variant="h6"
+                  fontWeight={FONT_WEIGHT_BOLD}
+                  gutterBottom
+                >
                   {`${RENTAL_TIME}:`}
                 </Typography>
                 <Grid container spacing={2} mt={2}>
@@ -170,6 +206,7 @@ const VehicleDetail: React.FC = () => {
                       }}
                       error={!!error.fromDate}
                       helperText={error.fromDate}
+                      disabled={vehicle.isRent}
                     />
                   </Grid>
                   <Grid size={5}>
@@ -185,6 +222,7 @@ const VehicleDetail: React.FC = () => {
                       }}
                       error={!!error.toDate}
                       helperText={error.toDate}
+                      disabled={vehicle.isRent}
                     />
                   </Grid>
                 </Grid>
@@ -196,8 +234,9 @@ const VehicleDetail: React.FC = () => {
                 color={PRIMARY_COLOR}
                 onClick={handleRentCar}
                 sx={styleRentalBtn}
+                disabled={vehicle.isRent}
               >
-                {RENT_VEHICLE}
+                {vehicle.isRent ? ISRENT_VEHICLE : RENT_VEHICLE}
               </Button>
             </Card>
           </Grid>
@@ -205,7 +244,13 @@ const VehicleDetail: React.FC = () => {
       </Container>
       <Footer />
       {vehicle && (
-        <QRPay openQR={openQR} closeQR={() => setOpenQR(false)} vehicle={vehicle} fromDate={fromDate} toDate={toDate} />
+        <QRPay
+          openQR={openQR}
+          closeQR={() => setOpenQR(false)}
+          vehicle={vehicle}
+          fromDate={fromDate}
+          toDate={toDate}
+        />
       )}
     </>
   )

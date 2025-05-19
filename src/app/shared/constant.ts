@@ -3,6 +3,7 @@ export const ALIGN_CENTER = 'center'
 export const FONT_WEIGHT_BOLD = 600
 export const PRIMARY_COLOR = 'primary'
 export const WARNING_COLOR = 'warning'
+export const SUCCESS_COLOR = 'success'
 export const ERROR_COLOR = 'error'
 export const INFO_COLOR = 'info'
 export const SIZE_BUTTON = 'small'
@@ -25,7 +26,7 @@ export const PLACEHOLDER_SEARCH = 'Nhập để tìm kiếm...'
 export const NO_DATA_AVAILABLE = 'Không có kết quả!'
 export const TEXT_COLOR = '#000'
 export const TEXT_COLOR_WHITE = '#FFF'
-export const BACKGROUND_TABLE_HEAD_COLOR = '#47acf9'
+export const BACKGROUND_TABLE_HEAD_COLOR = '#007ed2'
 export const BANNED_COLOR_BUTTON = '#ff7700'
 export const EDIT_COLOR_BUTTON = '#ccb100'
 export const DELETE_COLOR_BUTTON = '#d60000'
@@ -59,6 +60,9 @@ export const PASSWORD = 'Mật khẩu'
 export const LINK_TO_LOGO = '/images/logo.png'
 export const ADDRESS = 'Địa chỉ'
 export const MY_ADDRESS = '54 An Dương Vương, TP Huế'
+export const KEY_COMPONENT = 'strong'
+export const TEXT_TRANSFORM = 'uppercase'
+export const SYSTEM_NAME = 'Hệ thống cho thuê xe trực tuyến AnRental'
 
 //Regex
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -113,6 +117,12 @@ export const CATEGORY_CHOOSE_ERRROR = 'Vui lòng chọn loại xe!'
 
 //OrdersManagement text
 export const ORDER_MANAGEMENT = 'Quản lý thuê xe'
+export const LOADING_ORDERS = 'Đang tải danh sách đơn thuê xe...'
+export const DAYS = 'Ngày'
+export const RENTAL_VEHICLE_INFO = 'Thông tin xe thuê'
+export const CREATE_ORDER_DATE = 'Ngày lập đơn'
+export const CANCEL_ORDER = 'Hủy đơn'
+export const CONFIRM_COMPLETE_ORDER = 'Xác nhận hoàn tất'
 
 //Statistical
 export const STATISTICAL = 'Thống kê'
@@ -208,17 +218,18 @@ export const QR_HELP = 'Quét mã QR để thanh toán đặt xe:'
 export const OR = 'Hoặc'
 export const PAY_LATER = 'Thanh toán sau'
 export const PAY_LATER_NOTE =
-  'Lưu ý: Quý khách có thể sẽ không thể thuê xe này nếu có người đặt trước.'
+  'Lưu ý: Đơn chỉ được duyệt khi quý khách thanh toán. Quý khách có thể sẽ không thể thuê xe này nếu có người đặt trước.'
 export const BACK = 'Quay lại'
 export const RENTAL_TIME = 'Thời gian thuê xe'
 export const DATE_TYPE = 'date'
 export const RENT_VEHICLE = 'Thuê xe'
+export const ISRENT_VEHICLE = 'Xe đã cho thuê'
+export const ISRENT = 'Đã cho thuê'
 
 //HistoryRental text
 export const DETAIL = 'Xem'
 export const ORDER_INVOICE = 'HÓA ĐƠN THUÊ XE'
-export const ORDERID_TEXT = 'Mã đơn hàng'
+export const ORDERID_TEXT = 'Mã đơn'
 export const ORDER_RENT = 'Người thuê'
 export const ORDER_DETAIL_INFOMATION = 'Chi tiết thuê'
 export const THANKS_TEXT = 'Cảm ơn bạn đã sử dụng dịch vụ của AnRental!'
-
