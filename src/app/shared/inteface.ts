@@ -180,6 +180,52 @@ interface OrderDetailModalProps {
   fetchOrders: () => void
 }
 
+interface OrderWithTotal {
+  orderId: string
+  orderCode: string
+  userId: string
+  vehicleId: string
+  fromDay: Date
+  toDay: Date
+  status: number
+  createdAt: Date
+  users: {
+    userId: string
+    email: string
+    phone: string
+    name: string
+    password: string
+    image: string
+    createdAt: Date
+    updatedAt: Date
+    isBanned: boolean
+    role: boolean
+  }
+  vehicles: {
+    vehicleId: string
+    vehicleName: string
+    image: string
+    price: number
+    description: string
+    isRent: boolean
+    createdAt: Date
+    updatedAt: Date
+    categories: {
+      categoryId: string
+      categoryName: string
+      description: string
+      image: string
+    }
+  },
+  totalAmount: number
+}
+
+interface OrderStatistic {
+  data: OrderWithTotal[]
+  totalOrders: number
+  totalRevenue: number
+}
+
 //common type
 type MuiColor =
   | 'default'
@@ -213,5 +259,7 @@ export type {
   HistoryRentalProps,
   OrderDetailProps,
   OrderDetailModalProps,
+  OrderWithTotal,
+  OrderStatistic,
   MuiColor
 }

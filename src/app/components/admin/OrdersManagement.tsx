@@ -378,7 +378,7 @@ const OrdersManagement: React.FC = () => {
         open={openDetailModal}
         onClose={() => setOpenDetailModal(false)}
         order={selectedOrder}
-        onCompleteOrder={(orderId: string, toDate: string) => {
+        onCompleteOrder={() => {
           if (selectedOrder && selectedOrder.orderId && selectedOrder.toDay) {
             handleCompleteOrder(
               selectedOrder.orderId,

@@ -1,13 +1,16 @@
 'use server'
 import { OrderStatus } from '~/app/shared/enum/orderStatus'
-import { Vehicle } from '~/app/shared/inteface'
 import prisma from '~/lib/prisma'
 import { updateRentStatus } from './vehicle.action'
+import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
+import { getRentalDays } from '~/lib/getRentalDay'
+import { Vehicles } from '@prisma/client'
+import { formatDate } from '~/lib/formatDate'
 
 //Thuê xe tạo đơn
 const RentVehicle = async (
   userId: string,
-  vehicle: Vehicle,
+  vehicle: Vehicles,
   fromDate: Date,
   toDate: Date,
   status: number
@@ -84,6 +87,9 @@ const getHistoryRentalByUserId = async (userId: string) => {
             price: true
           }
         }
+      },
+      orderBy: {
+        createdAt: 'desc'
       }
     })
 
@@ -358,6 +364,229 @@ const completeOrder = async (orderId: string) => {
   }
 }
 
+const GetRevenueOnDate = async (date: Date) => {
+  try {
+    const orders = await prisma.orders.findMany({
+      where: {
+        createdAt: {
+          gte: startOfDay(date),
+          lte: endOfDay(date)
+        },
+        status: {
+          in: [OrderStatus.Accepted, OrderStatus.Completed]
+        }
+      },
+      include: {
+        users: true,
+        vehicles: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    const ordersWithTotal = orders.map(order => {
+      const rentalDays = getRentalDays(
+        formatDate(order.fromDay),
+        formatDate(order.toDay)
+      )
+      const price = order.vehicles?.price ?? 0
+      const totalAmount = price * rentalDays
+      return {
+        ...order,
+        totalAmount
+      }
+    })
+
+    const totalRevenue = ordersWithTotal.reduce(
+      (sum, order) => sum + order.totalAmount,
+      0
+    )
+
+    return {
+      data: ordersWithTotal,
+      totalOrders: orders.length,
+      totalRevenue
+    }
+  } catch (error) {
+    console.error('Lỗi khi tính doanh thu:', error)
+    return {
+      orders: [],
+      totalOrders: 0,
+      totalRevenue: 0
+    }
+  }
+}
+
+const GetRevenueInMonth = async (month: number, year: number) => {
+  try {
+    const fromDate = startOfMonth(new Date(year, month - 1, 1))
+    const toDate = endOfMonth(fromDate)
+
+    const orders = await prisma.orders.findMany({
+      where: {
+        createdAt: {
+          gte: fromDate,
+          lte: toDate
+        },
+        status: {
+          in: [OrderStatus.Accepted, OrderStatus.Completed]
+        }
+      },
+      include: {
+        users: true,
+        vehicles: true
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    const ordersWithTotal = orders.map(order => {
+      const rentalDays = getRentalDays(
+        formatDate(order.fromDay),
+        formatDate(order.toDay)
+      )
+      const price = order.vehicles?.price ?? 0
+      const totalAmount = price * rentalDays
+      return {
+        ...order,
+        totalAmount
+      }
+    })
+
+    const totalRevenue = ordersWithTotal.reduce(
+      (sum, order) => sum + order.totalAmount,
+      0
+    )
+
+    return {
+      data: ordersWithTotal,
+      totalOrders: orders.length,
+      totalRevenue
+    }
+  } catch (error) {
+    console.error('Lỗi khi tính doanh thu tháng:', error)
+    return {
+      data: [],
+      totalRevenue: 0
+    }
+  }
+}
+
+const getRevenueInYear = async (year: number) => {
+  try {
+    const fromDate = new Date(year, 0, 1)
+    const toDate = new Date(year, 11, 31, 23, 59, 59, 999)
+
+    const orders = await prisma.orders.findMany({
+      where: {
+        createdAt: {
+          gte: fromDate,
+          lte: toDate
+        },
+        status: {
+          in: [OrderStatus.Accepted, OrderStatus.Completed]
+        }
+      },
+      include: {
+        users: true,
+        vehicles: {
+          include: {
+            categories: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    const ordersWithTotal = orders.map(order => {
+      const rentalDays = getRentalDays(
+        formatDate(order.fromDay),
+        formatDate(order.toDay)
+      )
+      const price = order.vehicles?.price ?? 0
+      const totalAmount = price * rentalDays
+      return {
+        ...order,
+        totalAmount
+      }
+    })
+
+    const totalRevenue = ordersWithTotal.reduce(
+      (sum, order) => sum + order.totalAmount,
+      0
+    )
+
+    return {
+      data: ordersWithTotal,
+      totalOrders: orders.length,
+      totalRevenue
+    }
+  } catch (error) {
+    console.error('Lỗi khi tính doanh thu năm:', error)
+    return {
+      data: [],
+      totalRevenue: 0
+    }
+  }
+}
+
+const getRevenueAllTime = async () => {
+  try {
+    const orders = await prisma.orders.findMany({
+      where: {
+        status: {
+          in: [OrderStatus.Accepted, OrderStatus.Completed]
+        }
+      },
+      include: {
+        users: true,
+        vehicles: {
+          include: {
+            categories: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    })
+
+    const ordersWithTotal = orders.map(order => {
+      const rentalDays = getRentalDays(
+        formatDate(order.fromDay),
+        formatDate(order.toDay)
+      )
+      const price = order.vehicles?.price ?? 0
+      const totalAmount = price * rentalDays
+      return {
+        ...order,
+        totalAmount
+      }
+    })
+
+    const totalRevenue = ordersWithTotal.reduce(
+      (sum, order) => sum + order.totalAmount,
+      0
+    )
+
+    return {
+      data: ordersWithTotal,
+      totalOrders: orders.length,
+      totalRevenue
+    }
+  } catch (error) {
+    console.error('Lỗi khi tính doanh thu toàn thời gian:', error)
+    return {
+      data: [],
+      totalRevenue: 0
+    }
+  }
+}
+
 export {
   RentVehicle,
   getHistoryRentalByUserId,
@@ -366,5 +595,9 @@ export {
   getAllOrders,
   acceptOrder,
   deleteOrder,
-  completeOrder
+  completeOrder,
+  GetRevenueOnDate,
+  GetRevenueInMonth,
+  getRevenueInYear,
+  getRevenueAllTime
 }
