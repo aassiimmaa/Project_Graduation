@@ -125,7 +125,7 @@ export const CANCEL_ORDER = 'Hủy đơn'
 export const CONFIRM_COMPLETE_ORDER = 'Xác nhận hoàn tất'
 
 //Statistical
-export const STATISTICAL = 'Thống kê'
+export const STATISTICAL = 'Thống kê doanh thu'
 export const FROM_DATE = 'Từ ngày'
 export const TO_DATE = 'Đến ngày'
 export const STATUS = 'Trạng thái'
@@ -135,6 +135,18 @@ export const ACCEPT_ORDER = 'Duyệt đơn'
 export const DETAIL_ORDER = 'Xem chi tiết'
 export const LOCATION_CAR = 'Xem vị trí xe'
 export const DELETE_ORDER = 'Xóa đơn'
+export const DATETYPE = 'Lọc theo'
+export const SUFFIX_COUNT_ORDERS = ' lượt'
+export const SUFFIX_REVENUE = ' VNĐ'
+export const TOTAL_REVENUE = 'Tổng doanh thu'
+export const TOTAL_RENT_VEHICLE = 'Tổng lượt thuê xe'
+export const REVENUE_CHART_TITLE = 'Biểu đồ doanh thu thuê xe'
+export const REVENUE = 'Doanh thu (VNĐ)'
+export const COUNT_ORDERS = 'Lượt thuê'
+export const STATISTIC_NULL_ERR = 'Chưa có giao dịch tại thời điểm được chọn'
+export const STATISTIC_NULL_HELP =
+  'Vui lòng chọn khoảng thời gian khác hoặc thử lại sau.'
+export const STATISTIC_LOADING = 'Đang tải dữ liệu...'
 
 //LogedInUser text
 export const BACK_HOME = 'Quay lại trang chủ'

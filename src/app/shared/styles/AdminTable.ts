@@ -39,11 +39,50 @@ export const styleSelectCategory = {
   '& .MuiInputLabel-root.Mui-focused': {
     color: '#007BFF'
   },
+  '.MuiSelect-select': {
+    padding: '8px 16px'
+  },
   '& .MuiSelect-icon': {
     color: TEXT_COLOR,
     opacity: 0.5
   },
   width: '200px',
+  mr: 1
+}
+
+export const styleSelectStatus = {
+  '& .MuiOutlinedInput-root': {
+    '& fieldset': { borderColor: '#ccc' },
+    '&:hover fieldset': { borderColor: '#007BFF' },
+    '&.Mui-focused fieldset': { borderColor: '#007BFF' }
+  },
+  '& .MuiInputBase-input': {
+    caretColor: TEXT_COLOR,
+    color: TEXT_COLOR
+  },
+  '& .MuiInputLabel-root': {},
+  '& .MuiInputLabel-root.Mui-focused': {
+    color: '#007BFF'
+  },
+  '.MuiSelect-select': {
+    // padding: '8px 16px'
+  },
+  '.MuiPickersSectionList-root': {
+    // py: '8px',
+    // height: '40px',
+    color: TEXT_COLOR
+  },
+  '.MuiPickersOutlinedInput-notchedOutline': {
+    borderColor: '#ccc'
+  },
+  '&:hover .MuiPickersOutlinedInput-notchedOutline': {
+    borderColor: '#007BFF !important'
+  },
+  '.MuiSvgIcon-root': {
+    color: TEXT_COLOR,
+    opacity: 0.5
+  },
+  minWidth: '150px',
   mr: 1
 }
 
