@@ -33,7 +33,7 @@ const RentVehicle = async (
       }
     }
 
-    await prisma.orders.create({
+    const order = await prisma.orders.create({
       data: {
         orderCode,
         userId,
@@ -46,6 +46,7 @@ const RentVehicle = async (
 
     return {
       success: true,
+      order: order,
       message:
         status === 1
           ? 'Đã thuê xe thành công!'
@@ -626,6 +627,27 @@ const getRevenueAllTime = async () => {
   }
 }
 
+const checkPaid = async () => {
+  const url = process.env.API_GET_PAID
+  if (!url) {
+    console.error('API_KEY is not defined')
+    return
+  }
+
+  try {
+    const response = await fetch(url, {
+      headers: {
+        Authorization: `apikey ${process.env.API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.error('Error fetching:', error)
+  }
+}
+
 export {
   RentVehicle,
   getHistoryRentalByUserId,
@@ -638,5 +660,6 @@ export {
   GetRevenueOnDate,
   GetRevenueInMonth,
   getRevenueInYear,
-  getRevenueAllTime
+  getRevenueAllTime,
+  checkPaid
 }

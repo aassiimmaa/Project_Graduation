@@ -24,26 +24,116 @@ import {
   QR_TITLE,
   STORAGE_DATA_USER,
   TO_DATE,
+  TOTAL_PRICE,
   VARIANT_BUTTON,
   VARIANT_TEXT,
   VEHICLE_NAME
 } from '../shared/constant'
-import { RentVehicle } from '~/actions/order.action'
+import { acceptOrder, checkPaid, RentVehicle } from '~/actions/order.action'
 import toast from 'react-hot-toast'
+import { getRentalDays } from '~/lib/getRentalDay'
+import { formatDate } from '~/lib/formatDate'
+import { totalPrice } from '~/lib/totalPrice'
+import { useEffect, useState, useCallback } from 'react'
+import { formatPrice } from '~/lib/formatPrice'
+import { OrderStatus } from '../shared/enum/orderStatus'
 
-const handlePayLater = async ({userId, vehicle, fromDate, toDate, status}: payLaterProps) => {
-  const res = await RentVehicle(userId, vehicle, fromDate, toDate, status)
-  if (res.success){
-    toast.success(res.message)
-    window.location.href = '/HistoryRental'
-  } else{
-    toast.error(res.message)
+const QRPay = ({
+  openQR,
+  closeQR,
+  vehicle,
+  fromDate,
+  toDate,
+  PayCode
+}: QRProps) => {
+  const user = JSON.parse(localStorage.getItem(STORAGE_DATA_USER) || '{}')
+  const rentalDays = getRentalDays(
+    formatDate(new Date(fromDate)),
+    formatDate(new Date(toDate))
+  )
+  const totalAmount = totalPrice(vehicle.price, rentalDays)
+  const [amountPay, setAmountPay] = useState(0)
+  const [contentPay, setContentPay] = useState('')
+  const testPrice = 1000
+  const uniquePaymentCode = `Pay${PayCode}`
+
+  const handlePayLater = async ({
+    userId,
+    vehicle,
+    fromDate,
+    toDate,
+    status
+  }: payLaterProps) => {
+    const res = await RentVehicle(userId, vehicle, fromDate, toDate, status)
+    if (res.success) {
+      toast.success(res.message)
+      window.location.href = '/HistoryRental'
+    } else {
+      toast.error(res.message)
+    }
   }
-}
 
-const user = JSON.parse(localStorage.getItem(STORAGE_DATA_USER) || '{}')
+  const fetchPaid = async () => {
+    const res = await checkPaid()
+    console.log(res.data.records[res.data.records.length - 1].amount)
+    console.log(res)
+    setAmountPay(res.data.records[res.data.records.length - 1].amount)
+    setContentPay(res.data.records[res.data.records.length - 1].description)
+  }
 
-const QRPay = ({ openQR, closeQR, vehicle, fromDate, toDate }: QRProps) => {
+  const paidOrder = useCallback(
+    async (status: number) => {
+      const res = await RentVehicle(
+        user.id,
+        vehicle,
+        new Date(fromDate),
+        new Date(toDate),
+        status
+      )
+      if (res.order) {
+        await acceptOrder(res.order.orderId)
+      }
+      if (res.success) {
+        toast.success(res.message)
+        window.location.href = '/HistoryRental'
+      } else {
+        toast.error(res.message)
+      }
+    },
+    [user.id, vehicle, fromDate, toDate]
+  )
+
+  useEffect(() => {
+    // Gọi lần đầu sau 20 giây
+    const timeout = setTimeout(() => {
+      fetchPaid()
+
+      // Sau lần đầu, lặp lại mỗi 30 giây
+      const interval = setInterval(() => {
+        fetchPaid()
+      }, 30000)
+
+      // Cleanup interval khi component unmount
+      return () => clearInterval(interval)
+    }, 20000)
+
+    // Cleanup timeout nếu component unmount trước khi timeout chạy
+    return () => clearTimeout(timeout)
+  }, [])
+
+  useEffect(() => {
+    if (amountPay === 0 || contentPay === '') return
+
+    if (amountPay >= testPrice && contentPay.includes(uniquePaymentCode)) {
+      // Thông báo
+      toast.success('Thanh toán thành công!')
+      paidOrder(OrderStatus.Accepted)
+    }
+  }, [amountPay, contentPay, paidOrder, uniquePaymentCode])
+
+  console.log('Tiền đã nhận: ', amountPay)
+  console.log('Nội dung nhận: ', contentPay)
+  console.log(uniquePaymentCode)
 
   return (
     <Dialog open={openQR} onClose={() => closeQR()} maxWidth="sm" fullWidth>
@@ -59,12 +149,20 @@ const QRPay = ({ openQR, closeQR, vehicle, fromDate, toDate }: QRProps) => {
           {QR_HELP}
         </Typography>
 
-        <Image src="/uploads/QR-Pay.png" alt="QR" width={256} height={256} />
+        <Image
+          // src={`https://img.vietqr.io/image/vietinbank-106875540580-compact.jpg?amount=${totalAmount}&addInfo=Thanh%20toan%20don%20hang%20${vehicle.vehicleId}&accountName=NGUYEN%20THANH%20AN`}
+          src={`https://img.vietqr.io/image/vietinbank-106875540580-compact.jpg?amount=${1000}&addInfo=${uniquePaymentCode}&accountName=NGUYEN%20THANH%20AN`}
+          alt="QR"
+          width={300}
+          height={300}
+        />
 
         <Typography mt={2}>
           {`${VEHICLE_NAME}:`} <strong>{vehicle?.vehicleName}</strong>
           <br />
           {`${FROM_DATE}:`} {fromDate} - {`${TO_DATE}:`} {toDate}
+          <br />
+          {`${TOTAL_PRICE}: `} {formatPrice(totalAmount.toString())}
         </Typography>
 
         <Box display="flex" alignItems={ALIGN_CENTER} my={3}>
@@ -76,13 +174,31 @@ const QRPay = ({ openQR, closeQR, vehicle, fromDate, toDate }: QRProps) => {
         </Box>
 
         <Box display="flex" justifyContent={ALIGN_CENTER}>
-          <Button variant={VARIANT_BUTTON} color={PRIMARY_COLOR} onClick={() => handlePayLater({ userId: user.id, vehicle, fromDate: new Date(fromDate), toDate: new Date(toDate), status: 0 })}>
+          <Button
+            variant={VARIANT_BUTTON}
+            color={PRIMARY_COLOR}
+            onClick={() =>
+              handlePayLater({
+                userId: user.id,
+                vehicle,
+                fromDate: new Date(fromDate),
+                toDate: new Date(toDate),
+                status: 0
+              })
+            }
+          >
             {PAY_LATER}
           </Button>
         </Box>
 
         {/* Lưu ý */}
-        <Typography variant={VARIANT_TEXT} color={ERROR_COLOR} mt={2} display="block" textAlign={ALIGN_CENTER}>
+        <Typography
+          variant={VARIANT_TEXT}
+          color={ERROR_COLOR}
+          mt={2}
+          display="block"
+          textAlign={ALIGN_CENTER}
+        >
           {PAY_LATER_NOTE}
         </Typography>
       </DialogContent>

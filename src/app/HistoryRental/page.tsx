@@ -13,7 +13,8 @@ import {
   Typography,
   Button,
   Chip,
-  Box
+  Box,
+  Pagination
 } from '@mui/material'
 import { Cancel, Visibility } from '@mui/icons-material'
 import { NavBar } from '../components/NavBar'
@@ -31,8 +32,10 @@ import {
   FROM_DATE,
   HISTORY_RENTAL,
   INFO_COLOR,
+  PRIMARY_COLOR,
   SERIAL,
   SIZE_CONTAINER,
+  SIZE_PAGINATION,
   STATUS,
   STORAGE_DATA_USER,
   TO_DATE,
@@ -59,11 +62,17 @@ import {
 import { getStatusStyle } from '~/lib/getStatusStyle'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import {
+  PaginationContainer,
+  stylePagination
+} from '../shared/styles/AdminTable'
 
 const RentalHistoryPage: React.FC = () => {
   const [rentalData, setRentalData] = useState<HistoryRentalProps[]>([])
+  const [page, setPage] = useState(1)
+  const rowsPerPage = 8
+
   const user = JSON.parse(localStorage.getItem(STORAGE_DATA_USER) || '')
-  
 
   const handleCancelOrder = async (orderId: string, status: number) => {
     const res = await cancelOrder(orderId, status)
@@ -77,33 +86,45 @@ const RentalHistoryPage: React.FC = () => {
   }
 
   const fetchHistoryRental = async () => {
-      if (!user) {
-        alert('Vui lòng đăng nhập để sử dụng chức năng này!')
-        return
-      }
-
-      const data = await getHistoryRentalByUserId(user.id)
-      setRentalData(data?.orders ?? [])
+    if (!user) {
+      alert('Vui lòng đăng nhập để sử dụng chức năng này!')
+      return
     }
+
+    const data = await getHistoryRentalByUserId(user.id)
+    setRentalData(data?.orders ?? [])
+  }
 
   useEffect(() => {
     fetchHistoryRental()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  const totalPages = Math.ceil(rentalData.length / rowsPerPage) // Tổng số trang
+  // Hàm xử lý thay đổi trang
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    newPage: number
+  ) => {
+    setPage(newPage)
+  }
+
+  const paginatedData = rentalData.slice(
+    (page - 1) * rowsPerPage,
+    page * rowsPerPage
+  )
+
   return (
     <>
       <NavBar />
       <Container maxWidth={SIZE_CONTAINER} sx={styleLayoutTable}>
         <Card elevation={4} sx={styleCardContainer}>
-          {/* Tiêu đề */}
           <Box sx={styleTitleTable}>
             <Typography variant="h4" fontWeight={FONT_WEIGHT_BOLD}>
               {HISTORY_RENTAL}
             </Typography>
           </Box>
 
-          {/* Nội dung bảng */}
           <CardContent sx={{ p: 0 }}>
             <TableContainer>
               <Table>
@@ -127,16 +148,15 @@ const RentalHistoryPage: React.FC = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {rentalData.map((order, index) => {
+                  {paginatedData.map((order, index) => {
                     const statusStyle = getStatusStyle(order.status)
-
                     return (
                       <TableRow key={index} sx={styleHoverRow}>
                         <TableBodyCell
                           fontWeight={FONT_WEIGHT_BOLD.toString()}
                           align={ALIGN_CENTER}
                         >
-                          {index + 1}
+                          {page * rowsPerPage + index + 1}
                         </TableBodyCell>
 
                         <TableBodyCell>{order.users.name}</TableBodyCell>
@@ -184,7 +204,7 @@ const RentalHistoryPage: React.FC = () => {
                               variant={VARIANT_BUTTON}
                               color={ERROR_COLOR}
                               startIcon={<Cancel />}
-                              disabled={order.status === 0 ? false : true}
+                              disabled={order.status !== 0}
                               sx={styleActionButton}
                               onClick={() =>
                                 handleCancelOrder(order.orderId, order.status)
@@ -200,6 +220,18 @@ const RentalHistoryPage: React.FC = () => {
                 </TableBody>
               </Table>
             </TableContainer>
+
+            {/* Phân trang */}
+            <PaginationContainer>
+              <Pagination
+                count={totalPages}
+                page={page}
+                onChange={handleChangePage}
+                color={PRIMARY_COLOR}
+                size={SIZE_PAGINATION}
+                sx={stylePagination}
+              />
+            </PaginationContainer>
           </CardContent>
         </Card>
       </Container>

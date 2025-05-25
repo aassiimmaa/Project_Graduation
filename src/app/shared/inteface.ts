@@ -96,6 +96,7 @@ interface QRProps {
   vehicle: Vehicle
   fromDate: string
   toDate: string
+  PayCode: number
 }
 
 interface payLaterProps {
