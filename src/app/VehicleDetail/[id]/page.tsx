@@ -54,6 +54,7 @@ const VehicleDetail: React.FC = () => {
   const { id } = useParams()
   const router = useRouter()
   const [vehicle, setVehicle] = useState<Vehicle>()
+  const PayCode = Math.floor(100000 + Math.random() * 900000)
 
   // Lấy thông tin xe theo ID
   const isFetched = useRef(false)
@@ -243,13 +244,14 @@ const VehicleDetail: React.FC = () => {
         </Grid>
       </Container>
       <Footer />
-      {vehicle && (
+      {vehicle && openQR && (
         <QRPay
           openQR={openQR}
           closeQR={() => setOpenQR(false)}
           vehicle={vehicle}
           fromDate={fromDate}
           toDate={toDate}
+          PayCode={PayCode}
         />
       )}
     </>

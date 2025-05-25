@@ -111,7 +111,7 @@ const OrdersManagement: React.FC = () => {
     lng: 0
   })
 
-  console.log(selectedLocation)
+  // console.log(selectedLocation)
 
   useEffect(() => {
     if (selectedLocation) {
@@ -224,7 +224,7 @@ const OrdersManagement: React.FC = () => {
 
   const testLocation = { lat: 16.459214186981786, lng: 107.5927976982721 }
 
-  console.log(selectedLocation)
+  // console.log(selectedLocation)
 
   return (
     <>

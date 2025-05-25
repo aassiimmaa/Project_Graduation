@@ -22,7 +22,8 @@ const nextConfig = {
         hostname: 'www.winauto.vn',
         pathname: '/wp-content/uploads/2024/09/**'
       }
-    ]
+    ],
+    domains: ['img.vietqr.io']
   },
   experimental: {
     scrollRestoration: false,
