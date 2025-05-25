@@ -1,30 +1,16 @@
 'use client'
-import React, { useState } from 'react'
-import Avatar from 'react-avatar-edit'
 
-const Page = () => {
-  const [src, setSrc] = useState<string | null>(null)
-  const [preview, setPreview] = useState<string | null>(null)
+import VehicleLocationModal from '~/app/components/admin/VehicleLocationModal'
 
-  const onClose = () => {
-    setPreview(null)
-  }
+const HomePage = () => {
 
-  const onCrop = (view: string) => {
-    setPreview(view)
-  }
   return (
-    <>
-      <Avatar
-        width={390}
-        height={295}
-        onCrop={onCrop}
-        onClose={onClose}
-        src={src ?? undefined}
-      />
-      <img src={preview ?? undefined} alt="?" />
-    </>
+    <VehicleLocationModal
+      open={true}
+      onClose={() => !open}
+      location={{ lat: 16.442849979827617, lng: 107.61731558535982 }}
+    />
   )
 }
 
-export default Page
+export default HomePage

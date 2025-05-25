@@ -6,6 +6,7 @@ import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import { getRentalDays } from '~/lib/getRentalDay'
 import { Vehicles } from '@prisma/client'
 import { formatDate } from '~/lib/formatDate'
+import { MY_PLACE_IN_MAP } from '~/app/shared/constant'
 
 //Thuê xe tạo đơn
 const RentVehicle = async (
@@ -219,7 +220,8 @@ const getAllOrders = async () => {
               select: {
                 categoryName: true
               }
-            }
+            },
+            location: true
           }
         }
       },
@@ -269,6 +271,21 @@ const acceptOrder = async (orderId: string) => {
         message: 'Không tồn tại hóa đơn!'
       }
     }
+
+    const vehicleId = order.vehicles.vehicleId
+
+    await prisma.orders.updateMany({
+      where: {
+        orderId: { not: orderId },
+        vehicles: {
+          vehicleId: vehicleId
+        },
+        status: OrderStatus.Pending
+      },
+      data: {
+        status: OrderStatus.Cancelled
+      }
+    })
 
     await prisma.orders.update({
       where: { orderId },
@@ -350,6 +367,28 @@ const completeOrder = async (orderId: string) => {
     })
 
     await updateRentStatus(order.vehicles.vehicleId, false)
+
+    const freeVehicles = await prisma.vehicles.findMany({
+      where: {
+        isRent: false
+      }
+    })
+
+    const updateVehicleLocations = freeVehicles.map(v =>
+      prisma.vehicles.update({
+        where: { vehicleId: v.vehicleId },
+        data: {
+          location: {
+            update: {
+              lat: MY_PLACE_IN_MAP.lat,
+              lng: MY_PLACE_IN_MAP.lng
+            }
+          }
+        }
+      })
+    )
+
+    await Promise.all(updateVehicleLocations)
 
     return {
       success: true,

@@ -22,7 +22,7 @@ import { formatDateTime } from '~/lib/formatDateTime'
 import { formatPrice } from '~/lib/formatPrice'
 import { totalPrice } from '~/lib/totalPrice'
 import { getRentalDays } from '~/lib/getRentalDay'
-import { OrderDetailModalProps, OrderDetailProps } from '~/app/shared/inteface'
+import { OrderDetailModalProps } from '~/app/shared/inteface'
 import {
   ADDRESS,
   ALIGN_CENTER,
@@ -52,8 +52,6 @@ import {
   STATUS,
   SUCCESS_COLOR,
   SYSTEM_NAME,
-  TEXT_COLOR,
-  TEXT_COLOR_WHITE,
   TEXT_TRANSFORM,
   TO_DATE,
   TOTAL_PRICE,
