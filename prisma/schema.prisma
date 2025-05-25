@@ -28,6 +28,14 @@ model Users {
   orders Orders[]
 }
 
+model Location {
+  LocationId  String  @id @default(cuid())
+  vehicleId   String   @unique
+  lat         Float
+  lng         Float
+  vehicle    Vehicles @relation(fields: [vehicleId], references: [vehicleId], onDelete: Cascade)
+}
+
 model Vehicles {
   vehicleId   String   @id @default(cuid())
   vehicleName String
@@ -39,6 +47,7 @@ model Vehicles {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
+  location    Location?
   orders     Orders[]
   categories Categories @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
 }

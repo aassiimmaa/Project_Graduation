@@ -38,7 +38,7 @@ import {
 } from '~/app/shared/styles/AdminTable'
 import SearchIcon from '@mui/icons-material/Search'
 import toast from 'react-hot-toast'
-import { OrderStatistic, OrderWithTotal } from '~/app/shared/inteface'
+import { OrderStatistic } from '~/app/shared/inteface'
 import { formatPrice } from '~/lib/formatPrice'
 import { DATE_RANGE, DateRange } from '~/app/shared/enum/DateRange'
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers'
@@ -357,7 +357,7 @@ const Statistic: React.FC = () => {
                 interval={0}
                 height={60}
                 label={{
-                  value: { VEHICLE_NAME },
+                  value: VEHICLE_NAME,
                   position: 'right',
                   style: styleLabelAxis,
                   dx: 8,
@@ -368,7 +368,7 @@ const Statistic: React.FC = () => {
               <YAxis
                 dataKey="revenue"
                 label={{
-                  value: { REVENUE },
+                  value: REVENUE,
                   position: 'top',
                   offset: 10,
                   style: styleLabelAxis,

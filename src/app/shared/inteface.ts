@@ -169,6 +169,10 @@ interface OrderDetailProps {
     categories: {
       categoryName: string
     }
+    location: {
+      lat: number
+      lng: number
+    } | null
   }
 }
 
@@ -216,7 +220,13 @@ interface OrderWithTotal {
       description: string
       image: string
     }
-  },
+    location: {
+      locationId: string
+      vehicleId: string
+      lat: number,
+      lng: number
+    } | null
+  }
   totalAmount: number
 }
 

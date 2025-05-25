@@ -86,6 +86,7 @@ import { formatPrice } from '~/lib/formatPrice'
 import { formatDateTime } from '~/lib/formatDateTime'
 import { OrderStatus } from '~/app/shared/enum/orderStatus'
 import OrderDetailModal from './ordersComponents/DetailOrder'
+import VehicleLocationModal from './VehicleLocationModal'
 
 const OrdersManagement: React.FC = () => {
   const [page, setPage] = useState(1) // Trang hiện tại (Pagination bắt đầu từ 1)
@@ -98,6 +99,34 @@ const OrdersManagement: React.FC = () => {
   const [selectedOrder, setSelectedOrder] = useState<OrderDetailProps | null>(
     null
   )
+
+  //location
+  const [openLocationModal, setOpenLocationModal] = useState(false)
+  const [selectedLocation, setSelectedLocation] = useState<{
+    lat: number
+    lng: number
+  }>({ lat: 0, lng: 0 })
+  const [newLocation, setNewLocation] = useState<{ lat: number; lng: number }>({
+    lat: 0,
+    lng: 0
+  })
+
+  console.log(selectedLocation)
+
+  useEffect(() => {
+    if (selectedLocation) {
+      setNewLocation(selectedLocation)
+    }
+  }, [selectedLocation])
+
+  const handleShowLocation = (order: OrderDetailProps) => {
+    if (!order.vehicles?.location) {
+      toast.error('Không có thông tin vị trí xe')
+      return
+    }
+    setSelectedLocation(order.vehicles.location)
+    setOpenLocationModal(true)
+  }
 
   const fetchOrders = async () => {
     setLoading(true)
@@ -192,6 +221,10 @@ const OrdersManagement: React.FC = () => {
       toast.error(res.message)
     }
   }
+
+  const testLocation = { lat: 16.459214186981786, lng: 107.5927976982721 }
+
+  console.log(selectedLocation)
 
   return (
     <>
@@ -325,6 +358,7 @@ const OrdersManagement: React.FC = () => {
                             variant={VARIANT_BUTTON}
                             size={SIZE_BUTTON}
                             sx={styleLocationButton}
+                            onClick={() => handleShowLocation(order)}
                           >
                             <PlaceIcon />
                           </Button>
@@ -388,6 +422,17 @@ const OrdersManagement: React.FC = () => {
         }}
         fetchOrders={fetchOrders}
       />
+      {selectedLocation && openLocationModal && (
+        <VehicleLocationModal
+          open={openLocationModal}
+          onClose={() => {
+            setOpenLocationModal(false)
+            setSelectedLocation(testLocation)
+            setNewLocation(testLocation)
+          }}
+          location={newLocation}
+        />
+      )}
     </>
   )
 }

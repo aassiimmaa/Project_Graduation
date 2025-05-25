@@ -63,6 +63,10 @@ export const MY_ADDRESS = '54 An Dương Vương, TP Huế'
 export const KEY_COMPONENT = 'strong'
 export const TEXT_TRANSFORM = 'uppercase'
 export const SYSTEM_NAME = 'Hệ thống cho thuê xe trực tuyến AnRental'
+export const MY_PLACE_IN_MAP = {
+  lat: 16.451972886222777,
+  lng: 107.60224722341022
+}
 
 //Regex
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
