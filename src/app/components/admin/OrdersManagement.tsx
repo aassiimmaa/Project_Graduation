@@ -87,6 +87,7 @@ import { formatDateTime } from '~/lib/formatDateTime'
 import { OrderStatus } from '~/app/shared/enum/orderStatus'
 import OrderDetailModal from './ordersComponents/DetailOrder'
 import VehicleLocationModal from './VehicleLocationModal'
+import { updateLocation } from '~/actions/location.action'
 
 const OrdersManagement: React.FC = () => {
   const [page, setPage] = useState(1) // Trang hiện tại (Pagination bắt đầu từ 1)
@@ -225,6 +226,19 @@ const OrdersManagement: React.FC = () => {
   const testLocation = { lat: 16.459214186981786, lng: 107.5927976982721 }
 
   // console.log(selectedLocation)
+
+  const fetchLocation = async () => {
+    await updateLocation()
+  }
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      fetchLocation()
+      fetchOrders()
+    }, 30000)
+
+    return () => clearInterval(intervalId)
+  }, [openLocationModal])
 
   return (
     <>
