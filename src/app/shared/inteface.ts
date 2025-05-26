@@ -257,7 +257,7 @@ interface OrderWithAllInfo {
     phone: string
     name: string
     password: string
-    image: string
+    image: string | null
     createdAt: Date
     updatedAt: Date
     isBanned: boolean
