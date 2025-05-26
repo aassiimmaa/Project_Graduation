@@ -1,5 +1,6 @@
 'use server'
 import { OrderStatus } from '~/app/shared/enum/orderStatus'
+import { Order } from '~/app/shared/inteface'
 import prisma from '~/lib/prisma'
 
 const updateLocation = async () => {
@@ -20,7 +21,7 @@ const updateLocation = async () => {
     return Math.random() * (max - min) + min
   }
 
-  const updatePromises = orders.map(item =>
+  const updatePromises = orders.map((item: Order) =>
     prisma.location.update({
       where: { vehicleId: item.vehicleId },
       data: {

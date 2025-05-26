@@ -153,6 +153,17 @@ interface HistoryRentalProps {
   }
 }
 
+interface Order {
+    orderId: string;
+    orderCode: string;
+    userId: string;
+    vehicleId: string;
+    fromDay: Date;
+    toDay: Date;
+    status: number;
+    createdAt: Date;
+}
+
 interface OrderDetailProps {
   orderId: string
   orderCode: string
@@ -268,6 +279,7 @@ export type {
   CellProps,
   CellHeadProps,
   HistoryRentalProps,
+  Order,
   OrderDetailProps,
   OrderDetailModalProps,
   OrderWithTotal,
