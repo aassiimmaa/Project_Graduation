@@ -89,7 +89,7 @@ const UsersManagement: React.FC = () => {
       const res = await getAllUsers()
       if (res.success) {
         setUsers(
-          (res.users ?? []).map(user => ({
+          (res.users ?? []).map((user: User) => ({
             ...user,
             image: user.image ?? undefined
           }))
@@ -134,8 +134,8 @@ const UsersManagement: React.FC = () => {
       toast.success(res.message, {
         duration: 2000
       })
-      setUsers(prevUsers =>
-        prevUsers.map(user =>
+      setUsers((prevUsers: User[]) =>
+        prevUsers.map((user: User) =>
           user.userId === userId ? { ...user, isBanned: true } : user
         )
       )
