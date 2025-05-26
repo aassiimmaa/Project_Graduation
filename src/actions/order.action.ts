@@ -4,14 +4,14 @@ import prisma from '~/lib/prisma'
 import { updateRentStatus } from './vehicle.action'
 import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import { getRentalDays } from '~/lib/getRentalDay'
-import { Vehicles } from '@prisma/client'
 import { formatDate } from '~/lib/formatDate'
 import { MY_PLACE_IN_MAP } from '~/app/shared/constant'
+import { Vehicle } from '~/app/shared/inteface'
 
 //Thuê xe tạo đơn
 const RentVehicle = async (
   userId: string,
-  vehicle: Vehicles,
+  vehicle: Vehicle,
   fromDate: Date,
   toDate: Date,
   status: number
