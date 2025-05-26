@@ -154,14 +154,14 @@ interface HistoryRentalProps {
 }
 
 interface Order {
-    orderId: string;
-    orderCode: string;
-    userId: string;
-    vehicleId: string;
-    fromDay: Date;
-    toDay: Date;
-    status: number;
-    createdAt: Date;
+  orderId: string
+  orderCode: string
+  userId: string
+  vehicleId: string
+  fromDay: Date
+  toDay: Date
+  status: number
+  createdAt: Date
 }
 
 interface OrderDetailProps {
@@ -235,11 +235,56 @@ interface OrderWithTotal {
     location: {
       locationId: string
       vehicleId: string
-      lat: number,
+      lat: number
       lng: number
     } | null
   }
   totalAmount: number
+}
+
+interface OrderWithAllInfo {
+  orderId: string
+  orderCode: string
+  userId: string
+  vehicleId: string
+  fromDay: Date
+  toDay: Date
+  status: number
+  createdAt: Date
+  users: {
+    userId: string
+    email: string
+    phone: string
+    name: string
+    password: string
+    image: string
+    createdAt: Date
+    updatedAt: Date
+    isBanned: boolean
+    role: boolean
+  }
+  vehicles: {
+    vehicleId: string
+    vehicleName: string
+    image: string
+    price: number
+    description: string
+    isRent: boolean
+    createdAt: Date
+    updatedAt: Date
+    categories: {
+      categoryId: string
+      categoryName: string
+      description: string
+      image: string
+    }
+    location: {
+      locationId: string
+      vehicleId: string
+      lat: number
+      lng: number
+    } | null
+  }
 }
 
 interface OrderStatistic {
@@ -281,6 +326,7 @@ export type {
   HistoryRentalProps,
   Order,
   OrderDetailProps,
+  OrderWithAllInfo,
   OrderDetailModalProps,
   OrderWithTotal,
   OrderStatistic,

@@ -6,7 +6,11 @@ import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import { getRentalDays } from '~/lib/getRentalDay'
 import { formatDate } from '~/lib/formatDate'
 import { MY_PLACE_IN_MAP } from '~/app/shared/constant'
-import { OrderWithTotal, Vehicle } from '~/app/shared/inteface'
+import {
+  OrderWithAllInfo,
+  OrderWithTotal,
+  Vehicle
+} from '~/app/shared/inteface'
 
 //Thuê xe tạo đơn
 const RentVehicle = async (
@@ -427,7 +431,8 @@ const GetRevenueOnDate = async (date: Date) => {
         users: true,
         vehicles: {
           include: {
-            categories: true
+            categories: true,
+            location: true
           }
         }
       },
@@ -436,7 +441,7 @@ const GetRevenueOnDate = async (date: Date) => {
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
+    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -486,18 +491,14 @@ const GetRevenueInMonth = async (month: number, year: number) => {
       },
       include: {
         users: true,
-        vehicles: {
-          include: {
-            categories: true
-          }
-        }
+        vehicles: true
       },
       orderBy: {
         createdAt: 'desc'
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
+    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -548,7 +549,8 @@ const getRevenueInYear = async (year: number) => {
         users: true,
         vehicles: {
           include: {
-            categories: true
+            categories: true,
+            location: true
           }
         }
       },
@@ -557,7 +559,7 @@ const getRevenueInYear = async (year: number) => {
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
+    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -601,7 +603,8 @@ const getRevenueAllTime = async () => {
         users: true,
         vehicles: {
           include: {
-            categories: true
+            categories: true,
+            location: true
           }
         }
       },
@@ -610,7 +613,7 @@ const getRevenueAllTime = async () => {
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
+    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
