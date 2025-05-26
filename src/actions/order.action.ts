@@ -417,7 +417,7 @@ const completeOrder = async (orderId: string) => {
 
 const GetRevenueOnDate = async (date: Date) => {
   try {
-    const orders = await prisma.orders.findMany({
+    const orders: OrderWithAllInfo[] = await prisma.orders.findMany({
       where: {
         createdAt: {
           gte: startOfDay(date),
@@ -441,7 +441,7 @@ const GetRevenueOnDate = async (date: Date) => {
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
+    const ordersWithTotal = orders.map(order => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -479,7 +479,7 @@ const GetRevenueInMonth = async (month: number, year: number) => {
     const fromDate = startOfMonth(new Date(year, month - 1, 1))
     const toDate = endOfMonth(fromDate)
 
-    const orders = await prisma.orders.findMany({
+    const orders: OrderWithAllInfo[] = await prisma.orders.findMany({
       where: {
         createdAt: {
           gte: fromDate,
@@ -498,7 +498,7 @@ const GetRevenueInMonth = async (month: number, year: number) => {
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
+    const ordersWithTotal = orders.map(order => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -535,7 +535,7 @@ const getRevenueInYear = async (year: number) => {
     const fromDate = new Date(year, 0, 1)
     const toDate = new Date(year, 11, 31, 23, 59, 59, 999)
 
-    const orders = await prisma.orders.findMany({
+    const orders: OrderWithAllInfo[] = await prisma.orders.findMany({
       where: {
         createdAt: {
           gte: fromDate,
@@ -559,7 +559,7 @@ const getRevenueInYear = async (year: number) => {
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
+    const ordersWithTotal = orders.map(order => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -593,7 +593,7 @@ const getRevenueInYear = async (year: number) => {
 
 const getRevenueAllTime = async () => {
   try {
-    const orders = await prisma.orders.findMany({
+    const orders: OrderWithAllInfo[] = await prisma.orders.findMany({
       where: {
         status: {
           in: [OrderStatus.Accepted, OrderStatus.Completed]
@@ -613,7 +613,7 @@ const getRevenueAllTime = async () => {
       }
     })
 
-    const ordersWithTotal = orders.map((order: OrderWithAllInfo) => {
+    const ordersWithTotal = orders.map(order => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
