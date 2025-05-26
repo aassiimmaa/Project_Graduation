@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   Paper,
   Button,
@@ -106,62 +106,66 @@ const Statistic: React.FC = () => {
     }
   }
 
-  const fetchOrdersWithTotal = async (dateType: DateRange) => {
-    try {
-      let response = null
-      switch (dateType) {
-        case DateRange.All:
-          response = await getRevenueAllTime()
-          break
-        case DateRange.Date:
-          if (!searchValue) {
-            toast.error('Vui lòng chọn ngày')
-            return
-          }
-          response = await GetRevenueOnDate(searchValue)
-          break
-        case DateRange.Month:
-          if (!searchValue) {
-            toast.error('Vui lòng chọn ngày')
-            return
-          }
-          const year = searchValue.getFullYear()
-          const month = searchValue.getMonth() + 1
-          response = await GetRevenueInMonth(month, year)
-          break
-        case DateRange.Year:
-          if (!searchValue) {
-            toast.error('Vui lòng chọn ngày')
-            return
-          }
-          const yearValue = searchValue.getFullYear()
-          response = await getRevenueInYear(yearValue)
-          break
+  const fetchOrdersWithTotal = useCallback(
+    async (dateType: DateRange) => {
+      try {
+        let response = null
+        switch (dateType) {
+          case DateRange.All:
+            response = await getRevenueAllTime()
+            break
+          case DateRange.Date:
+            if (!searchValue) {
+              toast.error('Vui lòng chọn ngày')
+              return
+            }
+            response = await GetRevenueOnDate(searchValue)
+            break
+          case DateRange.Month:
+            if (!searchValue) {
+              toast.error('Vui lòng chọn ngày')
+              return
+            }
+            const year = searchValue.getFullYear()
+            const month = searchValue.getMonth() + 1
+            response = await GetRevenueInMonth(month, year)
+            break
+          case DateRange.Year:
+            if (!searchValue) {
+              toast.error('Vui lòng chọn ngày')
+              return
+            }
+            const yearValue = searchValue.getFullYear()
+            response = await getRevenueInYear(yearValue)
+            break
+        }
+        const data = response.data
+        setOrders({
+          //eslint-disable-next-line @typescript-eslint/no-explicit-any
+          data: (data ?? []).map((order: any) => ({
+            ...order,
+            users: {
+              ...order.users,
+              image: order.users.image ?? ''
+            }
+          })),
+          totalOrders: response.totalOrders ?? 0,
+          totalRevenue: response.totalRevenue
+        })
+      } catch (error) {
+        console.error('Error fetching orders:', error)
+      } finally {
+        setAnimationTrigger(prev => !prev)
       }
-      const data = response.data
-      setOrders({
-        data: (data ?? []).map((order: any) => ({
-          ...order,
-          users: {
-            ...order.users,
-            image: order.users.image ?? ''
-          }
-        })),
-        totalOrders: response.totalOrders ?? 0,
-        totalRevenue: response.totalRevenue
-      })
-    } catch (error) {
-      console.error('Error fetching orders:', error)
-    } finally {
-      setAnimationTrigger(prev => !prev)
-    }
-  }
+    },
+    [searchValue]
+  )
 
   useEffect(() => {
     if (!orders) {
       fetchOrdersWithTotal(DateRange.All)
     }
-  }, [])
+  }, [orders, fetchOrdersWithTotal])
 
   // Tính doanh thu theo xe
   const revenueByVehicle = (orders?.data ?? []).reduce(

@@ -1,10 +1,11 @@
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const useRequireAuth = () => {
   const router = useRouter()
   const hasShown = useRef(false)
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [user, setUser] = useState<any>(null)
 
   useEffect(() => {
@@ -21,7 +22,7 @@ const useRequireAuth = () => {
     } else {
       setUser(storedUser)
     }
-  }, [])
+  }, [router])
 
   return user
 }
