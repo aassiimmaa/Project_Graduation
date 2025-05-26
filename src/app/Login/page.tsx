@@ -7,17 +7,34 @@ import {
   Container,
   TextField,
   Typography,
-  Paper,
-  Divider
+  Paper
+  // Divider
 } from '@mui/material'
-import Grid from '@mui/material/Grid2'
-import { Google, Facebook } from '@mui/icons-material'
+// import Grid from '@mui/material/Grid2'
+// import { Google, Facebook } from '@mui/icons-material'
 import Image from 'next/image'
 import Link from 'next/link'
 import { LoginUser } from '~/actions/user.action'
 import toast from 'react-hot-toast'
-import { BACK_HOME, FACEBOOK, FONT_WEIGHT_BOLD, GOOGLE, LOGIN, MARGIN_TEXTFIELD_NORMAL, OR, PRIMARY_COLOR, REGISTER, VARIANT_BUTTON, VARIANT_INPUT, WARNING_COLOR } from '../shared/constant'
-import { styleContainerLoginForm, stylePaperLoginForm } from '../shared/styles/LoginPage'
+import {
+  BACK_HOME,
+  // FACEBOOK,
+  FONT_WEIGHT_BOLD,
+  // GOOGLE,
+  LINK_TO_LOGO,
+  LOGIN,
+  MARGIN_TEXTFIELD_NORMAL,
+  // OR,
+  PRIMARY_COLOR,
+  REGISTER,
+  VARIANT_BUTTON,
+  VARIANT_INPUT,
+  WARNING_COLOR
+} from '../shared/constant'
+import {
+  styleContainerLoginForm,
+  stylePaperLoginForm
+} from '../shared/styles/LoginPage'
 
 const LoginForm: React.FC = () => {
   const router = useRouter()
@@ -64,20 +81,14 @@ const LoginForm: React.FC = () => {
     }
   }
 
-  const handleThirdPartyLogin = (provider: string) => {
-    console.log(`Đăng nhập với ${provider}`)
-    // Gọi API đăng nhập bên thứ ba
-  }
+  // const handleThirdPartyLogin = (provider: string) => {
+  //   console.log(`Đăng nhập với ${provider}`)
+  //   // Gọi API đăng nhập bên thứ ba
+  // }
 
   return (
-    <Container
-      maxWidth="xs"
-      sx={styleContainerLoginForm}
-    >
-      <Paper
-        elevation={6}
-        sx={stylePaperLoginForm}
-      >
+    <Container maxWidth="xs" sx={styleContainerLoginForm}>
+      <Paper elevation={6} sx={stylePaperLoginForm}>
         <Box
           sx={{
             display: 'flex',
@@ -85,7 +96,7 @@ const LoginForm: React.FC = () => {
             alignItems: 'center'
           }}
         >
-          <Image src="/images/logo.png" height={80} width={100} alt="logo" />
+          <Image src={LINK_TO_LOGO} height={80} width={100} alt="logo" />
           <Typography variant="h5" fontWeight={FONT_WEIGHT_BOLD} mt={1}>
             {LOGIN}
           </Typography>
@@ -124,13 +135,18 @@ const LoginForm: React.FC = () => {
             {LOGIN}
           </Button>
           <Link href="/Register">
-            <Button fullWidth variant={VARIANT_INPUT} color={WARNING_COLOR} sx={{ mt: 1 }}>
+            <Button
+              fullWidth
+              variant={VARIANT_INPUT}
+              color={WARNING_COLOR}
+              sx={{ mt: 1 }}
+            >
               {REGISTER}
             </Button>
           </Link>
         </Box>
 
-        <Divider sx={{ my: 3 }}>{OR}</Divider>
+        {/* <Divider sx={{ my: 3 }}>{OR}</Divider>
 
         <Grid container spacing={2} justifyContent="center">
           <Grid size={6}>
@@ -155,7 +171,7 @@ const LoginForm: React.FC = () => {
               {FACEBOOK}
             </Button>
           </Grid>
-        </Grid>
+        </Grid> */}
 
         <Button
           fullWidth

@@ -2,6 +2,7 @@
 
 import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
+import { LINK_TO_LOGO } from '../shared/constant'
 
 export default function AdminDashboard() {
   return (
@@ -16,7 +17,7 @@ export default function AdminDashboard() {
       }}
     >
       <Image
-        src="/images/logo.png"
+        src={LINK_TO_LOGO}
         alt="AnRental Logo"
         width={220}
         height={180}

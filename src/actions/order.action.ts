@@ -145,6 +145,12 @@ const getOrderByOrderId = async (orderId: string) => {
               select: {
                 categoryName: true
               }
+            },
+            location: {
+              select: {
+                lat: true,
+                lng: true
+              }
             }
           }
         }

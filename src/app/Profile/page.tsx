@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Avatar,
   Box,
@@ -48,29 +48,60 @@ import {
 
 const ProfilePage: React.FC = () => {
   const router = useRouter()
-  const user = JSON.parse(localStorage.getItem(STORAGE_DATA_USER) || '{}')
+  // const user = JSON.parse(localStorage.getItem(STORAGE_DATA_USER) || '{}')
   const [isEditing, setIsEditing] = useState(false)
   const [avatarChanged, setAvatarChanged] = useState(false)
   const [cropDialogOpen, setCropDialogOpen] = useState(false)
   const [imageSrc, setImageSrc] = useState<string | null>(null)
+
+  const [user, setUser] = useState<{
+    name?: string
+    email?: string
+    phone?: string
+    image?: string
+    id?: string
+  } | null>(null)
   const [userInfo, setUserInfo] = useState({
-    fullName: user.name,
-    email: user.email,
-    phoneNumber: user.phone
+    fullName: '',
+    email: '',
+    phoneNumber: ''
   })
-  const [avatar, setAvatar] = useState<string | null>(user.image)
+  const [avatar, setAvatar] = useState<string | null>(null)
+  // const [avatar, setAvatar] = useState<string | null>(user.image)
   const [errors, setErrors] = useState({
     email: '',
     phoneNumber: ''
   })
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem(STORAGE_DATA_USER)
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser)
+      setUser(parsedUser)
+      setUserInfo({
+        fullName: parsedUser.name || '',
+        email: parsedUser.email || '',
+        phoneNumber: parsedUser.phone || ''
+      })
+      setAvatar(parsedUser.image || null)
+    }
+  }, [])
 
   //Hàm xử lý bật chế độ chỉnh sửa và lưu cập nhật thông tin người dùng
   const handleEditToggle = async () => {
     if (isEditing) {
       if (validateForm()) {
         //Gọi API để lưu thông tin người dùng
+        if (!user) {
+          toast.error('Không có thông tin người dùng.')
+          return
+        }
+        if (!user.id) {
+          toast.error('User ID is missing.')
+          return
+        }
         const result = await updateUser({
-          userId: user.id,
+          userId: user.id as string,
           fullName: userInfo.fullName,
           email: userInfo.email,
           phoneNumber: userInfo.phoneNumber,

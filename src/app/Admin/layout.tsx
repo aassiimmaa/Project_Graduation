@@ -23,6 +23,7 @@ import OrdersManagement from '../components/admin/OrdersManagement'
 import Statistical from '../components/admin/Statistical'
 import {
   CATEGORY_MANAGEMENT,
+  LINK_TO_LOGO,
   ORDER_MANAGEMENT,
   STATISTICAL,
   USER_MANAGEMENT,
@@ -104,12 +105,12 @@ const PAGE_COMPONENTS: Record<string, React.ReactNode> = {
 
 interface LayoutProps {
   children?: React.ReactNode
-  window?: () => Window
+  // window?: () => Window
 }
 
 export default function DashboardLayoutSidebarCollapsed({
-  children,
-  window
+  children
+  // window
 }: LayoutProps) {
   const [pathname, setPathname] = React.useState('/Admin')
   const user = useRequireAuth()
@@ -123,7 +124,7 @@ export default function DashboardLayoutSidebarCollapsed({
     [pathname]
   )
 
-  const Window = window ? window() : undefined
+  // const Window = window ? window() : undefined
 
   const [session, setSession] = React.useState<Session | null>(null)
 
@@ -169,7 +170,7 @@ export default function DashboardLayoutSidebarCollapsed({
         sx={{ cursor: 'pointer' }}
         onClick={() => setPathname('/Admin')}
       >
-        <Image src="/images/logo.png" alt="logo" height={40} width={50} />
+        <Image src={LINK_TO_LOGO} alt="logo" height={40} width={50} />
         <LogoText />
       </Stack>
     )
@@ -184,7 +185,7 @@ export default function DashboardLayoutSidebarCollapsed({
       navigation={NAVIGATION}
       authentication={authentication}
       router={router}
-      window={Window}
+      // window={Window}
       theme={theme}
       session={session}
     >

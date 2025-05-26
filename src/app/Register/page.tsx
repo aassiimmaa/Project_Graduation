@@ -20,6 +20,7 @@ import {
   EMAIL_REGEX_ERROR,
   FONT_WEIGHT_BOLD,
   HAS_ACCOUNT_ALREADY,
+  LINK_TO_LOGO,
   LOGIN,
   MARGIN_TEXTFIELD_NORMAL,
   PASSWORD,
@@ -128,7 +129,7 @@ const RegisterForm: React.FC = () => {
     <Container maxWidth="md" sx={styleRegisterContainer}>
       <Paper elevation={6} sx={stylePaperRegister}>
         <Box sx={styleHeaderRegisterForm}>
-          <Image src="/images/logo.png" height={80} width={100} alt="logo" />
+          <Image src={LINK_TO_LOGO} height={80} width={100} alt="logo" />
           <Typography variant="h5" fontWeight={FONT_WEIGHT_BOLD} mt={1}>
             {REGISTER}
           </Typography>
