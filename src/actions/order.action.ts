@@ -6,11 +6,20 @@ import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import { getRentalDays } from '~/lib/getRentalDay'
 import { formatDate } from '~/lib/formatDate'
 import { MY_PLACE_IN_MAP } from '~/app/shared/constant'
-import {
-  OrderWithAllInfo,
-  OrderWithTotal,
-  Vehicle
-} from '~/app/shared/inteface'
+import { OrderWithTotal, Vehicle } from '~/app/shared/inteface'
+import type { Prisma } from '@prisma/client'
+
+type OrderWithAllInfo = Prisma.OrdersGetPayload<{
+  include: {
+    users: true
+    vehicles: {
+      include: {
+        categories: true
+        location: true
+      }
+    }
+  }
+}>
 
 //Thuê xe tạo đơn
 const RentVehicle = async (
@@ -491,7 +500,12 @@ const GetRevenueInMonth = async (month: number, year: number) => {
       },
       include: {
         users: true,
-        vehicles: true
+        vehicles: {
+          include: {
+            categories: true,
+            location: true
+          }
+        }
       },
       orderBy: {
         createdAt: 'desc'
