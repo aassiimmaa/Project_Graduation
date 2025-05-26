@@ -21,6 +21,7 @@ import {
   PAY_LATER_NOTE,
   PRIMARY_COLOR,
   QR_HELP,
+  QR_PAY_NOTE,
   QR_TITLE,
   STORAGE_DATA_USER,
   TO_DATE,
@@ -75,8 +76,8 @@ const QRPay = ({
 
   const fetchPaid = async () => {
     const res = await checkPaid()
-    console.log(res.data.records[res.data.records.length - 1].amount)
-    console.log(res)
+    // console.log(res.data.records[res.data.records.length - 1].amount)
+    // console.log(res)
     setAmountPay(res.data.records[res.data.records.length - 1].amount)
     setContentPay(res.data.records[res.data.records.length - 1].description)
   }
@@ -163,6 +164,16 @@ const QRPay = ({
           {`${FROM_DATE}:`} {fromDate} - {`${TO_DATE}:`} {toDate}
           <br />
           {`${TOTAL_PRICE}: `} {formatPrice(totalAmount.toString())}
+        </Typography>
+
+        <Typography
+          variant={VARIANT_TEXT}
+          color={ERROR_COLOR}
+          mt={2}
+          display="block"
+          textAlign={ALIGN_CENTER}
+        >
+          {QR_PAY_NOTE}
         </Typography>
 
         <Box display="flex" alignItems={ALIGN_CENTER} my={3}>

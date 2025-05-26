@@ -235,6 +235,8 @@ export const OR = 'Hoặc'
 export const PAY_LATER = 'Thanh toán sau'
 export const PAY_LATER_NOTE =
   'Lưu ý: Đơn chỉ được duyệt khi quý khách thanh toán. Quý khách có thể sẽ không thể thuê xe này nếu có người đặt trước.'
+export const QR_PAY_NOTE =
+  'Lưu ý: Khi thanh toán xong, có thể sẽ mất một chút thời gian để hệ thống cập nhật trạng thái đơn hàng. Vui lòng giữ màn hình và đợi trong giây lát.'
 export const BACK = 'Quay lại'
 export const RENTAL_TIME = 'Thời gian thuê xe'
 export const DATE_TYPE = 'date'
