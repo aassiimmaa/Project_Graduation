@@ -13,7 +13,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { NavBar } from '../components/NavBar'
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera'
-import AvatarCroper from '../components/AvatarCroper'
+// import AvatarCroper from '../components/AvatarCroper'
 import { updateUser } from '~/actions/user.action'
 import toast from 'react-hot-toast'
 import {
@@ -45,6 +45,12 @@ import {
   stylePaperProfile,
   styleUploadAvatarButton
 } from '../shared/styles/Profile'
+import dynamic from 'next/dynamic'
+
+const AvatarCroper = dynamic(() => import('../components/AvatarCroper'), {
+  ssr: false,
+})
+
 
 const ProfilePage: React.FC = () => {
   const router = useRouter()
