@@ -376,6 +376,7 @@ const completeOrder = async (orderId: string) => {
     await updateRentStatus(order.vehicles.vehicleId, false)
 
     const freeVehicles = await prisma.vehicles.findMany({
+      include: { categories: true },
       where: {
         isRent: false
       }
