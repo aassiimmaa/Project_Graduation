@@ -425,7 +425,11 @@ const GetRevenueOnDate = async (date: Date) => {
       },
       include: {
         users: true,
-        vehicles: true
+        vehicles: {
+          include: {
+            categories: true
+          }
+        }
       },
       orderBy: {
         createdAt: 'desc'
@@ -482,7 +486,11 @@ const GetRevenueInMonth = async (month: number, year: number) => {
       },
       include: {
         users: true,
-        vehicles: true
+        vehicles: {
+          include: {
+            categories: true
+          }
+        }
       },
       orderBy: {
         createdAt: 'desc'
