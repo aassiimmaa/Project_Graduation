@@ -6,7 +6,7 @@ import { endOfDay, endOfMonth, startOfDay, startOfMonth } from 'date-fns'
 import { getRentalDays } from '~/lib/getRentalDay'
 import { formatDate } from '~/lib/formatDate'
 import { MY_PLACE_IN_MAP } from '~/app/shared/constant'
-import { Vehicle } from '~/app/shared/inteface'
+import { OrderWithTotal, Vehicle } from '~/app/shared/inteface'
 
 //Thuê xe tạo đơn
 const RentVehicle = async (
@@ -381,7 +381,7 @@ const completeOrder = async (orderId: string) => {
       }
     })
 
-    const updateVehicleLocations = freeVehicles.map(v =>
+    const updateVehicleLocations = freeVehicles.map((v: Vehicle) =>
       prisma.vehicles.update({
         where: { vehicleId: v.vehicleId },
         data: {
@@ -431,7 +431,7 @@ const GetRevenueOnDate = async (date: Date) => {
       }
     })
 
-    const ordersWithTotal = orders.map(order => {
+    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -445,7 +445,7 @@ const GetRevenueOnDate = async (date: Date) => {
     })
 
     const totalRevenue = ordersWithTotal.reduce(
-      (sum, order) => sum + order.totalAmount,
+      (sum: number, order: OrderWithTotal) => sum + order.totalAmount,
       0
     )
 
@@ -488,7 +488,7 @@ const GetRevenueInMonth = async (month: number, year: number) => {
       }
     })
 
-    const ordersWithTotal = orders.map(order => {
+    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -502,7 +502,7 @@ const GetRevenueInMonth = async (month: number, year: number) => {
     })
 
     const totalRevenue = ordersWithTotal.reduce(
-      (sum, order) => sum + order.totalAmount,
+      (sum: number, order: OrderWithTotal) => sum + order.totalAmount,
       0
     )
 
@@ -548,7 +548,7 @@ const getRevenueInYear = async (year: number) => {
       }
     })
 
-    const ordersWithTotal = orders.map(order => {
+    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -562,7 +562,7 @@ const getRevenueInYear = async (year: number) => {
     })
 
     const totalRevenue = ordersWithTotal.reduce(
-      (sum, order) => sum + order.totalAmount,
+      (sum: number, order: OrderWithTotal) => sum + order.totalAmount,
       0
     )
 
@@ -601,7 +601,7 @@ const getRevenueAllTime = async () => {
       }
     })
 
-    const ordersWithTotal = orders.map(order => {
+    const ordersWithTotal = orders.map((order: OrderWithTotal) => {
       const rentalDays = getRentalDays(
         formatDate(order.fromDay),
         formatDate(order.toDay)
@@ -615,7 +615,7 @@ const getRevenueAllTime = async () => {
     })
 
     const totalRevenue = ordersWithTotal.reduce(
-      (sum, order) => sum + order.totalAmount,
+      (sum: number, order: OrderWithTotal) => sum + order.totalAmount,
       0
     )
 
