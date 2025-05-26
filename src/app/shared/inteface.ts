@@ -233,7 +233,7 @@ interface OrderWithTotal {
       image: string
     }
     location: {
-      locationId: string
+      LocationId: string
       vehicleId: string
       lat: number
       lng: number
@@ -279,7 +279,7 @@ interface OrderWithAllInfo {
       image: string
     }
     location: {
-      locationId: string
+      LocationId: string
       vehicleId: string
       lat: number
       lng: number
