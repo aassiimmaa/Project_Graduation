@@ -40,6 +40,13 @@ const styleFooter = {
   }
 }
 
+const styleLoading = {
+  display: 'flex',
+  justifyContent: ALIGN_CENTER,
+  alignItems: ALIGN_CENTER,
+  height: '100vh'
+}
+
 export {
   styleInvoiceContainer,
   styleBackBtn,
@@ -47,5 +54,6 @@ export {
   styleKeyTable,
   styleKeyDetail,
   styleValueDetail,
+  styleLoading,
   styleFooter
 }

@@ -9,7 +9,8 @@ import {
   TableContainer,
   TableRow,
   IconButton,
-  Divider
+  Divider,
+  CircularProgress
 } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import Image from 'next/image'
@@ -55,6 +56,7 @@ import {
   styleInvoiceContainer,
   styleKeyDetail,
   styleKeyTable,
+  styleLoading,
   styleTableContainer,
   styleValueDetail
 } from '~/app/shared/styles/HistoryRentalDetail'
@@ -88,9 +90,9 @@ const Invoice = () => {
 
   if (!data) {
     return (
-      <Typography textAlign={ALIGN_CENTER}>
-        Không tìm thấy hóa đơn với mã: {orderId}
-      </Typography>
+      <Box sx={styleLoading}>
+        <CircularProgress />
+      </Box>
     )
   }
 
