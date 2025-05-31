@@ -137,8 +137,9 @@ const QRPay = ({
   // console.log('Tiền đã nhận: ', amountPay)
   // console.log('Nội dung nhận: ', contentPay)
   // console.log(uniquePaymentCode)
+  console.log(user)
 
-  if (!user) return <CircularProgress />;
+  if (!user) return <CircularProgress />
 
   return (
     <Dialog open={openQR} onClose={() => closeQR()} maxWidth="sm" fullWidth>
@@ -192,15 +193,18 @@ const QRPay = ({
           <Button
             variant={VARIANT_BUTTON}
             color={PRIMARY_COLOR}
-            onClick={() =>
-              handlePayLater({
-                userId: user?.userId,
-                vehicle,
-                fromDate: new Date(fromDate),
-                toDate: new Date(toDate),
-                status: 0
-              })
-            }
+            onClick={() => {
+              // console.log(user)
+              if (user) {
+                handlePayLater({
+                  userId: user.id,
+                  vehicle,
+                  fromDate: new Date(fromDate),
+                  toDate: new Date(toDate),
+                  status: 0
+                })
+              }
+            }}
           >
             {PAY_LATER}
           </Button>
