@@ -6,7 +6,8 @@ import {
   Typography,
   Button,
   Divider,
-  Box
+  Box,
+  CircularProgress
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import Image from 'next/image'
@@ -23,7 +24,6 @@ import {
   QR_HELP,
   QR_PAY_NOTE,
   QR_TITLE,
-  STORAGE_DATA_USER,
   TO_DATE,
   TOTAL_PRICE,
   VARIANT_BUTTON,
@@ -38,6 +38,7 @@ import { totalPrice } from '~/lib/totalPrice'
 import { useEffect, useState, useCallback } from 'react'
 import { formatPrice } from '~/lib/formatPrice'
 import { OrderStatus } from '../shared/enum/orderStatus'
+import useRequireAuth from '~/hooks/useRequireAuth'
 
 const QRPay = ({
   openQR,
@@ -47,7 +48,7 @@ const QRPay = ({
   toDate,
   PayCode
 }: QRProps) => {
-  const user = JSON.parse(localStorage.getItem(STORAGE_DATA_USER) || '{}')
+  const user = useRequireAuth()
   const rentalDays = getRentalDays(
     formatDate(new Date(fromDate)),
     formatDate(new Date(toDate))
@@ -84,8 +85,9 @@ const QRPay = ({
 
   const paidOrder = useCallback(
     async (status: number) => {
+      if (!user) return
       const res = await RentVehicle(
-        user.id,
+        user.userId,
         vehicle,
         new Date(fromDate),
         new Date(toDate),
@@ -101,7 +103,7 @@ const QRPay = ({
         toast.error(res.message)
       }
     },
-    [user.id, vehicle, fromDate, toDate]
+    [user, vehicle, fromDate, toDate]
   )
 
   useEffect(() => {
@@ -132,9 +134,11 @@ const QRPay = ({
     }
   }, [amountPay, contentPay, paidOrder, uniquePaymentCode])
 
-  console.log('Tiền đã nhận: ', amountPay)
-  console.log('Nội dung nhận: ', contentPay)
-  console.log(uniquePaymentCode)
+  // console.log('Tiền đã nhận: ', amountPay)
+  // console.log('Nội dung nhận: ', contentPay)
+  // console.log(uniquePaymentCode)
+
+  if (!user) return <CircularProgress />;
 
   return (
     <Dialog open={openQR} onClose={() => closeQR()} maxWidth="sm" fullWidth>
@@ -190,7 +194,7 @@ const QRPay = ({
             color={PRIMARY_COLOR}
             onClick={() =>
               handlePayLater({
-                userId: user.id,
+                userId: user?.userId,
                 vehicle,
                 fromDate: new Date(fromDate),
                 toDate: new Date(toDate),
