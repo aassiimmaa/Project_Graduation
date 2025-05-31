@@ -90,7 +90,8 @@ const ChangePassword: React.FC = () => {
   const handleSubmit = async () => {
     if (validateForm()) {
       const result = await changePassword({
-        userId: <user className="id"></user>,
+        //fix
+        userId: user.id,
         currentPassword: passwords.currentPassword,
         newPassword: passwords.newPassword
       })
