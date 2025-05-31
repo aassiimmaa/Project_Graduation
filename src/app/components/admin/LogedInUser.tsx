@@ -17,7 +17,6 @@ import { BACK_HOME, LOGOUT } from '~/app/shared/constant'
 
 interface UserProps {
   user: User
-  image: string
 }
 
 const LogedInUser = (LogIn: UserProps) => {
@@ -44,7 +43,7 @@ const LogedInUser = (LogIn: UserProps) => {
     <Box sx={{ position: 'relative' }}>
       <Avatar
         alt={LogIn.user.name}
-        src={LogIn.image}
+        src={LogIn.user.image ?? undefined}
         onClick={handleMenu}
         sx={styleAvatar(open)}
       />

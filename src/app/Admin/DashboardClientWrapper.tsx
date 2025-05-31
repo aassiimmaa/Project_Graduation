@@ -164,7 +164,7 @@ export default function DashboardClientWrapper({
     </Stack>
   )
 
-  const CustomAccount = () => <LogedInUser user={user} image={user.image} />
+  const CustomAccount = () => <LogedInUser user={user} />
 
   return (
     <AppProvider
