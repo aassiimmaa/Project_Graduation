@@ -235,7 +235,7 @@ const OrdersManagement: React.FC = () => {
     const intervalId = setInterval(() => {
       fetchLocation()
       fetchOrders()
-    }, 30000)
+    }, 10000)
 
     return () => clearInterval(intervalId)
   }, [openLocationModal])
