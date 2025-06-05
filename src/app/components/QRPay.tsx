@@ -78,16 +78,18 @@ const QRPay = ({
   const fetchPaid = async () => {
     const res = await checkPaid()
     // console.log(res.data.records[res.data.records.length - 1].amount)
-    // console.log(res)
-    setAmountPay(res.data.records[res.data.records.length - 1].amount)
-    setContentPay(res.data.records[res.data.records.length - 1].description)
+    console.log(res)
+    if (res.data){
+      setAmountPay(res.data.records[res.data.records.length - 1].amount)
+      setContentPay(res.data.records[res.data.records.length - 1].description)
+    }
   }
 
   const paidOrder = useCallback(
     async (status: number) => {
       if (!user) return
       const res = await RentVehicle(
-        user.userId,
+        user.id,
         vehicle,
         new Date(fromDate),
         new Date(toDate),

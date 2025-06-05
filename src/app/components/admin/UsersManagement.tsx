@@ -78,7 +78,7 @@ const UsersManagement: React.FC = () => {
   const [page, setPage] = useState(1) // Trang hiện tại (Pagination bắt đầu từ 1)
   const [searchTerm, setSearchTerm] = useState('') // Từ khóa tìm kiếm
   const [searchQuery, setSearchQuery] = useState('') // Từ khóa thực hiện tìm kiếm
-  const rowsPerPage = 8 // Số dòng mỗi trang
+  const rowsPerPage = 5 // Số dòng mỗi trang
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
   const [users, setUsers] = useState<User[]>([])
   const [loading, setLoading] = useState(true)

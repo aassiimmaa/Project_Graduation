@@ -145,9 +145,10 @@ const OrdersManagement: React.FC = () => {
 
   // Lọc dữ liệu dựa trên từ khóa tìm kiếm
   const filteredOrders =
-    orders?.filter(order =>
-      order.orderCode.toLowerCase().includes(searchQuery.toLowerCase())
-    ) || []
+  orders?.filter(order =>
+    order.orderCode.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    order.users.name.toLowerCase().includes(searchQuery.toLowerCase())
+  ) || []
 
   const totalPages = Math.ceil(filteredOrders.length / rowsPerPage) // Tổng số trang
 

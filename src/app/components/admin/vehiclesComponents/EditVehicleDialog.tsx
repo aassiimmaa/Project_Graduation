@@ -11,7 +11,6 @@ import {
   MenuItem
 } from '@mui/material'
 import {
-  ADD_VEHICLE,
   BUTTON_WRAPPER_COMPONENT,
   CANCEL_TEXT,
   CATEGORY_CHOOSE_ERRROR,
@@ -20,6 +19,7 @@ import {
   DESCRIPTION,
   DESCRIPTION_ERROR,
   EDIT_TEXT,
+  EDIT_VEHICLE,
   ERROR_COLOR,
   FONT_WEIGHT_BOLD,
   IMAGE,
@@ -193,7 +193,7 @@ const EditVehicleDialog: React.FC<EditVehicleDialogParams> = ({
       maxWidth="sm"
     >
       <DialogTitle sx={{ color: TEXT_COLOR, fontWeight: FONT_WEIGHT_BOLD }}>
-        {ADD_VEHICLE}
+        {EDIT_VEHICLE}
       </DialogTitle>
 
       <DialogContent sx={styleContentContainer}>
